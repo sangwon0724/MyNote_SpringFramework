@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이론 공부</title>
+    <link rel="stylesheet" href="./css/index.css" />
+</head>
+<body>
+    <section id="base">
+        <span>
+            <bold>변수</bold>
+        </span>
+        <span>▶ let & const
+            <pre>
+                ● let : 기존의 var같은 자료형, 변수 재선언 불가, 변수 재할당 가능
+                    예시 - var의 경우)
+                        var str = "test";
+                        var str = "example";//에러 없음
+                    예시 - let의 경우)
+                        let str = "test";
+                        let str = "example";//에러 발생
+                ● const : 변수 재선언 불가, 변수 재할당 특정 상황에 한해서 가능
+                    예시 - 기본적인 변수의 경우)
+                        const str = "test";
+                        const str = "example";//에러 없음
+                        str = "example";//에러 없음
+                    예시 - 객체의 경우)
+                        const str = {
+                            text : "test"
+                        };
+                        str.name = "example";//에러 없음
+
+                ※ 기본적인 변수는 왠만하면 const를 쓰고, 재할당할 변수만 let을 하는게 좋다.
+            </pre>
+        </span>
+    </section>
+
+    <div id="remote">
+        <section id="remote_setcion">
+            <select id="remote_menu">
+                <option value="base">이론</option>
+            </select>
+        </section>
+    </div>
+
+    <script src="./remote.js"></script>
+</body>
+</html>
