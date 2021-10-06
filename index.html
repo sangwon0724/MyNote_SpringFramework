@@ -5,56 +5,82 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>메인 화면</title>
-    <link rel="stylesheet" href="./css/index.css" />
-
-    <style>
-        a {display: inline-block; margin-bottom: 20px;}
-    </style>
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="./jquery-3.5.1.js"></script>
+    <style></style>
 </head>
-<body>
-    <section id="spring">
-        <span>
-            <bold>스프링 기술 종류</bold><br><br>
-        </span>
-        <span>필수
-            <pre>
-                ● <a href="./springframework.html">Spring Framework</a>
-                ● <a href="./springboot.html">Spring Boot</a>
-            </pre>
-        </span>
-        <span>선택
-            <pre>
-                ● 스트링 데이터
-                ● 스트링 세션
-                ● 스트링 시큐리트
-                ● 스트링 Rest Docs
-                ● 스트링 배치
-                ● 스트링 클라우드
-                ● 스트링 ...
-            </pre>
-        </span>
-        <span>팁
-            <pre>
-                ● 이미 작동중인 포트 종료시키기
-                    1. cmd 실행
-                    2. netstat -a -n -o -p tcp을 실행하여 해당 포트의 pid를 확인한다.
-                    3. taskkill /f /pid [해당 pid]를 입력하여 포트를 종료시킨다.
-            </pre>
-        </span>
-    </section>
+<body id="main_body">
+    <nav id="nav">
+        <button id="openbtn" onclick="changeSidebar()">☰ Close Sidebar</button>
+    </nav>
 
-    <br>
+    <nav id="sidebar">
+        <button href="./Spring/SpringFramework.html">Spring Framework 공부</button>
+        <button href="./Spring/SpringBoot.html">Spring Boot 공부</button>
+        <!--
+            <button href="./Spring/SpringData.html">Spring Data 공부</button>
+            <button href="./Spring/SpringSession.html">Spring Session 공부</button>
+            <button href="./Spring/SpringSecurity.html">Spring Security 공부</button>
+            <button href="./Spring/SpringBatch.html">Spring Batch 공부</button>
+            <button href="./Spring/SpringCloud.html">Spring Cloud 공부</button>
+        -->
+        <button href="./Tip/good_OOP_programming.html">좋은 객체지향 프로그래밍</button>
+        <button href="./Tip/tip.html">팁</button>
+    </nav>
+    <section id="note_body">
 
-    
-    <section id="good_OOP_programming">
-        <span>
-            <bold>좋은 객체지향 프로그래밍</bold><br><br>
-        </span>
-        <span>
-            <pre>
-                ● <a href="./good_OOP_programming.html">좋은 객체지향 프로그래밍</a>
-            </pre>
-        </span>
     </section>
+    <script>
+        //리모콘 작동
+        function move_section(event){
+            var section_id = event.target.value;
+            //location.href = "#" + section_id;
+            document.querySelector("#note_body > #"+section_id).scrollIntoView({behavior: 'smooth'});
+        }
+
+        $(document).ready(function(){
+            $("#sidebar>button").on("click", function(e){
+                $("#note_body").load($(e.target).attr("href"));
+                $("#remoteBtn").text("☰ Close Remote");
+
+                var tablinks = document.querySelectorAll("#sidebar > button");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                e.currentTarget.className += " active";
+            });
+        });
+
+        
+        $("#note_body > #remote> #remote_setcion > #remote_menu").on("change",move_section)
+
+        function changeSidebar(){
+            const text = $("#openbtn").text();
+            if(text === "☰ Close Sidebar"){
+                $("#sidebar").css("display","none");
+                $("#note_body").css("width","100vw");
+                $("#note_body").css("padding-left","7vw");
+                $("#openbtn").text("☰ Open Sidebar");
+            }
+            else if(text === "☰ Open Sidebar"){
+                $("#sidebar").css("display","flex");
+                $("#note_body").css("width","85vw");
+                $("#note_body").css("padding-left","0");
+                $("#openbtn").text("☰ Close Sidebar");
+            }
+        }
+
+        function changeRemote(){
+            const text = $("#remoteBtn").text();
+            if(text === "☰ Close Remote"){
+                $("#remote").css("visibility","hidden");
+                $("#remoteBtn").text("☰ Open Remote");
+            }
+            else if(text === "☰ Open Remote"){
+                $("#remote").css("visibility","");
+                $("#remoteBtn").text("☰ Close Remote");
+            }
+        }
+    </script>
 </body>
 </html>
