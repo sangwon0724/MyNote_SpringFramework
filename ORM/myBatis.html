@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myBatis 공부</title>
+    <link rel="stylesheet" href="./css/index.css" />
+</head>
+<body>
+    <section id="installAndConnnecting">
+        <span>
+            <bold>설치 및 연결</bold>
+        </span>
+        <span>설치
+            <pre>
+                1. pom.xml ~~~
+            </pre>
+        </span>
+        <span>연결
+            <pre>
+                1. XXX
+            </pre>
+        </span>
+    </section>
+
+    <br>
+
+    <section id="dataBinding">
+        <span>
+            <bold>데이터 연결</bold>
+        </span>
+        <span>#
+            <pre>
+                #은 데이터 값에 문자열을 자동으로 추가한 상태로 대입된다.
+            </pre>
+        </span>
+        <span>#
+            <pre>
+                $는 데이터 값이 그대로 대입된다.
+            </pre>
+        </span>
+    </section>
+
+    <br>
+
+    <section id="dataSubstitution">
+        <span>
+            <bold>데이터 치환</bold>
+        </span>
+        <span>태그를 삭제하고 싶은 경우
+            <pre>
+                ● REGEXP_REPLACE(칼럼명, 정규식, 교체 내용) 함수를 사용한다.
+
+                예시)
+                    /* html 태그를 빈 문자열로 교체한다. */
+                    REGEXP_REPLACE(title, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%'
+            </pre>
+        </span>
+        <span>특수문자를 사용하고 싶은 경우
+            <pre>
+                ● &lt;![CDATA[ 내용 ]]>을 사용한다.
+
+                예시)
+                    select title, content from blog_post
+                    where useYN = 'Y'
+                    &lt;![CDATA[
+						and (REGEXP_REPLACE(title, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%' or REGEXP_REPLACE(content, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%')
+				    ]]>
+            </pre>
+        </span>
+    </section>
+
+    <div id="remote">
+        <section id="remote_setcion">
+            <select id="remote_menu">
+                <option value="installAndConnnecting">설치 및 연결</option>
+                <option value="dataBinding">데이터 연결</option>
+                <option value="dataSubstitution">데이터 치환</option>
+            </select>
+        </section>
+    </div>
+
+    <script src="./remote.js"></script>
+</body>
+</html>

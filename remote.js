@@ -5,4 +5,6 @@ function move_section(event){
     document.getElementById(section_id).scrollIntoView({behavior: 'smooth'});
 }
 
-document.getElementById("remote_menu").addEventListener("change", move_section);
+//document.getElementById("remote_menu").addEventListener("change", move_section);
+
+$("#note_body > #remote> #remote_setcion > #remote_menu").on("change",move_section)
