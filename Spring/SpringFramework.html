@@ -34,19 +34,6 @@
 
     <br>
 
-    <section id="base">
-        <span>
-            <bold>이론</bold>
-        </span>
-        <span>xxx
-            <pre>
-                ● 
-            </pre>
-        </span>
-    </section>
-
-    <br>
-
     <section id="bean">
         <span>
             <bold>스프링 빈</bold>
@@ -674,26 +661,6 @@
 
     <br>
 
-    <section id="redirect">
-        <span>
-            <bold>리다이렉트</bold>
-        </span>
-        <span>
-            <pre>
-                ● 정의 : 지금의 페이지에서 특정 페이지로 전환하는 기능
-            </pre>
-        </span>
-        <span>리다이렉트 방법
-            <pre>
-                ●컨트롤러 메소드의 return 주소에 redirect 작성하기
-                    예시)
-                        return "redirect:/common/main";
-            </pre>
-        </span>
-    </section>
-
-    <br>
-
     <section id="interseptor">
         <span>
             <bold>인터셉터</bold>
@@ -746,7 +713,7 @@
         <span>컨트롤러 어노테이션 (@Controller)
             <pre>
                 ●  해당 클래스를 "Controller"로 등록하기 위해 사용하는 어노테이션
-                ●  @Controller 어노테이션을 적용하면 해당 클래스가 bean으로 등록되며 해당 클래스가 Controller로 사용됨을 프레임워크에 알린다.
+                ●  @Controller 어노테이션을 적용하면 해당 클래스가 bean으로 등록되며, 해당 클래스가 Controller로 사용할것임을 프레임워크에 알린다.
             </pre>
         </span>
         <span>주소 매핑하기 (@RequestMapping, @GetMapping, @PostMapping)
@@ -773,6 +740,9 @@
                         ○ return : return "redirect:/test/D";
                         ○ URL : http://localhost:8083/test/D
                         ○ 매칭되는 뷰 : D.jsp
+                ● @GetMapping과 @PostMapping
+                    ○ @GetMapping("요청 주소") => @RequestMapping(value = "요청 주소", method = RequestMethod.GET)의 요약
+                    ○ @PostMapping("요청 주소") => @RequestMapping(value = "요청 주소", method = RequestMethod.POST)의 요약
             </pre>
         </span>
         <span>비동기 통신을 위한 어노테이션 (@RequestBody, @ResponseBody)
@@ -897,7 +867,7 @@
         </span>
         <span>서비스 어노테이션 (@Service)
             <pre>
-                ● xxx
+                ● 빈 객체를 만들어 주는 어노테이션, 가시성을 위해 사용한다. 외부I/O에 대해서 처리하는 경우에 명시한다.
             </pre>
         </span>
         <span>서비스와 DAO의 연결방식
@@ -1051,11 +1021,90 @@
         </span>
     </section>
 
+    <br>
+
+    <section id="annotation">
+        <span>
+            <bold>어노테이션 목록</bold>
+        </span>
+        <span>MVC - 컨트롤러
+            <pre>
+                ● @Contrller : 해당 클래스를 빈으로 등록하고, 해당 클래스를  컨트롤러로 사용할것임을 프레임워크에 알리는 어노테이션
+
+                ● @RequestMapping, @GetMapping, @PostMapping : 요청 url을 연결하는 어노테이션
+
+                ●  @RequestBody, @ResponseBody : 비동기 통신을 위해 움직이는 데이터인 http 요청에 대한 요청본문/응답본문 어노테이션
+
+                ●  @RequestParam(파라미터명) : url을 통해 해당 메소드를 요청할 때 전달해오는 값을 알기위한 어노테이션
+                ●  @PathVariable : url에 명시된 동적 값을 알기위한 어노테이션
+
+                ● @RestController = @Contrller + @ResponseBody
+
+                ● @ModelAttribute : View에 데이터를 전달하기 위해 설정하는 어노테이션
+            </pre>
+        </span>
+        <span>MVC - 서비스
+            <pre>
+                ● @Service : 빈 객체를 만들어 주는 어노테이션, 가시성을 위해 사용한다. 외부I/O에 대해서 처리하는 경우에 명시한다.
+            </pre>
+        </span>
+        <span>빈 관련 - 의존성 주입
+            <pre>
+                ● @Autowired : 해당하는 타입의 객체를 찾아서 자동으로 할당하는 어노테이션
+                    ○ 생성자, 메소드, 멤버변수 위에 모두 사용 가능
+                    ○ 탐색 순서 : 타입 -> 이름 -> @Qualifier -> 실패
+                ● @Qualifier("qualifier 태그에 명시한 value") : @Autowired 어노테이션과 함께 사용하는 어노테이션
+                
+                ● @Inject : 해당하는 타입의 객체를 찾아서 자동으로 할당하는 어노테이션
+                    ○ 생성자, 메소드, 멤버변수 위에 모두 사용 가능
+                    ○ 탐색 순서 : 타입 -> @Named-> 이름 -> 실패
+                ● @Named("id명") : @Inject 어노테이션과 함께 사용하는 어노테이션
+
+                ● @Resource(name="등록된 빈의 id") : 주입하려고 하는 객체의 id가 일치하는 객체를 자동으로 주입한다.
+                    ○ 메소드, 멤버변수 위에 사용 가능
+                    ○ 사실상 @Autowired + @Qualifier
+                    ○ 탐색 순서 : 이름 -> 타입 -> @Qualifier -> 실패
+                    ○ @Resource나 @Resource(name="등록된 빈의 id")로 사용한다.
+                    ○ &lt;context:annotation-config/>를 xml 파일에 추가해야지 사용할수 있다.
+            </pre>
+        </span>
+        <span>빈 관련 - 컴포넌트 스캔
+            <pre>
+                ● @Component("빈 id") : 개발자가 직접 작성한 클래스를 bean 등록하고자 할 경우 사용하는 어노테이션
+                ● @ComponentScan : 설정된 시작 지점부터 컴포넌트 클래스를 scanning하여 빈으로 등록해주는 역할을 하는 어노테이션
+                    ○ 스캔하는 컴포넌트 클래스 : @Component, @Repository, @Service, @Controller, @Configuration
+                    ○ basePackages 속성 : 스캔을 시작할 패키지 경로를 명시 (예시 : com.my.app)
+                    ○ basePackageClasses 속성 : 스캔을 시작할 패키지 경로에 있는 클래스를 명시 (예시 : BlogController.class)
+                    ○ basePackages 속성으로 명시하나 basePackageClasses 속성으로 명시하나 같은 곳을 가리키게 한다면 결과는 같겠지만,
+                      basePackageClasses 속성으로 명시하는 것이 좀 더 안전하다.
+                ● @Filter : @ComponentScan 어노테이션의 excludeFilters 속성에서 사용하는 어노테이션, 스캔을 제외할 조건을 명시한다.
+                    예시) excludeFilters = @Filter(type = FilterType.ANNOTATION, classes = {Service.class})
+                ● @Scope
+            </pre>
+        </span>
+        <span>빈 관련 - 외부 설정 파일
+            <pre>
+                ● @Configuration : 외부라이브러 또는 내장 클래스를 빈으로 등록하고자 할 경우 사용하는 어노테이션, 1개 이상의 @Bean을 제공하는 클래스의 경우 반드시 @Configuraton을 명시
+                ● @PropertySource("classpath:설정파일경로") : 해당 설정 파일의 위치를 명시하는 어노테이션
+                ● @Value("${빈id.속성명:디폴트값}") : 빈으로 등록된 클래스에서 값을 가져와서 주입하는 어노테이션
+            </pre>
+        </span>
+        <span>쿠키
+            <pre>
+                ● @CookieValue(value="가져올_쿠키명", required=true/false)
+            </pre>
+        </span>
+        <span>기타
+            <pre>
+                ● @Repository : 빈 객체를 만들어 주는 어노테이션, 가시성을 위해 사용한다. 외부I/O에 대해서 처리하는 경우에 명시한다.
+            </pre>
+        </span>
+    </section>
+
     <div id="remote">
         <section id="remote_setcion">
             <select id="remote_menu">
                 <option value="intro">스프링 프레임워크</option>
-                <option value="base">이론</option>
                 <option value="bean">스프링 빈</option>
                 <option value="beanLifeCycle">빈 생명 주기</option>
                 <option value="beanScope">빈 스코프</option>
@@ -1068,7 +1117,6 @@
                 <option value="psa">PSA</option>
                 <option value="cookie">쿠키</option>
                 <option value="session">세션</option>
-                <option value="redirect">리다이렉트</option>
                 <option value="interseptor">인터셉터</option>
                 <option value="controller">컨트롤러</option>
                 <option value="service">서비스</option>
@@ -1077,6 +1125,7 @@
                 <option value="settingFile_root_context">설정 파일 - root-context.xml</option>
                 <option value="settingFile_servlet_context">설정 파일 - servlet-context.xml</option>
                 <option value="settingFile_divide">설정 파일 분리하기</option>
+                <option value="annotation">어노테이션 목록</option>
             </select>
         </section>
     </div>
