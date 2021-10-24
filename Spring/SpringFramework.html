@@ -579,7 +579,7 @@
         <span>
             <bold>PSA (Portable Service Abstraction)</bold>
         </span>
-        <span>쿠키 생성하기
+        <span>
             <pre>
                 ● 정의 : xxx
             </pre>
@@ -745,32 +745,146 @@
         </span>
         <span>컨트롤러 어노테이션 (@Controller)
             <pre>
-                ● xxx
+                ●  해당 클래스를 "Controller"로 등록하기 위해 사용하는 어노테이션
+                ●  @Controller 어노테이션을 적용하면 해당 클래스가 bean으로 등록되며 해당 클래스가 Controller로 사용됨을 프레임워크에 알린다.
             </pre>
         </span>
         <span>주소 매핑하기 (@RequestMapping, @GetMapping, @PostMapping)
             <pre>
-                ● xxx
+                ● 해당 어노테이션이 선언된 컨트롤러 클래스의 모든 메소드가 하나의 요청에 대한 처리를 할 경우에 사용한다.
+                ● @RequestMapping 어노테이션에 대한 모든 매핑 정보는 스프링에서 제공하는 HandlerMapping 클래스가 가지고 있다.
+                ● @RequestMapping의 value 속성에는 요청될 url을, method 속성에는 요청 방식에 대해 작성한다.
+                    예시)
+                        @RequestMapping(value = "/blog/main", method = RequestMethod.GET)
+                        public String blogMain(Model model) throws Exception{ ... }
+                ● @RequestMapping을 적용한 메소드 사용 시 뷰 네임을 적용하는 방법
+                    1) String : return에 명시한 문자열을 읽고 그 값에 해당하는 페이지를 찾아서 매칭시킨다.
+                    2) void : return이 따로 없기 때문에 요청한 url 주소에 따라서 뷰를 매칭시킨다.
+                    3) 이외에도 VO나 Map로도 전달할 수도 있다. (이 경우에도 요청 url 주소에 따라서 뷰 매칭)
+                    4) Spring 5에서 지원해주는 reactive streams도 가능하다. (Mono, Flux)
+                ● forward 방식과 redirect 방식
+                    1. forward 방식
+                        ○ 요청 주소 : /test/A
+                        ○ return : return "/test/B";
+                        ○ URL : http://localhost:8083/test/A
+                        ○ 매칭되는 뷰 : B.jsp
+                    2. redirect 방식
+                        ○ 요청 주소 : /test/C
+                        ○ return : return "redirect:/test/D";
+                        ○ URL : http://localhost:8083/test/D
+                        ○ 매칭되는 뷰 : D.jsp
             </pre>
         </span>
-        <span>객체 리턴하기 (@ResponseBody)
+        <span>비동기 통신을 위한 어노테이션 (@RequestBody, @ResponseBody)
             <pre>
-                ● xxx
+                ● 주로 ajax같은 비동기 통신을 하여 데이터 처리를 하기 위해서는 http 요청의 본문에 데이터를 담아하기 때문에
+                  @ResponseBody나  @RequestBody같은 어노테이션이 필요하다.
+                ● 요청 본문 (@RequestBody) : http 요청의 바디내용을 통째로 자바객체로 변환해서 매핑된 메소드 파라미터로 전달해준다.
+                ● 응답 본문 (@ResponseBody)
+                    ○ @ResponseBody 어노테이션이 붙은 컨트롤러는 요청을 받았을 때 해당 http 요청의 미디어타입과 파라미터의 타입을 먼저 확인한다.
+                    ○ return으로 전달하려는 자바 객체를 http 요청의 타입에 맞게 MessageConverter를 통해 변환하여 클라이언트로 전송한다.
+                ● 비동기 통신 관련 컨트롤러 예시
+                    @ResponseBody
+                    @RequestMapping(value = "/blog/main/ajax", method = RequestMethod.POST)
+                    public Map&lt;String, Object> blogMainPostAjax(@RequestBody HashMap&lt;String, Object> map,  Model model) throws Exception {
+
+                        ...
+
+                        Map&lt;String, Object> result = new HashMap&lt;sString, Object>();
+                        result.put("message", "success");
+
+                        return result;
+                    }
+                ● @RestController 어노테이션 : @Contrller 어노테이션 + @Response 어노테이션
             </pre>
         </span>
-        <span>값 전달하기 (@RequestParam, @PathVariable, @RequestBody)
+        <span>값 전달하기/전달받기 (@RequestParam, @PathVariable)
             <pre>
-                ● xxx
+                ● name 속성의 따른 값 (@RequestParam 어노테이션) : 명시한 name 속성명에 따라 전달받은 값을 골라서 받는다.
+                    1. @RequestParam을 통해 전달받을 값을 String으로 지정했을 때, 만약 전달받은 값이 String이 아닐 경우 자동으로 형변환한다.
+                    2. required 속성을 명시하면 필수 여부를 선택할수 있다. (기본 값 : true)
+                        예시 ) @RequestParam(value="nickname", required=false) String nickname
+                    3. 필수 값이지만 값이 들어오지 않으면 오류가 발생하기 때문에 이를 위해 기본 값을 설정할수 있다.
+                        예시 ) @RequestParam(value="mode", defaultvalue="view") String mode
+                    4. 기본 예시
+                        @RequestMapping(value="/find/account", method = RequestMethod.GET)
+                        public String findId(@RequestParam("name") String name, @RequestParam("birthday") String birthday) {
+                            System.out.pringln("계정 찾기 - 이름 : " + name + " / 생년월일 : " + birthday);
+                            //요청 url : http://localhost:8083/blog/proflie?name=홍길동&birthday=970229
+                            //출력 : 계정 찾기 - 이름 : 홍길동 / 생년월일 : 970229
+                            
+                            return "/find/account";
+                        }
+                ● 요청 url에 따른 동적 값 (@PathVariable 어노테이션) : @RequestMapping의 URL 값의 중괄호에 명시된 패스 변수를 받는다.
+                    예시)
+                        @RequestMapping(value="/blog/{id}", method = RequestMethod.GET)
+                        public String personalBlog(@PathVariable("id") String id) {
+                            System.out.pringln("방문 블로그 : " + id);
+                            //요청 url : http://localhost:8083/blog/helloworld
+                            //출력 : 방문 블로그 : helloworld
+
+                            return "/blog/personal";
+                        }
             </pre>
         </span>
         <span>데이터 전달 방식 (RequestMethod - GET/POST)
             <pre>
-                ● xxx
+                ● GET : 클라이언트에서 서버로 어떠한 리소스로 부터 정보를 요청하기 위해 사용되는 메서드
+                    ○ GET 요청은 캐시가 가능하다.
+                    ○ GET 요청은 브라우저 히스토리에 남는다.
+                    ○ GET 요청은 북마크 될 수 있다.
+                    ○ GET 요청은 길이 제한이 있다. (표준은 없지만 브라우저마다 제한이 다르다.)
+                    ○ GET 요청은 url에 파라미터가 모두 노출되기 때문에 중요한 정보를 다루면 안된다.
+                    ○ GET 요청은 데이터를 요청할 때만 사용 된다.
+                    ○ GET 요청은 url 파라미터에 요청하는 데이터를 담아 보내기 때문에 http 메시지에 body가 없다.
+                ● POST : 클라이언트에서 서버로 리소스를 생성하거나 업데이트하기 위해 데이터를 보낼 때 사용 되는 메서드
+                    ○ POST 요청은 캐시되지 않는다.
+                    ○ POST 요청은 브라우저 히스토리에 남지 않는다.
+                    ○ POST 요청은 북마크 되지 않는다.
+                    ○ POST 요청은 데이터 길이에 제한이 없다.
+                    ○ POST 요청은 body 에 데이터를 담아 보내기 때문에 당연히 http 메시지에 body가 존재한다.
             </pre>
         </span>
         <span>View 페이지에 데이터 전달하기 (Model 객체)
             <pre>
-                ● xxx
+                ● Model 객체란? : Controller에서 생성한 데이터를 담아서 View로 전달할 때 사용하는 HashMap의 형식의 객체
+                ● Model 객체 사용법
+                    @RequestMapping(value = "/blog/{userID}", method = RequestMethod.GET)
+                    public String personalBlog(@PathVariable String userID, Model model) throws Exception {
+                        model.addAttribute("mode", "view"); //게시글 보기 모드
+                        return "/blog/personal";
+                    }
+                ● Model 객체를 파라미터로 사용하지 않고 특정 파라미터를 직접 view에 매칭시키는 방법
+                    @RequestMapping(value = "/blog/{userID}", method = RequestMethod.GET)
+                    public String personalBlog(@PathVariable String userID, @ModelAttribute("mode") String mode, Model model) throws Exception {
+                        //@ModelAttribute 어노테이션은 multipart/form-data 형태의 HTTP Body 내용과 HTTP 파라미터들을 1대1로 객체에 바인딩시킨다.
+                        //@ModelAttribute 어노테이션에 파라미터명을 명시하면 요청 url에 ModelAttribute로 명시된 값이 필요하다.
+                        //ModelAttribute("mode")처럼 정확하게 명시하지 않고 ModelAttribute User user처럼 사용할 수도 있다.
+                        //만약 Setter함수가 없다면 매핑을 시키지 못하고, null을 갖게 된다.
+
+                        return "/blog/personal";
+                    }
+                ● ModelAndView 객체 : Model과 View를 동시에 설정가능한 형식의 객체 (ModelAndView 객체를 리턴한다.)
+                    @RequestMapping(value = "/blog/{userID}", method = RequestMethod.GET)
+                    public ModelAndView personalBlog(@PathVariable String userID, Model model) throws Exception {
+                        ModelAndView mv = new ModelAndView();
+                        mv.setViewName("/blog/personal"); //뷰명
+                        mv.addObject("mode", "view"); //뷰로 보낼 데이터
+
+                        return mv;
+                    }
+            </pre>
+        </span>
+        <span>Spring 5부터 지원되는 Rendering 인터페이스
+            <pre>
+                기본 형식)
+                    @매핑_어노테이션("요청 url")
+                    public Rendering 메소드명() {
+                        return Rendering
+                            .view("뷰명")
+                            .modelAttribute("모델명", 데이터)
+                            .build();
+                    }
             </pre>
         </span>
     </section>
@@ -850,6 +964,93 @@
         </span>
     </section>
 
+    <br>
+
+    <section id="settingFile_divide">
+        <span>
+            <bold>설정 파일 분리하기</bold>
+        </span>
+        <span>설정 값 분리의 필요성 (@Value 어노테이션)
+            <pre>
+                ● 환경에 따라 유연한 값 설정 가능
+                ● 초기값을 설정 가능
+                ● 불필요한 컴파일 축소 가능
+            </pre>
+        </span>
+        <span>전제 조건
+            <pre>
+                ● classpath의 기본 위치는 프로젝트/src/main/resources다.
+            </pre>
+        </span>
+        <span>PropertyPlaceHolderConfigurer를 통한 수동 변환
+            <pre>
+                ● 설명 : 빈 설정 메타정보가 모두 준비됐을 때 빈 메타정보 자체를 조작하기 위해 사용하는 방식
+                ● 전체 조건 : 해당 클래스에 @Configuration 어노테이션과 @PropertySource("classpath:설정파일경로") 어노테이션을 명시해준다.
+                ● 사용 예시)
+                    &lt;&lt;&lt; xml >>>
+
+                    user.username=HongGilDong
+                    user.birthday=970229
+                    
+                    &lt;&lt;&lt; class >>>
+
+                    @Value("${user.username}")
+                    private String userName;
+                    
+                    @Value("${user.birthday}")
+                    private String birthday;
+                    
+                    //defaultvalue 설정 가능
+                    @Value("${user.hoddy:게임}")
+                    private String hoddy;
+            </pre>
+        </span>
+        <span>SpEL을 통한 능동 변환
+            <pre>
+                ● 설명 : 다른 빈 오브젝트에 직접 접근할 수 있는 표현식을 이용해 원하는 프로퍼티 값을 능동적으로 가져온다.
+                ● 전체 조건 : 해당 클래스에 @Component 어노테이션을 명시해준다.
+                ● 사용 예시)
+                    &lt;&lt;&lt; 빈으로 등록할 클래스 >>>
+
+                    @Component("userInfo")
+                    public class config{
+                        public static String username="HongGilDong";
+                        public String getBirthday(){
+                            return "970229";
+                        }
+                    }
+
+                    &lt;&lt;&lt; class >>>
+                    
+                    @Value("#{userInfo.username}")
+                    private String userName;
+                    
+                    @Value("#{userInfo.getBirthday()}")
+                    private String birthday;
+                ※ 주의점 : 메소드 및 생성자 인자에 @Value를 사용할 때는 @Autowired나 @Resource같은 어노테이션이 반드시  존재해야 한다.
+            </pre>
+        </span>
+        <span>Environment을 통한 능동 변환
+            <pre>
+                ● 설명 : 다른 빈 오브젝트에 직접 접근할 수 있는 표현식을 이용해 원하는 프로퍼티 값을 능동적으로 가져온다.
+                ● 전체 조건 : 해당 클래스에 @Configuration 어노테이션과 @PropertySource("classpath:설정파일경로") 어노테이션을 명시해준다.
+                ● 사용 예시)
+                    &lt;&lt;&lt; xml >>>
+
+                    user.username=HongGilDong
+                    user.birthday=970229
+
+                    &lt;&lt;&lt; class >>>
+
+                    @Autowired 
+                    Environment env;
+
+                    private String userName=env.getProperty("user.username");
+                    private String birthday=env.getProperty("user.birthday");
+            </pre>
+        </span>
+    </section>
+
     <div id="remote">
         <section id="remote_setcion">
             <select id="remote_menu">
@@ -875,6 +1076,7 @@
                 <option value="settingFile_web">설정 파일 - web.xml</option>
                 <option value="settingFile_root_context">설정 파일 - root-context.xml</option>
                 <option value="settingFile_servlet_context">설정 파일 - servlet-context.xml</option>
+                <option value="settingFile_divide">설정 파일 분리하기</option>
             </select>
         </section>
     </div>
