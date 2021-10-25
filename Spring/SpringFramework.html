@@ -12,7 +12,7 @@
         <span>
             <bold>스프링 프레임워크</bold>
         </span>
-        <span>기본 소개
+        <span>◆ 기본 소개
             <pre>
                 ● 핵심 기술 : 스프링 DI 컨테이너, AOP, 이벤트, 기타
                 ● 웹 기술 : 스프링 MVC, 스프링 WebFlux
@@ -22,7 +22,7 @@
                 ● 언어 : 코틀린, 그루비
             </pre>
         </span>
-        <span>스프링의 핵심
+        <span>◆ 스프링의 핵심
             <pre>
                 ● 스프링은 자바 언어 기반의 프레임워크
                 ● 자바 언어의 가장 큰 특징 - 객체 지향 언어
@@ -56,12 +56,12 @@
         <span>
             <bold>maven (메이븐)</bold>
         </span>
-        <span>maven이란?
+        <span>◆ maven이란?
             <pre>
                 ● 내용
             </pre>
         </span>
-        <span>maven의 생명구조
+        <span>◆ maven의 라이프싸이클
             <pre>
                 ● 내용
             </pre>
@@ -74,7 +74,7 @@
         <span>
             <bold>스프링 빈</bold>
         </span>
-        <span>스프링 컨테이너
+        <span>◆ 스프링 컨테이너
             <pre>
                 ● 스프링 컨테이너 : 주입을 이용해서 객체를 관리하는 컨테이너
                 ● 스프링 컨테이너의 역할 : 빈의 생성과 관계, 사용, 생명 주기등을 관리
@@ -91,7 +91,7 @@
                         ○ 대부분의 어플리케이션에서는 빈 팩토리보다 어플리케이션 컨텍스트를 사용하는 것이 좋다.
             </pre>
         </span>
-        <span>빈 팩토리 사용법
+        <span>◆ 빈 팩토리 사용법
             <pre>
                 ● getBean()이 호출되면, 팩토리는 의존성 주입을 이용해 빈을 인스턴스화 하고 빈의 특성을 설정하기 시작한다.
 
@@ -103,7 +103,7 @@
 
             </pre>
         </span>
-        <span>어플리케이션 컨텍스트 사용법
+        <span>◆ 어플리케이션 컨텍스트 사용법
             <pre>
                 ● 어플리케이션 컨텍스트의 구현체 종류
                     (1) ClassPathXmlApplicationContext : 클래스패스에 위치한 xml 파일에서 컨텐스트 정의 내용을 읽어들인다.
@@ -116,13 +116,13 @@
                         testBean testbean = AC.getBean("testbean");
             </pre>
         </span>
-        <span>빈 팩토리와 어플리케이션 컨텍스트의 차이점
+        <span>◆ 빈 팩토리와 어플리케이션 컨텍스트의 차이점
             <pre>
                 ● 빈 팩토리 : 처음으로 getBean()이 호출된 시점에서야 해당 빈을 생성
                 ● 애플리케이션 컨텍스트 : 컨텍스트 초기화 시점에 모든 싱글톤 빈을 미리 빈을 생성해 놓아 빈이 필요할 때 즉시 사용할 수 있도록 보장
             </pre>
         </span>
-        <span>xml 파일을 통한 빈 등록하기
+        <span>◆ xml 파일을 통한 빈 등록하기
             <pre>
                 ● bean 태그
                     ○ id : 등록하는 빈의 고유 명칭
@@ -157,7 +157,7 @@
         <span>
             <bold>빈 생명주기</bold>
         </span>
-        <span>
+        <span>◆ 빈 생명주기
             <pre>
                 ● 기본적인 생명주기 :
                     생성 → 빈 설정 (초기화) → 사용 → 소멸
@@ -183,12 +183,12 @@
                     test.registerShutdownHook();
             </pre>
         </span>
-        <span>기본적인 전제조건
+        <span>◆ 기본적인 전제조건
             <pre>
                 ● 빈에 관련된 메소드를 정의한 클래스에는 @Configuration 어노테이션을 추가해야 한다.
             </pre>
         </span>
-        <span>빈 생명주기 사용방법 1 : 인터페이스 활용하기
+        <span>◆ 빈 생명주기 사용방법 1 : 인터페이스 활용하기
             <pre>
                 ● 빈 초기화 하기
                     ○ InitializingBean 인터페이스를 활용한다.
@@ -207,7 +207,7 @@
                     ○ 이 방법은 스프링 초창기에 나온 방법이라서 지금은 거의 사용하지 않는 방법이다.
             </pre>
         </span>
-        <span>빈 생명주기 사용방법 2 : 사용자 정의 메소드 활용하기
+        <span>◆ 빈 생명주기 사용방법 2 : 사용자 정의 메소드 활용하기
             <pre>
                 ● 빈 초기화 하기 + 소멸하기
                     ○ 해당 클래스에서 빈을 초기화할 때의 메소드와 소멸할 때의 메소드를 직접 정의한다.
@@ -230,7 +230,7 @@
                     ○ 따라서 해당 방법을 이용시에는 빈 소멸메소드를 따로 만들지 않아도 잘 작동한다.
             </pre>
         </span>
-        <span>빈 생명주기 사용방법 3 : 어노테이션 활용하기
+        <span>◆ 빈 생명주기 사용방법 3 : 어노테이션 활용하기
             <pre>
                 ● 빈 초기화 하기
                     ○ 본인이 작성한 빈 초기화 메소드에 @PostConstruct 어노테이션을 추가한다.
@@ -287,7 +287,7 @@
         <span>
             <bold>빈 스코프 - 싱글톤 스코프</bold>
         </span>
-        <span>싱글톤 스코프의 특징
+        <span>◆ 싱글톤 스코프의 특징
             <pre>
                 ● 스코프를 명시적으로 지정하지 않으면 설정되는 기본 스코프
                 ● 빈 스코프를 싱글톤으로 사용하면 빈을 각각의 다른 객체로 생성해도 같은 것을 가리키게 된다.
@@ -298,7 +298,7 @@
                 ● 해당 빈에 대한 요청과 참조가 있으면 캐시된 객체를 반환한다.
             </pre>
         </span>
-        <span>싱글톤 스코프의 사용 방법 (스코프의 기본 값이 싱글톤이기 때문에 생략해도 상관없다.)
+        <span>◆ 싱글톤 스코프의 사용 방법 (스코프의 기본 값이 싱글톤이기 때문에 생략해도 상관없다.)
             <pre>
                 ● xml을 통한 사용방법
                     &lt;bean id="test" scope="singleton">&lt;/bean>
@@ -307,13 +307,13 @@
                     @Scope("singleton")
             </pre>
         </span>
-        <span>싱글톤 패턴
+        <span>◆ 싱글톤 패턴
             <pre>
                 ● 클래스의 인스턴스가 1개만 생성되도록 하는 디자인 패턴
                 ● private 생성자를 사용해서 외부에서 임의로 new 키워드를 사용하지 못하도록 막아야 한다
             </pre>
         </span>
-        <span>싱글톤 패턴의 문제점
+        <span>◆ 싱글톤 패턴의 문제점
             <pre>
                 ● 싱글톤 패턴을 구현하는 코드 자체가 많이 들어간다.
                 ● 의존관계상 클라이언트가 구체 클래스에 의존한다. DIP를 위반한다.
@@ -325,7 +325,7 @@
                 ● 안티패턴으로 불리기도 한다.
             </pre>
         </span>
-        <span>싱글톤 컨테이너
+        <span>◆ 싱글톤 컨테이너
             <pre>
                 ● 스프링 컨테이너는 기본적으로 객체 인스턴스를 싱글톤으로 관리한다.
                 ● 스프링 컨테이너는 기본적으로 빈 스코프가 싱글톤이기 때문에 객체를 하나만 생성해서 관리한다.
@@ -336,7 +336,7 @@
                 ● 싱글톤 레지스트리 : 싱글톤 객체를 생성하고 관리하는 기능
             </pre>
         </span>
-        <span>싱글톤 방식의 주의점
+        <span>◆ 싱글톤 방식의 주의점
             <pre>
                 ● 객체 인스턴스를 하나만 생성해서 공유하는 싱글톤 방식은 여러 클라이언트가 하나의 같은 객체 인스턴스를 공유하기 때문에
                   싱글톤 객체는 상태를 유지하게 설계하면 안된다.
@@ -348,7 +348,7 @@
                     예시) 개인 정보
             </pre>
         </span>
-        <span>싱글톤 방식을 위한 @Configuration 어노테이션
+        <span>◆ 싱글톤 방식을 위한 @Configuration 어노테이션
             <pre>
                 ● @Bean 어노테이션만 사용해도 스프링 빈으로 등록되지만, 싱글톤을 보장하지 않는다.
             </pre>
@@ -361,18 +361,18 @@
         <span>
             <bold>빈 스코프 - 프로토타입 스코프</bold>
         </span>
-        <span>정의
+        <span>◆ 정의
             <pre>
                 ● 빈을 조회했을 때 스프링 컨테이너가 빈을 생성하고 필요한 의존관계를 주입한 다음에
                   생성한 프로토타입 빈을 클라이언트에 반환한 다음에 더 이상 빈을 관리하지 않는 빈 스코프의 종류 중 하나
             </pre>
         </span>
-        <span>사용방법
+        <span>◆ 사용방법
             <pre>
                 ● 클래스에 @Scope("prototype") 어노테이션을 추가한다.
             </pre>
         </span>
-        <span>프로토타입 빈의 특징
+        <span>◆ 프로토타입 빈의 특징
             <pre>
                 ● 스프링 컨테이너에 요청할 때 마다 새로 생성된다.
                 ● 스프링 컨테이너는 프로토타입 빈의 생성과 의존관계 주입 그리고 초기화까지만 관여한다.
@@ -389,13 +389,13 @@
         <span>
             <bold>컴포넌트 스캔</bold>
         </span>
-        <span>정의
+        <span>◆ 정의
             <pre>
                 ● 컴포넌트 스캔 :
                     스프링에서 제공하는 설정 정보가 없어도 자동으로 스프링 빈을 등록하는 기능
             </pre>
         </span>
-        <span>컴포넌트 스캔 사용방법
+        <span>◆ 컴포넌트 스캔 사용방법
             <pre>
                 ● 기본적인 사용방법
                     ○ 클래스에 @ComponentScan 어노테이션을 추가한다.
@@ -478,7 +478,7 @@
         <span>
             <bold>스프링 3대 요소 - 의존성 주입 (DI)</bold>
         </span>
-        <span>기본적인 사용법
+        <span>◆ 기본적인 사용법
             <pre>
                 ● 의존성 주입 (Dependency Injection) : 어떤 객체에 스프링 컨테이너가 또 다른 객체와 의존성을 맺어주는 행위
 
@@ -496,7 +496,7 @@
                     }
             </pre>
         </span>
-        <span>어노테이션의 종류에 따른 다양한 의존성 주입 방법
+        <span>◆ 어노테이션의 종류에 따른 다양한 의존성 주입 방법
             <pre>
                 ● @Autowired : 해당하는 타입의 객체를 찾아서 자동으로 할당하는 어노테이션
                     ○ 생성자, 메소드, 멤버변수 위에 모두 사용 가능
@@ -538,7 +538,7 @@
         <span>
             <bold>스프링 3대 요소 - 관점 지향 프로그래밍 (AOP)</bold>
         </span>
-        <span>정의
+        <span>◆ 정의
             <pre>
                 ● AOP (Aspect Oriented Programming) : 관점지향적 프로그래밍
                 ● 기능을 비즈니스 로직과 공통 모듈로 구분한 뒤에 개발자의 코드 밖에서 필요한 시점에 비즈니스 로직에 삽입하여 실행되도록 하는 방법
@@ -546,12 +546,12 @@
                 ● DI가 의존성의 주입이라면, AOP는 기능의 주입이다.
             </pre>
         </span>
-        <span>AOP가 필요한 상황
+        <span>◆ AOP가 필요한 상황
             <pre>
                 ● 중복을 최대한 줄여서 적은 량의 코드 수정만으로도 프로젝트의 전체적인 부분을 변경할 수 있도록 하기 위해서
             </pre>
         </span>
-        <span>AOP의 특징
+        <span>◆ AOP의 특징
             <pre>
                 ● 중복되는 코드가 줄어든다.
                 ● 프로젝트의 유지보수를 효율적으로 할 수 있다.
@@ -560,7 +560,7 @@
                 ● 변화에 대한 수용성이 높아진다.
             </pre>
         </span>
-        <span>AOP 용어
+        <span>◆ AOP 용어
             <pre>
                 ● Joinpoint
                     ○ Advice를 적용가능한 지점
@@ -589,7 +589,7 @@
                       둘 사이의 결합 규칙을 정의할 수 있다.
             </pre>
         </span>
-        <span>AOP 적용 방법
+        <span>◆ AOP 적용 방법
             <pre>
                 ● xxxxxxx
             </pre>
@@ -615,7 +615,7 @@
         <span>
             <bold>쿠키</bold>
         </span>
-        <span>쿠키 생성하기
+        <span>◆ 쿠키 생성하기
             <pre>
                 1. 쿠키 객체 생성하기
                     Cookie cookie = new Cookie("속성명", "값");
@@ -624,7 +624,7 @@
                     response.addCookie(cookie);
             </pre>
         </span>
-        <span>쿠키 사용하기
+        <span>◆ 쿠키 사용하기
             <pre>
                 ● 컨트롤러 메소드의 매개변수로 쿠키 사용
                     코드)
@@ -640,7 +640,7 @@
                     ○ required=false를 입력하지 않으면 만약 쿠키가 없을 때 에러가 발생한다.
             </pre>
         </span>
-        <span>쿠키 삭제하기
+        <span>◆ 쿠키 삭제하기
             <pre>
                 cookie.setMaxAge(0); //존재 시간을 0초로 하기
             </pre>
@@ -653,7 +653,7 @@
         <span>
             <bold>세션</bold>
         </span>
-        <span>세션 얻기
+        <span>◆ 세션 얻기
             <pre>
                 ● 방법 1 : HttpServletRequest를 통한 세션 얻기
                     ○ 컨트롤러 클래스의 메소드의 매개변수로 HttpServletRequest 객체 명시하기
@@ -675,19 +675,19 @@
                         (3) 유지 기간 : Request 중인 동안인만 존재
             </pre>
         </span>
-        <span>세션에 값 설정하기
+        <span>◆ 세션에 값 설정하기
             <pre>
                 1. 세션 객체를 얻는다. (변수명 : session)
                 2. session.setAttribute("속성명","값");
             </pre>
         </span>
-        <span>세션에서 값 가져오기
+        <span>◆ 세션에서 값 가져오기
             <pre>
                 1. 세션 객체를 얻는다. (변수명 : session)
                 2. session.getAttribute("속성명","값");
             </pre>
         </span>
-        <span>세션 삭제하기
+        <span>◆ 세션 삭제하기
             <pre>
                 1. 세션 객체를 얻는다. (변수명 : session)
                 2. session.invalidate();
@@ -701,12 +701,12 @@
         <span>
             <bold>인터셉터</bold>
         </span>
-        <span>
+        <span>◆ 인터셉터란?
             <pre>
                 ● 정의 : 컨트롤러에 들어오는 요청인 HttpRequest와 컨트롤러가 응답하는 HttpResponse를 가로채는 역할
             </pre>
         </span>
-        <span>인터셉터 사용 방법
+        <span>◆ 인터셉터 사용 방법
             <pre>
                 ● spirng-servlet.xml에 인터셉터 태그를 통해서 사용 설정하기
                     코드)
@@ -725,7 +725,7 @@
                         (3) afterCompletion() : 뷰까지 처리가 끝난 후에 처리된다.
             </pre>
         </span>
-        <span>인터셉터와 필터의 차이
+        <span>◆ 인터셉터와 필터의 차이
             <pre>
                 ● 인터셉터
                     ○ 호출 시점 : DispatcherServlet이 실행된 후
@@ -746,19 +746,19 @@
         <span>
             <bold>컨트롤러</bold>
         </span>
-        <span>컨트롤러 어노테이션 (@Controller)
+        <span>◆ 컨트롤러 어노테이션 (@Controller)
             <pre>
                 ●  해당 클래스를 "Controller"로 등록하기 위해 사용하는 어노테이션
                 ●  @Controller 어노테이션을 적용하면 해당 클래스가 bean으로 등록되며, 해당 클래스가 Controller로 사용할것임을 프레임워크에 알린다.
             </pre>
         </span>
-        <span>컨트롤러의 역할 (컨트롤러 &lt;=> 서비스 &lt;=> DAO)
+        <span>◆ 컨트롤러의 역할 (컨트롤러 &lt;=> 서비스 &lt;=> DAO)
             <pre>
                 ● 컨트롤러는 단순히 요청을 받아 해당 요청에 맞는 서비스에 데이터를 주입하는 역할을 한다.
                 ● 서비스는 비즈니스 로직이기 때문에 단순한 자바 코드로만 이루어져야 하기 때문에 HttpServletRequest나 HttpServletResponse와 같은 객체를 매개 변수로 받아서 처리하는 역할은 컨트롤러에서 해야 한다.
             </pre>
         </span>
-        <span>주소 매핑하기 (@RequestMapping, @GetMapping, @PostMapping)
+        <span>◆ 주소 매핑하기 (@RequestMapping, @GetMapping, @PostMapping)
             <pre>
                 ● 해당 어노테이션이 선언된 컨트롤러 클래스의 모든 메소드가 하나의 요청에 대한 처리를 할 경우에 사용한다.
                 ● @RequestMapping 어노테이션에 대한 모든 매핑 정보는 스프링에서 제공하는 HandlerMapping 클래스가 가지고 있다.
@@ -787,7 +787,7 @@
                     ○ @PostMapping("요청 주소") => @RequestMapping(value = "요청 주소", method = RequestMethod.POST)의 요약
             </pre>
         </span>
-        <span>비동기 통신을 위한 어노테이션 (@RequestBody, @ResponseBody)
+        <span>◆ 비동기 통신을 위한 어노테이션 (@RequestBody, @ResponseBody)
             <pre>
                 ● 주로 ajax같은 비동기 통신을 하여 데이터 처리를 하기 위해서는 http 요청의 본문에 데이터를 담아하기 때문에
                   @ResponseBody나  @RequestBody같은 어노테이션이 필요하다.
@@ -810,7 +810,7 @@
                 ● @RestController 어노테이션 : @Contrller 어노테이션 + @Response 어노테이션
             </pre>
         </span>
-        <span>값 전달하기/전달받기 (@RequestParam, @PathVariable)
+        <span>◆ 값 전달하기/전달받기 (@RequestParam, @PathVariable)
             <pre>
                 ● name 속성의 따른 값 (@RequestParam 어노테이션) : 명시한 name 속성명에 따라 전달받은 값을 골라서 받는다.
                     1. @RequestParam을 통해 전달받을 값을 String으로 지정했을 때, 만약 전달받은 값이 String이 아닐 경우 자동으로 형변환한다.
@@ -839,7 +839,7 @@
                         }
             </pre>
         </span>
-        <span>데이터 전달 방식 (RequestMethod - GET/POST)
+        <span>◆ 데이터 전달 방식 (RequestMethod - GET/POST)
             <pre>
                 ● GET : 클라이언트에서 서버로 어떠한 리소스로 부터 정보를 요청하기 위해 사용되는 메서드
                     ○ GET 요청은 캐시가 가능하다.
@@ -857,7 +857,7 @@
                     ○ POST 요청은 body 에 데이터를 담아 보내기 때문에 당연히 http 메시지에 body가 존재한다.
             </pre>
         </span>
-        <span>View 페이지에 데이터 전달하기 (Model 객체)
+        <span>◆ View 페이지에 데이터 전달하기 (Model 객체)
             <pre>
                 ● Model 객체란? : Controller에서 생성한 데이터를 담아서 View로 전달할 때 사용하는 HashMap의 형식의 객체
                 ● Model 객체 사용법
@@ -887,7 +887,7 @@
                     }
             </pre>
         </span>
-        <span>Spring 5부터 지원되는 Rendering 인터페이스
+        <span>◆ Spring 5부터 지원되는 Rendering 인터페이스
             <pre>
                 기본 형식)
                     @매핑_어노테이션("요청 url")
@@ -907,12 +907,12 @@
         <span>
             <bold>서비스</bold>
         </span>
-        <span>서비스 어노테이션 (@Service)
+        <span>◆ 서비스 어노테이션 (@Service)
             <pre>
                 ● 빈 객체를 만들어 주는 어노테이션, 가시성을 위해 사용한다. 비즈니스 로직에 대해서 처리하는 경우에 명시한다.
             </pre>
         </span>
-        <span>서비스의 역할 (컨트롤러 &lt;=> 서비스 &lt;=> DAO)
+        <span>◆ 서비스의 역할 (컨트롤러 &lt;=> 서비스 &lt;=> DAO)
             <pre>
                 ● 컨트롤러 => 서비스 :
                     컨트롤러는 단순히 요청을 받아 해당 요청에 맞는 서비스에 데이터를 주입하는 역할을 한다.
@@ -922,7 +922,7 @@
                     서비스는 특정한 작업을 위해 여러개의 DAO를 묶은 하나의 트랜잭이 된다.
             </pre>
         </span>
-        <span>서비스의 특징
+        <span>◆ 서비스의 특징
             <pre>
                 ● 서비스는 불필요하게 Http 통신을 위한 HttpServlet을 상속 받을 필요도 없는 순수한 자바 객체로 구성된다.
                     =>  서비스에 request나 response와 같은 객체를 매개변수로 받아선 안된다.
@@ -942,7 +942,7 @@
         <span>
             <bold>설정 파일 - pom.xml</bold>
         </span>
-        <span>pom.xml의 역할 ( POM : Project Object Model )
+        <span>◆ pom.xml의 역할 ( POM : Project Object Model )
             <pre>
                 ● 프로젝트의 구조와 내용을 설명하는 파일
                 ● 프로젝트 관리 및 빌드에 필요한 환경 설정, 의존성 관리 등의 정보들을 기술한다.
@@ -951,7 +951,7 @@
                 ● 프로젝트의 구조와 내용을 설명하는 파일
             </pre>
         </span>
-        <span>프로젝트 정보 (pom.xml의 project 태그 내부에 작성)
+        <span>◆ 프로젝트 정보 (pom.xml의 project 태그 내부에 작성)
             <pre>
                 ● modelVersion : POM 모델의 버전 (예시 : 4.0.0)
                 ● groupId : 프로젝트의 큰 틀
@@ -977,7 +977,7 @@
                 ※ 최상위의 project 태그의 xmlns, xmlns:xsi, xsi:schemaLocation같은 속성들은 모두 정해진 값이기 때문에 그냥 복사해다가 쓰면 된다.
             </pre>
         </span>
-        <span>의존성 정보 (pom.xml의 project 태그 → dependencies 태그 → dependency 태그 내부에 작성)
+        <span>◆ 의존성 정보 (pom.xml의 project 태그 → dependencies 태그 → dependency 태그 내부에 작성)
             <pre>
                 ● groupId : 해당 라이브러리의 그룹명 (예시 : org.springframework)
                 ● artifactId : 해당 라이브러리의 기능명 (예시 : spring-context)
@@ -993,7 +993,7 @@
                         &lt;/exclusions>
             </pre>
         </span>
-        <span>빌드 정보 (pom.xml의 project 태그 → build 태그 → plugins 태그 → plugin 태그 내부에 작성)
+        <span>◆ 빌드 정보 (pom.xml의 project 태그 → build 태그 → plugins 태그 → plugin 태그 내부에 작성)
             <pre>
                 ● groupId : 해당 플러그인의 그룹명 (예시 : org.apache.maven.plugins)
                 ● artifactId : 해당 플러그인의 기능명 (예시 : maven-compiler-plugin)
@@ -1004,14 +1004,14 @@
                 ※ maven-compiler-plugin 플러그인을 찾아서 configuration 설정에서 source와 target의 값을 바꾸면 해당 프로젝트의 jdk 버전을 변경할 수 있다.
             </pre>
         </span>
-        <span>pom.xml의 상속  (pom.xml의 project 태그 → parent 태그 내부에 작성)
+        <span>◆ pom.xml의 상속  (pom.xml의 project 태그 → parent 태그 내부에 작성)
             <pre>
                 ● groupId : 상속받는 pom.xml이 해당하는 프로젝트의 groupId
                 ● artifactId : 상속받는 pom.xml이 해당하는 프로젝트의 artifactId
                 ● version : 상속받는 pom.xml이 해당하는 프로젝트의 version
             </pre>
         </span>
-        <span>자주 쓰는 기능
+        <span>◆ 자주 쓰는 기능
             <pre>
                 ● mybatis 관련
                     &lt;dependency>
@@ -1093,19 +1093,19 @@
         <span>
             <bold>설정 파일 - web.xml</bold>
         </span>
-        <span>web.xml의 역할
+        <span>◆ web.xml의 역할
             <pre>
                 ● Web Application의 환경파일
             </pre>
         </span>
-        <span>web.xml의 특징
+        <span>◆ web.xml의 특징
             <pre>
                 ● 모든 Web application은 반드시 하나의 web.xml 파일을 가져야 함
                 ● web.xml 파일의 설정들은 Web Application 시작시 메모리에 로딩된다.
                 ● web.xml 파일을 수정 할 경우 web application을 재시작 해야 한다.
             </pre>
         </span>
-        <span>web.xml의 작성 내용
+        <span>◆ web.xml의 작성 내용
             <pre>
                 ● ServletContext의 초기 파라미터
                 ● Session의 유효시간 설정
@@ -1118,7 +1118,7 @@
                 ● 보안
             </pre>
         </span>
-        <span>설정 정보 (web.xml의 web-app 태그 내부에 작성)
+        <span>◆ 설정 정보 (web.xml의 web-app 태그 내부에 작성)
             <pre>
                 ● context-param : 모든 서블릿과 필터에서 사용되는 루트 스프링 컨테이너에 대한 설정
                     ○ param-name : 설정파일에 대한 별명 (예시 : contextConfigLocation)
@@ -1180,7 +1180,7 @@
                     ○ file-size-threshold : 업로드한 파일의 크기가 해당 태그에서 설정한 값보다 크면 location 태그에서 지정한 디렉터리에 임시로 파일을 복사한다, 바이트 단위 (기본 값 : 0)
             </pre>
         </span>
-        <span>자주 쓰는 기능
+        <span>◆ 자주 쓰는 기능
             <pre>
                 ● 한글 깨짐 방지
                     &lt;filter>
@@ -1214,12 +1214,12 @@
         <span>
             <bold>설정 파일 - root-context.xml</bold>
         </span>
-        <span>root-context.xml의 역할
+        <span>◆ root-context.xml의 역할
             <pre>
                 ● 내용
             </pre>
         </span>
-        <span>빈 설정 (기본 구조 : bean => property & constructor-arg, root-context.xml의 beans 태그 안에 작성)
+        <span>◆ 빈 설정 (기본 구조 : bean => property & constructor-arg, root-context.xml의 beans 태그 안에 작성)
             <pre>
                 ● bean : xxx
                     ○ id : xxx
@@ -1232,13 +1232,13 @@
                 ※ property 태그 안에서도 bean을 설정할 수 있다.
             </pre>
         </span>
-        <span>컴포넌트 스캔 설정 (root-context.xml의 beans 태그 안에 작성)
+        <span>◆ 컴포넌트 스캔 설정 (root-context.xml의 beans 태그 안에 작성)
             <pre>
                 ● context:component-scan : xxx
                     ○ base-package : xxx
             </pre>
         </span>
-        <span>자주 쓰는 기능
+        <span>◆ 자주 쓰는 기능
             <pre>
                 ● xxx
                     xxx
@@ -1252,24 +1252,24 @@
         <span>
             <bold>설정 파일 - servelt-context.xml</bold>
         </span>
-        <span>servelt-context.xml의 역할
+        <span>◆ servelt-context.xml의 역할
             <pre>
                 ● xxx
             </pre>
         </span>
-        <span>어노테이션 설정 (servelt-context.xml의 beans 태그 안에 작성, 단일 태그로 사용)
+        <span>◆ 어노테이션 설정 (servelt-context.xml의 beans 태그 안에 작성, 단일 태그로 사용)
             <pre>
                 ● &lt;annotation-driven /> : xxx
             </pre>
         </span>
-        <span>xxx 설정 (servelt-context.xml의 beans 태그 안에 작성, 단일 태그로 사용)
+        <span>◆ xxx 설정 (servelt-context.xml의 beans 태그 안에 작성, 단일 태그로 사용)
             <pre>
                 ● &lt;resources mapping="/resources/**" location="/resources/" />
                     ○ mapping : xxx
                     ○ location : xxx
             </pre>
         </span>
-        <span>빈 설정 (기본 구조 : 최상위 beans => 추가할 기능 beans => beans:property, servelt-context.xml의 beans 태그 안에 작성, 단일 태그로 사용 가능)
+        <span>◆ 빈 설정 (기본 구조 : 최상위 beans => 추가할 기능 beans => beans:property, servelt-context.xml의 beans 태그 안에 작성, 단일 태그로 사용 가능)
             <pre>
                 ● beans:bean
                     ○ id : xxx
@@ -1279,13 +1279,13 @@
                     ○ value : xxx
             </pre>
         </span>
-        <span>interceptors 설정 (기본 구조 : 최상위 beans => interceptors => interceptor => mapping , servelt-context.xml의 beans 태그 안에 작성)
+        <span>◆ interceptors 설정 (기본 구조 : 최상위 beans => interceptors => interceptor => mapping , servelt-context.xml의 beans 태그 안에 작성)
             <pre>
                 ● mapping : xxx
                     ○ base-package : path
             </pre>
         </span>
-        <span>자주 쓰는 기능
+        <span>◆ 자주 쓰는 기능
             <pre>
                 ● xxx
                     xxx
@@ -1299,19 +1299,19 @@
         <span>
             <bold>설정 파일 분리하기</bold>
         </span>
-        <span>설정 값 분리의 필요성 (@Value 어노테이션)
+        <span>◆ 설정 값 분리의 필요성 (@Value 어노테이션)
             <pre>
                 ● 환경에 따라 유연한 값 설정 가능
                 ● 초기값을 설정 가능
                 ● 불필요한 컴파일 축소 가능
             </pre>
         </span>
-        <span>전제 조건
+        <span>◆ 전제 조건
             <pre>
                 ● classpath의 기본 위치는 프로젝트/src/main/resources다.
             </pre>
         </span>
-        <span>PropertyPlaceHolderConfigurer를 통한 수동 변환
+        <span>◆ PropertyPlaceHolderConfigurer를 통한 수동 변환
             <pre>
                 ● 설명 : 빈 설정 메타정보가 모두 준비됐을 때 빈 메타정보 자체를 조작하기 위해 사용하는 방식
                 ● 전체 조건 : 해당 클래스에 @Configuration 어노테이션과 @PropertySource("classpath:설정파일경로") 어노테이션을 명시해준다.
@@ -1334,7 +1334,7 @@
                     private String hoddy;
             </pre>
         </span>
-        <span>SpEL을 통한 능동 변환
+        <span>◆ SpEL을 통한 능동 변환
             <pre>
                 ● 설명 : 다른 빈 오브젝트에 직접 접근할 수 있는 표현식을 이용해 원하는 프로퍼티 값을 능동적으로 가져온다.
                 ● 전체 조건 : 해당 클래스에 @Component 어노테이션을 명시해준다.
@@ -1359,7 +1359,7 @@
                 ※ 주의점 : 메소드 및 생성자 인자에 @Value를 사용할 때는 @Autowired나 @Resource같은 어노테이션이 반드시  존재해야 한다.
             </pre>
         </span>
-        <span>Environment을 통한 능동 변환
+        <span>◆ Environment을 통한 능동 변환
             <pre>
                 ● 설명 : 다른 빈 오브젝트에 직접 접근할 수 있는 표현식을 이용해 원하는 프로퍼티 값을 능동적으로 가져온다.
                 ● 전체 조건 : 해당 클래스에 @Configuration 어노테이션과 @PropertySource("classpath:설정파일경로") 어노테이션을 명시해준다.
@@ -1386,7 +1386,7 @@
         <span>
             <bold>어노테이션 목록</bold>
         </span>
-        <span>MVC - 컨트롤러
+        <span>◆ MVC - 컨트롤러
             <pre>
                 ● @Contrller : 해당 클래스를 빈으로 등록하고, 해당 클래스를  컨트롤러로 사용할것임을 프레임워크에 알리는 어노테이션
 
@@ -1402,12 +1402,12 @@
                 ● @ModelAttribute : View에 데이터를 전달하기 위해 설정하는 어노테이션
             </pre>
         </span>
-        <span>MVC - 서비스
+        <span>◆ MVC - 서비스
             <pre>
                 ● @Service : 빈 객체를 만들어 주는 어노테이션, 가시성을 위해 사용한다. 비즈니스 로직에 대해서 처리하는 경우에 명시한다.
             </pre>
         </span>
-        <span>빈 관련 - 의존성 주입
+        <span>◆ 빈 관련 - 의존성 주입
             <pre>
                 ● @Autowired : 해당하는 타입의 객체를 찾아서 자동으로 할당하는 어노테이션
                     ○ 생성자, 메소드, 멤버변수 위에 모두 사용 가능
@@ -1427,7 +1427,7 @@
                     ○ &lt;context:annotation-config/>를 xml 파일에 추가해야지 사용할수 있다.
             </pre>
         </span>
-        <span>빈 관련 - 컴포넌트 스캔
+        <span>◆ 빈 관련 - 컴포넌트 스캔
             <pre>
                 ● @Component("빈 id") : 개발자가 직접 작성한 클래스를 bean 등록하고자 할 경우 사용하는 어노테이션
                 ● @ComponentScan : 설정된 시작 지점부터 컴포넌트 클래스를 scanning하여 빈으로 등록해주는 역할을 하는 어노테이션
@@ -1441,19 +1441,19 @@
                 ● @Scope
             </pre>
         </span>
-        <span>빈 관련 - 외부 설정 파일
+        <span>◆ 빈 관련 - 외부 설정 파일
             <pre>
                 ● @Configuration : 외부라이브러 또는 내장 클래스를 빈으로 등록하고자 할 경우 사용하는 어노테이션, 1개 이상의 @Bean을 제공하는 클래스의 경우 반드시 @Configuraton을 명시
                 ● @PropertySource("classpath:설정파일경로") : 해당 설정 파일의 위치를 명시하는 어노테이션
                 ● @Value("${빈id.속성명:디폴트값}") : 빈으로 등록된 클래스에서 값을 가져와서 주입하는 어노테이션
             </pre>
         </span>
-        <span>쿠키
+        <span>◆ 쿠키
             <pre>
                 ● @CookieValue(value="가져올_쿠키명", required=true/false)
             </pre>
         </span>
-        <span>기타
+        <span>◆ 기타
             <pre>
                 ● @Repository : 빈 객체를 만들어 주는 어노테이션, 가시성을 위해 사용한다. 외부I/O에 대해서 처리하는 경우에 명시한다.
             </pre>
