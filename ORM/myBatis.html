@@ -9,91 +9,91 @@
 </head>
 <body>
     <section id="installAndConnnecting">
-        <span>
-            <bold>설치 및 연결</bold>
-        </span>
-        <span>설치 및 연결
-            <pre>
-                1. pom.xml에 의존성 추가
-                    &lt;dependency>
-                        &lt;groupId>org.mybatis&lt;/groupId>
-                        &lt;artifactId>mybatis&lt;/artifactId>
-                        &lt;version>3.2.2&lt;/version>
-                    &lt;/dependency>
-                    &lt;dependency>
-                        &lt;groupId>org.mybatis&lt;/groupId>
-                        &lt;artifactId>mybatis-spring&lt;/artifactId>
-                        &lt;version>1.2.0&lt;/version>
-                    &lt;/dependency>
-                    &lt;dependency>
-                        &lt;groupId>org.springframework&lt;/groupId>
-                        &lt;artifactId>spring-jdbc&lt;/artifactId>
-                        &lt;version>${org.springframework-version}&lt;/version>
-                    &lt;/dependency>
-            </pre>
-        </span>
-        <span>사용법 (공통)
-            <pre>
-                1. XXX
-            </pre>
-        </span>
-        <span>사용법 (초기 버전)
-            <pre>
-                1. XXX
-            </pre>
-        </span>
-        <span>사용법 (3.0 버전)
-            <pre>
-                1. XXX
-            </pre>
-        </span>
+        <header class="note_title">설치 및 연결</header>
+        <ul>
+            <li>설치 및 연결
+                <pre>
+                    1. pom.xml에 의존성 추가
+                        &lt;dependency>
+                            &lt;groupId>org.mybatis&lt;/groupId>
+                            &lt;artifactId>mybatis&lt;/artifactId>
+                            &lt;version>3.2.2&lt;/version>
+                        &lt;/dependency>
+                        &lt;dependency>
+                            &lt;groupId>org.mybatis&lt;/groupId>
+                            &lt;artifactId>mybatis-spring&lt;/artifactId>
+                            &lt;version>1.2.0&lt;/version>
+                        &lt;/dependency>
+                        &lt;dependency>
+                            &lt;groupId>org.springframework&lt;/groupId>
+                            &lt;artifactId>spring-jdbc&lt;/artifactId>
+                            &lt;version>${org.springframework-version}&lt;/version>
+                        &lt;/dependency>
+                </pre>
+            </li>
+            <li>사용법 (공통)
+                <pre>
+                    1. XXX
+                </pre>
+            </li>
+            <li>사용법 (초기 버전)
+                <pre>
+                    1. XXX
+                </pre>
+            </li>
+            <li>사용법 (3.0 버전)
+                <pre>
+                    1. XXX
+                </pre>
+            </li>
+        </ul>
     </section>
 
     <br>
 
     <section id="dataBinding">
-        <span>
-            <bold>데이터 연결</bold>
-        </span>
-        <span>#
-            <pre>
-                #은 데이터 값에 문자열을 자동으로 추가한 상태로 대입된다.
-            </pre>
-        </span>
-        <span>#
-            <pre>
-                $는 데이터 값이 그대로 대입된다.
-            </pre>
-        </span>
+        <header class="note_title">데이터 연결</header>
+        <ul>
+            <li># 사용법
+                <pre>
+                    #은 데이터 값에 문자열을 자동으로 추가한 상태로 대입된다.
+                </pre>
+            </li>
+            <li>$ 사용법
+                <pre>
+                    $는 데이터 값이 그대로 대입된다.
+                </pre>
+            </li>
+        </ul>
     </section>
 
     <br>
 
     <section id="dataSubstitution">
-        <span>
-            <bold>데이터 치환</bold>
-        </span>
-        <span>태그를 삭제하고 싶은 경우
-            <pre>
-                ● REGEXP_REPLACE(칼럼명, 정규식, 교체 내용) 함수를 사용한다.
+        <header class="note_title">데이터 치환</header>
+        <ul>
+            <li>태그를 삭제하고 싶은 경우
+                <pre>
+                    ● REGEXP_REPLACE(칼럼명, 정규식, 교체 내용) 함수를 사용한다.
 
-                예시)
-                    /* html 태그를 빈 문자열로 교체한다. */
-                    REGEXP_REPLACE(title, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%'
-            </pre>
-        </span>
-        <span>특수문자를 사용하고 싶은 경우
-            <pre>
-                ● &lt;![CDATA[ 내용 ]]>을 사용한다.
+                    예시)
+                        /* html 태그를 빈 문자열로 교체한다. */
+                        REGEXP_REPLACE(title, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%'
+                </pre>
+            </li>
+            <li>특수문자를 사용하고 싶은 경우
+                <pre>
+                    ● &lt;![CDATA[ 내용 ]]>을 사용한다.
 
-                예시)
-                    select title, content from blog_post
-                    where useYN = 'Y'
-                    &lt;![CDATA[
-						and (REGEXP_REPLACE(title, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%' or REGEXP_REPLACE(content, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%')
-				    ]]>
-            </pre>
-        </span>
+                    예시)
+                        select title, content from blog_post
+                        where useYN = 'Y'
+                        &lt;![CDATA[
+                            and (REGEXP_REPLACE(title, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%' or REGEXP_REPLACE(content, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%')
+                        ]]>
+                </pre>
+            </li>
+        </ul>
     </section>
 
     <div id="remote">
