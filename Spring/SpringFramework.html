@@ -1219,6 +1219,31 @@
                 ● 내용
             </pre>
         </span>
+        <span>빈 설정 (기본 구조 : bean => property & constructor-arg, root-context.xml의 beans 태그 안에 작성)
+            <pre>
+                ● bean : xxx
+                    ○ id : xxx
+                    ○ class : xxx
+                ● property : xxx
+                    ○ name : xxx
+                    ○ value : xxx
+                ● constructor-arg : xxx
+
+                ※ property 태그 안에서도 bean을 설정할 수 있다.
+            </pre>
+        </span>
+        <span>컴포넌트 스캔 설정 (root-context.xml의 beans 태그 안에 작성)
+            <pre>
+                ● context:component-scan : xxx
+                    ○ base-package : xxx
+            </pre>
+        </span>
+        <span>자주 쓰는 기능
+            <pre>
+                ● xxx
+                    xxx
+            </pre>
+        </span>
     </section>
 
     <br>
@@ -1230,6 +1255,40 @@
         <span>servelt-context.xml의 역할
             <pre>
                 ● xxx
+            </pre>
+        </span>
+        <span>어노테이션 설정 (servelt-context.xml의 beans 태그 안에 작성, 단일 태그로 사용)
+            <pre>
+                ● &lt;annotation-driven /> : xxx
+            </pre>
+        </span>
+        <span>xxx 설정 (servelt-context.xml의 beans 태그 안에 작성, 단일 태그로 사용)
+            <pre>
+                ● &lt;resources mapping="/resources/**" location="/resources/" />
+                    ○ mapping : xxx
+                    ○ location : xxx
+            </pre>
+        </span>
+        <span>빈 설정 (기본 구조 : 최상위 beans => 추가할 기능 beans => beans:property, servelt-context.xml의 beans 태그 안에 작성, 단일 태그로 사용 가능)
+            <pre>
+                ● beans:bean
+                    ○ id : xxx
+                    ○ class : xxx
+                ● beans:property
+                    ○ name : xxx
+                    ○ value : xxx
+            </pre>
+        </span>
+        <span>interceptors 설정 (기본 구조 : 최상위 beans => interceptors => interceptor => mapping , servelt-context.xml의 beans 태그 안에 작성)
+            <pre>
+                ● mapping : xxx
+                    ○ base-package : path
+            </pre>
+        </span>
+        <span>자주 쓰는 기능
+            <pre>
+                ● xxx
+                    xxx
             </pre>
         </span>
     </section>
