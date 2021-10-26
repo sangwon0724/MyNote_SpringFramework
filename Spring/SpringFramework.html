@@ -29,11 +29,6 @@
                     ● 스프링은 좋은 객체 지향 애플리케이션을 개발할 수 있게 도와주는 프레임워크
                 </pre>
             </li>
-            <li>스프링 프레임워크의 구조
-                <pre>
-                    ● xxx
-                </pre>
-            </li>
         </ul>
     </section>
 
@@ -709,7 +704,6 @@
                 <pre>
                     ● spirng-servlet.xml에 인터셉터 태그를 통해서 사용 설정하기
                         코드)
-                            <!-- Interceptors -->
                             &lt;mvc:interceptors>
                                 &lt;mvc:interceptor>
                                     &lt;mvc:mapping path="/**" /> 
@@ -718,7 +712,7 @@
                             &lt;/mvc:interceptors>
 
                     ● 인터셉터 클래스 구현하기
-                        ○ 방법 1 : HandlerInterceptor 인터페이스 구현하기
+                        ○ HandlerInterceptorAdapter 상속받기
                             (1) preHandle() : 컨트롤러로 보내기 전에 처리하는 인터셉터, return 값이 false면 컨트롤러로 요청을 안한다.
                             (2) postHandle() : 컨트롤러의 handler가 끝나면 처리된다.
                             (3) afterCompletion() : 뷰까지 처리가 끝난 후에 처리된다.
@@ -1215,32 +1209,77 @@
         <ul>
             <li>root-context.xml의 역할
                 <pre>
-                    ● 내용
+                    ● 모든 서블릿이 공유할 수 있는 공통 빈을 설정하는 파일
+                    ● 프로젝트의 어플리케이션 영역 설정
+                    ● 스프링 MVC 설정과 관련된 여러 처리를 담당
+                    ● View와 관련없는 빈을 설정 (예시 : 서비스, 레포지토리 등등)
+                    ● View와 밀접하지 않은 정보를 기술하는 xml 파일
+                    ● 외부 jar파일등으로 사용하는 클래스는 bean 태그를 이용해 작성
                 </pre>
             </li>
             <li>빈 설정 (기본 구조 : bean => property & constructor-arg, root-context.xml의 beans 태그 안에 작성)
                 <pre>
-                    ● bean : xxx
-                        ○ id : xxx
-                        ○ class : xxx
-                    ● property : xxx
-                        ○ name : xxx
-                        ○ value : xxx
-                    ● constructor-arg : xxx
+                    ● bean : 객체 정의 태그
+                        ○ id : 해당 객체의 고유 id (예시 : dataSourceSpied)
+                        ○ class : 해당 객체 (예시 : org.springframework.jdbc.datasource.DriverManagerDataSource)
+                        ○ destroy-method : 주어진 세션을 자동으로 close하라는 의미 (예시 : close)
+                    ● property : bean 태그 안에 작성하는 해당 객체의 속성을 설정하는 태그
+                        ○ name : 해당 속성의 이름 (예시 : driverClassName)
+                        ○ value : 해당 속성의 값 (예시 : org.mariadb.jdbc.Driver)
+                        ○ ref : 해당 빈이 참고하는 다른 빈의 id (예시 : dataSource)dataSourceSpied
+                    ● constructor-arg :  bean 태그 안에 작성하는 의존하는 객체를 생성자를 통해 주입받는 태그
+                        ○ ref : 해당 빈이 참고하는 다른 빈의 id (예시 : dataSourceSpied)
 
                     ※ property 태그 안에서도 bean을 설정할 수 있다.
                 </pre>
             </li>
             <li>컴포넌트 스캔 설정 (root-context.xml의 beans 태그 안에 작성)
                 <pre>
-                    ● context:component-scan : xxx
-                        ○ base-package : xxx
+                    ● context:component-scan : 명시한 패키지에 있는 클래스들을 빈으로 등록하기 위한 태그
+                        ○ base-package : 빈으로 등록하려고 하는 클래스가 포함된 패키지 경로 (예시 : com.my.mapper)
+                    ● 기본 예시 코드 )
+                        &lt;context:component-scan base-package="com.my.mapper" />
+                    ● 필터링 기능이 적용된 예시 코드 )
+                        &lt;context:component-scan base-package="com.my">
+                            &lt;context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+                        &lt;/context:component-scan>
                 </pre>
             </li>
             <li>자주 쓰는 기능
                 <pre>
-                    ● xxx
-                        xxx
+                    ● JDBC 연결 (mariaDB의 경우)
+                        &lt;bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+                            &lt;property name="driverClassName" value="org.mariadb.jdbc.Driver" />
+                            &lt;property name="url" value="jdbc:mariadb://url주소/데이터베이스명" />
+                            &lt;property name="username" value="유저명" />
+                            &lt;property name="password" value="비밀번호" />
+                        &lt;/bean>
+
+                    ● myBatis 사용
+                        &lt;bean id="SqlSessionFectory" class="org.mybatis.spring.SqlSessionFactoryBean">
+                            &lt;property name="dataSource" ref="dataSource" />
+                            &lt;property name="configLocation" value="classpath:/mybatis-config.xml" />
+                            &lt;property name="mapperLocations" value="classpath:/mappers/*Mapper.xml" />
+                        &lt;/bean>
+                        &lt;bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+                            &lt;constructor-arg name="sqlSessionFactory" ref="SqlSessionFectory" />
+                        &lt;/bean>
+                        &lt;bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+                            &lt;property name="basePackage" value="com.my.mapper" />
+                        &lt;/bean>
+
+                    ● SQL log 사용 (DBMS의 유저정보를 정의하는 dataSource가 이미 정의되어있는 경우)
+                        1. DBMS의 유저정보를 정의하는 id가 dataSource인 빈의 id를 dataSourceSpied로 변경한다.
+                        2. 아래의 코드를 작성한다.
+                            &lt;bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource"> 
+                                &lt;constructor-arg ref="dataSourceSpied" /> 
+                                &lt;property name="logFormatter"> 
+                                    &lt;bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter"> 
+                                        &lt;property name="loggingType" value="MULTI_LINE" /> 
+                                        &lt;property name="sqlPrefix" value="SQL : "/> 
+                                    &lt;/bean> 
+                                &lt;property> 
+                            &lt;/bean>
                 </pre>
             </li>
         </ul>
@@ -1253,12 +1292,12 @@
         <ul>
             <li>servelt-context.xml의 역할
                 <pre>
-                    ● xxx
+                    ● 요청과 관련된 객체를 정의하는 설정 파일
                 </pre>
             </li>
             <li>어노테이션 설정 (servelt-context.xml의 beans 태그 안에 작성, 단일 태그로 사용)
                 <pre>
-                    ● &lt;annotation-driven /> : xxx
+                    ● &lt;annotation-driven /> : 어노테이션을 사용하기 위해서 필수적으로 작성해야 하는 내용
                 </pre>
             </li>
             <li>xxx 설정 (servelt-context.xml의 beans 태그 안에 작성, 단일 태그로 사용)
