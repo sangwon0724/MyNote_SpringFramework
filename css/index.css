@@ -1,6 +1,7 @@
 @import "remote.css"; /* 리모콘 */
 @import "note.css"; /* 노트 */
 @import "nav.css"; /* 네비게이션 */
+@import "modal.css"; /* 모달창 */
 @import "reset.css"; /* 초기화 */
 
 body {
