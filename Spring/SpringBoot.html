@@ -222,6 +222,25 @@
 
     <br>
 
+    <section id="filter">
+        <header class="note_title">필터</header>
+        <ul>
+            <li>필터 (filter)
+                <pre>
+                    ● Web Application에서 관리되는 영역
+                    ● Spring Boot Framework에서 클라이언트로부터 오는 요청/응답에 대해서 최초/최종 단계의 위치에 존재한다.
+                    ● Filter를 통해서 요청/응답의 정보를 변경할수 있다.
+                    ● Spring에 의해서 데이터가 변환되기 전의 순수한 클라이언트의 요청/응답 값을 확인 할 수 있다.
+                    ● 유일하게 ServletRequest/ServletResponse 객체를 변환할 수 있다.
+                    ● Filter에서는 주로 request/response의 logging 용도나 인증 logic 처리를 한다.
+                    ● Filter에서 logic을 처리함으로써 Service Business Logic과 분리한다.
+                </pre>
+            </li>
+        </ul>
+    </section>
+
+    <br>
+
     <section id="ObjectMapper">
         <header class="note_title">ObjectMapper</header>
         <ul>
@@ -279,6 +298,95 @@
                     ● @DeleteMapping : Http Delete Method URL 주소 매핑
 
                     ● @Valid : POJO Java class의 검증
+                </pre>
+            </li>
+            <li>Lombok 어노테이션
+                <pre>
+                    ● @Data : 종합 선물 세트
+                        ○ @Data = @toString  + @EqualsAndHashCode  + @Getter  + @Setter  + @NoArgsConstructor + @RequiredArgsConstructor  + @AllArgsConstructor
+                        ○ 효과가 너무 강하여 왠만하면 @Data 어노테이션보다는 필요한 어노테이션만 따로 설정하는 것이 좋다.
+
+                    ● @Getter : getter 메소드를 자동으로 만들어준다. 
+                    ● @Setter : setter 메소드를 자동으로 만들어준다.
+
+                    ● @Value : 불변하는 특성을 가진 객체를 만드려고 할 때 사용한다.
+
+                    ● @NoArgsConstructor : 파라미터가 없는 생성자를 생성해준다.
+                        ○ final이 붙어있는 경우에는 필드를 초기화 할 수 없기 때문에 생성자를 만들 수가 없어서 에러가 발생한다.
+                        ○ final이 붙어있는 경우에는 @NoArgsConstructor(force = true) 옵션을 이용해서 강체로 초기화시켜서 생성자를 만드는 방법을 사용한다.
+                        ○ @NonNull 같이 필드에 제약조건이 설정되어 있는 경우, 생성자 내에 null-check 로직이 생성되지 않는다.
+                    ● @RequiredArgsConstructor : 추가 작업을 필요로 하는 필드에 대한 생성자를 생성
+                        ○ 초기화 되지 않은 모든 final 필드와 @NonNull같은 validator로 마크돼있는 모든 필드들에 대한 생성자를 자동으로 생성해준다.
+                        ○ validator 어노테이션이 붙어있는 필드에 대하여 만들어진 생성자는 자동적으로 해당 어노테이션에 대한 검증요소가 추가된다.
+                    ● @AllArgsConstructor : 클래스에 존재하는 모든 필드에 대한 생성자를 자동으로 생성해준다.
+                        ○ @NoArgsConstructor + @RequiredArgsConstructor
+                    ● @Builder : 클래스에 존재하는 모든 필드에 대한 생성자를 자동으로 생성해준다.
+                        ○ @AllArgsConstructor 또는 @RequiredArgsConstructor
+                        ○ @Builder 이외의 생성자 어노테이션들은 필드를 선언한 순서대로 생성자의 파라미터를 만들기 때문에
+                          만약 VO Class에서 두 필드의 선언 순서를 바꿨는데 두 필드가 자료형까지 같다면 오류가 발생하지 않기 때문에
+                          추후에 문제가 발생해도 모를 확률이 크기때문에 @Builder를 사용하는 것이 좋다.
+                        ○ 사용 예시
+                            UserVO tempUser
+                                = UserVO.builder()
+                                    .name("홍길동")
+                                    .age(25)
+                                    .email("hong@naver.com")
+                                    .phoneNumber("0001112222")
+                                    .birthday("19970229")
+                                    .build();
+
+
+                    ● @toString : 해당 VO Class의 모든 필드를 출력하는 toString 메소드를 생성한다.
+                    ● @EqualsAndHashCode - hashcode와 equals 메소드를 생성한다.
+                        ○ 불변 클래스를 제외하고는 아무 파라미터 없는 @EqualsAndHashCode 어노테이션은 사용하지 않는 것이 좋다.
+                        ○ 항상 @EqualsAndHashCode(of={“필드명시”}) 형태로 동등성 비교에 필요한 필드를 명시하는 형태로 사용한다.
+
+                    ● @Log / @Slf4j / @Log4j2 : log 기능을 바로 사용해줄 수 있게 해준다.
+                    ● @NonNull : null 값 체크
+                    ● @Cleanup : I/O 작업이나 JDBC 작업시 try-catch-finally문의 finally에서 close()를 사용해야 하던 번거로움을 줄여준다.
+                        예시) @Cleanup Connection con = DriverManager.getConnection(url, user, password);
+                    ● @SneakyThrows(예외오류명.class) : throws나 try-catch문의 catch를 통한 번거로운 예외 처리 생략가능
+                    ● @Synchronized : 동기화
+
+                    ※ Lombok 설치 방법
+                        1. pom.xml에 dependency 추가
+                            &lt;dependency>
+                                &lt;groupId>org.projectlombok&lt;/groupId>
+                                &lt;artifactId>lombok&lt;/artifactId>
+                                &lt;version>1.18.16&lt;/version>
+                                &lt;scope>provided&lt;/scope>
+                            &lt;/dependency>
+                        2-A-1. cmd를 켜서 cd C:\Users\사용자명\.m2\repository\org\projectlombok\lombok\lombok버전 실행
+                        2-A-2. java -jar lombok.jar 실행 (버전이 있는 경우 java -jar lombok-1.18.16.jar)
+                        2-B-1. 파일 탐색기를 열고 C:\Users\사용자명\.m2\repository\org\projectlombok\lombok\lombok로 이동
+                        2-B-2. lombok.jar 파일 실행
+                        3. IDEs 목록에 사용하는 STS(eclipse)를 선택 (안 보이면 Specify location 버튼으로 찾기)
+                        4. Install / Update 클릭
+                        5. Install Successful이 출력되면 성공 (Quit Installer는 단순 종료 버튼)
+
+                    ※ Lombok 어노테이션 추가 위치
+                        ● 클래스 위
+                        ● 필드 위
+
+                    ※ @Getter / @Setter에 필드를 포함시키지 않는 방법
+                        ● @Geeter(AccessLevel.None)
+                        ● @Setter(AccessLevel.None)
+
+                    ※ 생성자 어노테이션을 고유 이름으로 만들기
+                       1. 해당 VO Class에 생성자 어노테이션을 추가한다.
+                       2. 해당 어노테이션에 staticName="원하는 이름" 옵션을 추가한다.
+                       3. 해당 Class에 대한 생성자는 private로 만들어진다.
+                       4. private로 만들어진 생성자를 return 시키는 public static 생성자가 만들어진다. (생성자명은 옵션에 명시한 이름)
+
+                    ※ 주의점
+                        ● static 필드에도 @Getter / @Setter 적용이 가능하다.
+                        ● enum에도 @Getter를 사용할 수 있다.
+                        ● enum에는 @Setter를 사용할 수 없다.
+                        ● 생성자 어노테이션에서 static 필드는 제외된다.
+                        ● 생성자 어노테이션 사용 시 생성자의 파라미터의 순서는 해당 VO Class에서 필드를 선언한 순서와 같다. (주의 필요)
+                        ● 생성자 어노테이션 사용시 기본값은 public이지만 필요로 따라서 접근 제한자를 설정해야 한다.
+                        ● 생성자 어노테이션도 (access =AccessLevel.PROTECTED)처럼 기본 접근 제한자를 선택할 수 있는 옵션이 존재한다.
+                        ● 왜인지는 모르겠는데 @Builder를 사용할 때 커스텀 어노테이션이 있으니까 오류가 생긴다.
                 </pre>
             </li>
             <li>Custom Annotation
@@ -350,6 +458,7 @@
                 <option value="intro">스프링 부트</option>
                 <option value="validation">유효성 검사</option>
                 <option value="exception">예외 처리</option>
+                <option value="filter">필터</option>
                 <option value="ObjectMapper">ObjectMapper</option>
                 <option value="responseEntity">ResponseEntity</option>
                 <option value="annotation">어노테이션 목록</option>
