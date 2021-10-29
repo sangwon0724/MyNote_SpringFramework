@@ -1,2 +1,6 @@
 @Valid와 BindingResult와 FieldError
-StringBuilder
+String / StringBuffer / StringBuilder
+WebMvcConfigurer
+InterceptorRegistry
+ResourceHttpRequestHandler
+HandlerMethod

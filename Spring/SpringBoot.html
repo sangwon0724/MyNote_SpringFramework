@@ -228,12 +228,118 @@
             <li>필터 (filter)
                 <pre>
                     ● Web Application에서 관리되는 영역
+                    ● 인터셉터는 DispatcherServlet이 실행되기 전에 호출된다.
                     ● Spring Boot Framework에서 클라이언트로부터 오는 요청/응답에 대해서 최초/최종 단계의 위치에 존재한다.
                     ● Filter를 통해서 요청/응답의 정보를 변경할수 있다.
                     ● Spring에 의해서 데이터가 변환되기 전의 순수한 클라이언트의 요청/응답 값을 확인 할 수 있다.
                     ● 유일하게 ServletRequest/ServletResponse 객체를 변환할 수 있다.
                     ● Filter에서는 주로 request/response의 logging 용도나 인증 logic 처리를 한다.
                     ● Filter에서 logic을 처리함으로써 Service Business Logic과 분리한다.
+                </pre>
+            </li>
+            <li>필터 구현하기
+                <pre>
+                    1. javax.servlet.Filter의 Filter 인터페이스를 구현한 클래스를 만든다.
+                    2. 상황에 맞는 메소드를 오버라이딩한다.
+                        ○ public void init(FilterConfig filterConfig) : 필터를 웹 콘테이너에 생성 후 초기화할 때 호출되는 메소드
+                        ○ public void doFilter(ServletRequest request, SevletResponse response, FilterChain chain) :
+                            ○ request, response에 대한 필터링 로직을 작성하는 메소드
+                            ○ resquest, response가 체인을 통과할 때 마다 서블릿 컨테이너에서 호출된다.
+                            ○ FilterChain으로 연결한다.
+                            ○ 필터링 로직을 사용하지 않을 때에는 요청을 servlet으로 보내지 않고 바로 응답하게 한다.
+                        ○ public void destroy() : 필터가 웹 콘테이너에서 삭제될 때 호출되는 메소드
+
+                    ● doFilter 예시
+                        @Override
+                        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+                            ContentCachingRequestWrapper wrappingRequest = new ContentCachingRequestWrapper((HttpServletRequest)request);
+                            ContentCachingResponseWrapper wrappingResponse = new ContentCachingResponseWrapper((HttpServletResponse) response);
+                    
+                            chain.doFilter(wrappingRequest, wrappingResponse);
+                    
+                            System.out.println(new String(wrappingRequest.getContentAsByteArray(),"UTF-8"));
+
+                            System.out.println(new String(wrappingResponse.getContentAsByteArray(),"UTF-8"));
+                            
+                            wrappingResponse.copyBodyToResponse();
+                        }
+                </pre>
+            </li>
+            <li>필터 적용하기
+                <pre>
+                    1. @SpringBootApplication이 적용된 클래스에 가서 @ServletComponentScan을 추가한다.
+                    2. Filter를 구현한 클래스에 가서 @WebFilter(urlPatterns="url 주소")를 추가한다. (url 주소는 String 배열로 줄 수도 있다.)
+                </pre>
+            </li>
+        </ul>
+    </section>
+
+    <br>
+
+    <section id="interceptor">
+        <header class="note_title">인터셉터</header>
+        <ul>
+            <li>인터셉터 (interceptor)
+                <pre>
+                    ● 컨트롤러에 들어오는 요청 HttpRequest와 컨트롤러가 응답하는 HttpResponse를 가로채는 기능
+                    ● Interceptor는 DispatcherServlet이 실행된 후에 호출된다.
+                    ● Interceptor에서 logic을 처리함으로써 Service Business Logic과 분리한다.
+                </pre>
+            </li>
+            <li>인터셉터 구현하기
+                <pre>
+                    1. HandlerInterceptor 인터페이스를 구현한 인터셉터용 클래스를 추가한다.
+                    2. 해당 클래스에 @Component 어노테이션을 추가한다.
+                    3. 필요한 메소드들을 오버라이딩 한다.
+                        ● PreHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+                            ○ 컨트롤러에 진입하기 전에 실행되는 메소드
+                            ○ 반환 값이 true일 경우 컨트롤러로 진입하고, false일 경우 진입하지 않는다.
+                            ○ Object handler는 진입하려는 컨트롤러의 클래스 객체가 담겨있다.
+                        
+                        ● PostHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
+                            ○ 컨트롤러 진입 후 View가 랜더링 되기 전에 수행되는 메소드
+                        
+                        ● afterComplete(HttpServletRequest request, HttpServletResponse response, Object object, Exception ex)
+                            ○ 컨트롤러 진입 후 view가 랜더링 된 후에 실행되는 메소드
+                        
+                        ● afterConcurrentHandlingStarted(HttpServletRequest request, HttpServletResponse response, Object h)
+                            ○ 비동기 요청 시 PostHandle 메소드와 afterCompletion 메소드 대신에 실행되는 메소드
+                </pre>
+            </li>
+            <li>인터셉터 적용하기
+                <pre>
+                    1. WebMvcConfigurer 인터페이스를 구현한 인터셉터 등록용 클래스를 추가한다.
+                    2. 해당 클래스에 @Configuration 어노테이션을 추가한다.
+                    3. 필요한 메소드들을 오버라이딩 한다.
+                        ● public void addInterceptors(InterceptorRegistry registry) : 인터셉터를 등록하는 메소드
+                    4. addInterceptors 메소드에서 자신이 생성한 인터셉터 클래스 객체를 등록한다.
+                        예시-1)
+                            //Lombok의 @RequiredArgsConstructor 추가
+                            private final AuthInterceptor authInterceptor;
+
+                            @Override
+                            public void addInterceptors(InterceptorRegistry registry) {
+                                registry.addInterceptor(authInterceptor)
+                                .addPathPatterns("/api/test/*") // 해당 경로에 접근하기 전에 인터셉터가 가로챈다. (필수 X)
+                                .excludePathPatterns("/api/service/*"); // 해당 경로는 인터셉터가 가로채지 않는다. (필수 X)
+                            }
+
+                        예시-2)
+                            private final AuthInterceptor authInterceptor;
+
+                            //MvcConfig는 임의로 만든 인터셉터 등록용 클래스명
+                            public MvcConfig(AuthInterceptor authInterceptor) {
+                                this.authInterceptor = authInterceptor;
+                            }
+
+                            @Override
+                            public void addInterceptors(InterceptorRegistry registry) {
+                                registry.addInterceptor(authInterceptor)
+                                .addPathPatterns("/api/test/*") // 해당 경로에 접근하기 전에 인터셉터가 가로챈다. (필수 X)
+                                .excludePathPatterns("/api/service/*"); // 해당 경로는 인터셉터가 가로채지 않는다. (필수 X)
+                            }
+
+                    ※ 인터셉터 객체를 @AutoWired로 받을 수도 있지만 그렇게 되면 순환 참조가 일어날 수도 있다.
                 </pre>
             </li>
         </ul>
@@ -459,6 +565,7 @@
                 <option value="validation">유효성 검사</option>
                 <option value="exception">예외 처리</option>
                 <option value="filter">필터</option>
+                <option value="interceptor">인터셉터</option>
                 <option value="ObjectMapper">ObjectMapper</option>
                 <option value="responseEntity">ResponseEntity</option>
                 <option value="annotation">어노테이션 목록</option>
