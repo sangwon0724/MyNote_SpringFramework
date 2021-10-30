@@ -514,6 +514,33 @@
                             RestTemplate restTemplate = new RestTemplate();
                             restTemplate.delete(uri);
             </li>
+            <li>RestTemplate를 통한 서버 호출 - HTTP Method에 상관없이 호출하기
+                <pre>
+                    ● exchange : POST 요청을 보내고 java.net.URI 로 반환받음
+                        ○ 장점 : Http Header를 수정할 수 있다.
+                        ○ 기본 형태 :
+                                (1) exchange(URI, HttpMethod, HttpEntity, responseType)
+                                (2) exchange(RequestEntity, responseType)
+                                ※ RequestEntity와 ResponseEntity가 HttpEntity Class를 상속받고 있다.
+                        ○ 사용 예시 - 1 :
+                            UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
+                            RequestEntity&lt;UserVO> request = RequestEntity
+                                    .post(uri) //요청할 API 서버의 주소 설정
+                                    .contentType(MediaType.APPLICATION_JSON) //contentType 설정, org.springframework.http.MediaType
+                                    .header("x-authorization","my-header") //헤더 설정
+                                    .body(user); //몸체 설정 (= 전달할 데이터)
+                            RestTemplate restTemplate = new RestTemplate();
+                            ResponseEntity&lt;UserVO> response = restTemplate.exchange(uri, HttpMethod.POST, request, UserVO.class); //org.springframework.core.ParameterizedTypeReference
+                        ○ 사용 예시 - 2 :
+                            UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
+                            RequestEntity&lt;UserVO> request = RequestEntity
+                                    .post(uri) //요청할 API 서버의 주소 설정
+                                    .contentType(MediaType.APPLICATION_JSON) //contentType 설정, org.springframework.http.MediaType
+                                    .header("x-authorization","my-header") //헤더 설정
+                                    .body(user); //몸체 설정 (= 전달할 데이터)
+                            RestTemplate restTemplate = new RestTemplate();
+                            ResponseEntity&lt;UserVO> response = restTemplate.exchange(request, new ParameterizedTypeReference&lt;>(){}); //org.springframework.core.ParameterizedTypeReference
+            </li>
         </ul>
     </section>
 
@@ -824,6 +851,22 @@
 
     <br>
 
+    <section id="study_api_integration">
+        <header class="note_title">API 연동하기</header>
+        <ul>
+            <li>네이버 API
+                <pre>
+                    1. 네이버 메인 최하단의 "Developers" 메뉴 목록에서 "네이버 개발자" 센터 메뉴 클릭하기
+                    2. 최상단의 "Application" 메뉴의 "애플리케이션 등록" 메뉴를 클릭한다.
+                    3. 각 항목들을 설정하고 등록하기 버튼을 누른다.
+                    4. 각 API의 가이드 문서를 보고 사용하면 된다.
+                </pre>
+            </li>
+        </ul>
+    </section>
+
+    <br>
+
     <section id="reference">
         <header class="note_title">참조 목록</header>
         <ul>
@@ -863,6 +906,7 @@
                 <option value="ObjectMapper">ObjectMapper</option>
                 <option value="responseEntity">ResponseEntity</option>
                 <option value="annotation">어노테이션 목록</option>
+                <option value="study_api_integration">API 연동하기</option>
                 <option value="reference">참조 목록</option>
             </select>
         </section>
