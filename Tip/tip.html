@@ -87,14 +87,12 @@
 
     <div id="remote">
         <section id="remote_setcion">
-            <select id="remote_menu">
+            <select id="remote_menu" onchange="move_section()">
                 <option value="stopPort">작동중인 포트 종료시키기</option>
                 <option value="connetGit">깃허브와 연동하기</option>
                 <option value="codeStyle">코드 작성 방식 변경</option>
             </select>
         </section>
     </div>
-
-    <script src="./remote.js"></script>
 </body>
 </html>
