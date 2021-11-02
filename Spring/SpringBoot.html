@@ -718,6 +718,29 @@
 
     <br>
 
+    <section id="thymeleaf">
+        <header class="note_title">thymeleafs</header>
+        <ul>
+            <li>thymeleaf
+                <pre>
+                    ● xxx
+                </pre>
+            </li>
+            <li>설치방법
+                <pre>
+                    ● pom.xml에 dependency 추가
+                    &lt;dependency>
+                        &lt;groupId>org.springframework.boot&lt;/groupId>
+                        &lt;artifactId>spring-boot-starter-thymeleaf&lt;/artifactId>
+                        &lt;version>2.3.4.RELEASE&lt;/version>
+                    &lt;/dependency>
+                </pre>
+            </li>
+        </ul>
+    </section>
+
+    <br>
+
     <section id="ObjectMapper">
         <header class="note_title">ObjectMapper</header>
         <ul>
@@ -788,6 +811,19 @@
                     ● 역직렬화 실행시 존재하지 않는 필드 무시 설정
                         예시)
                             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // 없는 필드로 인한 오류 무시
+                </pre>
+            </li>
+        </ul>
+    </section>
+
+    <br>
+
+    <section id="modelMapper">
+        <header class="note_title">ModelMapper</header>
+        <ul>
+            <li>MbjectMapper
+                <pre>
+                    ● xxx
                 </pre>
             </li>
         </ul>
@@ -1077,7 +1113,9 @@
                 <option value="serverToServer">Server To Server</option>
                 <option value="JUnit">JUnit</option>
                 <option value="swagger">Swagger</option>
+                <option value="thymeleaf">thymeleaf</option>
                 <option value="ObjectMapper">ObjectMapper</option>
+                <option value="modelMapper">ModelMapper</option>
                 <option value="responseEntity">ResponseEntity</option>
                 <option value="annotation">어노테이션 목록</option>
                 <option value="study_api_integration">API 연동하기</option>
