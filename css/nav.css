@@ -27,8 +27,7 @@
 
 #sidebar {
   width: 15vw;
-  height: auto;
-  min-height: 93vh;
+  height: 93vh;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -36,10 +35,16 @@
   left: 0;
   margin-top: 7vh;
   z-index: 2;
-
+  overflow-y: scroll;
   float: left;
   border-right: 1px solid #aaa;
   background-color: #f1f1f1;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+#sidebar::-webkit-scrollbar {
+  display: none;
 }
 
 #sidebar > button {
