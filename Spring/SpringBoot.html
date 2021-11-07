@@ -1042,7 +1042,10 @@
             <li>Lombok 어노테이션
                 <pre>
                     ● @Data : 종합 선물 세트
-                        ○ @Data = @toString  + @EqualsAndHashCode  + @Getter  + @Setter  + @NoArgsConstructor + @RequiredArgsConstructor  + @AllArgsConstructor
+                        ○ @Data
+                            = @toString  + @EqualsAndHashCode
+                            + @Getter  + @Setter
+                            + @NoArgsConstructor + @RequiredArgsConstructor  + @AllArgsConstructor
                         ○ 효과가 너무 강하여 왠만하면 @Data 어노테이션보다는 필요한 어노테이션만 따로 설정하는 것이 좋다.
 
                     ● @Getter : getter 메소드를 자동으로 만들어준다. 
@@ -1096,7 +1099,7 @@
                             = UserVO..builder() .hobbyList("game") .hobbyList("read book") .hobbyList("listen music") .build();
 
 
-                    ● @toString : 해당 VO Class의 모든 필드를 출력하는 toString 메소드를 생성한다.
+                    ● @ToString : 해당 VO Class의 모든 필드를 출력하는 toString 메소드를 생성한다.
                     ● @EqualsAndHashCode - hashcode와 equals 메소드를 생성한다.
                         ○ 불변 클래스를 제외하고는 아무 파라미터 없는 @EqualsAndHashCode 어노테이션은 사용하지 않는 것이 좋다.
                         ○ 항상 @EqualsAndHashCode(of={“필드명시”}) 형태로 동등성 비교에 필요한 필드를 명시하는 형태로 사용한다.

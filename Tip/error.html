@@ -25,6 +25,16 @@
                     ※ 해결 : @RequestBody의 패키지를 org.springframework.web.bind.annotation.RequestBody로 수정
                 </pre>
             </li>
+            <li>JPA와 h2 연동 중에 Error creating bean with name 'entityManagerFactory' ~ 발생
+                <pre>
+                    ※ 원인 : jdbc 관련 dependency의 부재
+                    ※ 해결 : pom.xml에 dependency 추가
+                        &lt;dependency>
+                            &lt;groupId>org.springframework.boot&lt;/groupId>
+                            &lt;artifactId>spring-boot-starter-jdbc&lt;/artifactId>
+                        &lt;/dependency>
+                </pre>
+            </li>
         </ul>
     </section>
 
