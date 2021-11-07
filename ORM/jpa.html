@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JPA 공부</title>
+    <link rel="stylesheet" href="./css/index.css" />
+</head>
+<body>
+    <section id="intro">
+        <header class="note_title">JPA</header>
+        <ul>
+            <li>JPA
+                <pre>
+                    ● JPA (Java Persistence API) : Java에 대한 ORM 기술 표준
+                    ● 인터페이스 모음집
+                    ● JPA 인터페이스를 구현한 오픈소스 종류 : Hibernate, EclipseLink, DataNucleus
+                </pre>
+            </li>
+            <li>JPA의 사용 이유
+                <pre>
+                    ● SQL 중심이 아닌 객체 중심으로 개발
+                        ○ SQL 작성시 코드 반복의 감소
+                        ○ 모델링 문제 해결
+                    ● CRUD가 간단하다.
+                        (※ 특히 수정이 간단하다. => 객체를 변경하면 자동으로 Update Query 실행)
+                    ● 유지보수
+                        ○ 기존 : 필드 변경 시 관련 SQL 모두 수정
+                        ○ JPA 사용 : 필드만 추가 (※ 이유 : SQL은 JPA가 대신 처리해주기 때문)
+                    ● Object와 RDB 간의 패러다임 불일치 해결
+                    ● 최적화 기능
+                        ○ 캐싱 기능 : 1차 캐시와 동일성 보장
+                        ○ 버퍼링 기능 : 트랜잭션을 지원하는 쓰기 지연
+                        ○ 지연 로딩 : 객체가 실제로 사용될 때 로딩하는 전략
+                        ○ 즉시 로딩 : Join SQL로 한 번에 연관된 객체까지 미리 조회하는 전략
+                    ● 데이터 접근 추상화와 벤더 독립성
+                    ● 표준
+                </pre>
+            </li>
+            <li>JPA 동작 과정
+                <pre>
+                    ● 기본 구조
+                        ○ 애플리케이션과 JDBC 사이에서 동작
+                        ○ 개발자가 JPA 사용시 JPA 내부에서 JDBC API를 통해서 SQL을 호출하여 DataBase와 통신
+
+                    ● 저장 과정
+                        1. 개발자가 저장을 원하는 객체를 JPA에 전달
+                        2. JPA가 Entity를 분석
+                        3. JPA가 Insert SQL 생성
+                        4. JPA가 JDBC API를 사용하여 SQL을 DB에 전송
+
+                    ● 조회 과정
+                        1. 개발자가 조회를 원하는 객체의 PK 값을 JPA에 전달
+                        2. JPA가 Entity의 매핑 정보를 바탕으로 적절한 Selete SQL 생성
+                        3. JPA가 JDBC API를 사용하여 SQL을 DataBase에 전달
+                        4. DataBase가 JPA에게 결과를 전달
+                        5. JPA가 DataBase한테 전달받은 결과를 객체에 매핑하여 전달
+                </pre>
+            </li>
+        </ul>
+    </section>
+
+    <section id="installAndConnnecting">
+        <header class="note_title">설치 및 연결</header>
+        <ul>
+            <li>설치 및 연결
+                <pre>
+                    ● pom.xml에 dependency 추가
+                        &lt;dependency>
+                            &lt;groupId>org.springframework.boot&lt;/groupId>
+                            &lt;artifactId>spring-boot-starter-data-jpa&lt;/artifactId>
+                    &lt;/dependency>
+                </pre>
+            </li>
+        </ul>
+    </section>
+
+    <br>
+
+    <section id="basicUsage">
+        <header class="note_title">기본 사용법</header>
+        <ul>
+            <li>Repository 제작법
+                <pre>
+                    1. JPA의 Repository로 사용할 인터페이스를 만든다.
+                    2. 해당 인터페이스에 org.springframework.data.jpa.repository.JpaRepository를 import한다.
+                    3. JpaRepository 클래스를 JpaRepository&lt;Entity형식,ID형식>으로 상속받는다.
+                            예시) public interface BookRepository extends JpaRepository&lt;BookEntity, Long>
+                </pre>
+            </li>
+            <li>Entity 제작법
+                <pre>
+                    1. JPA의 Entity로 사용할 클래스를 만든다.
+                    2. 해당 클래스에 javax.persistence.Entity를 import 하고 @Entity를 추가해준다.
+                    3. xxx
+                </pre>
+            </li>
+        </ul>
+    </section>
+
+    <br>
+
+    <section id="h2db">
+        <header class="note_title">H2 Database</header>
+        <ul>
+            <li>H2 Database
+                <pre>
+                    ● Java 기반의 경량화된 관계형 DB
+                    ● 파일로 저장해서 실제 DB처럼 데이터 유지 가능
+                    ● 메모리 DB로 사용해서 실제 인스턴스가 동작 시점에만 유지하는 것도 가능
+                    ● 테스트 DB로 주로 사용
+                    ● 유지보수 시 JUnit 테스트용으로 주로 사용
+                    ● 서버를 재기동시 초기화
+                </pre>
+            </li>
+            <li>설치방법 (Spring Boot 기준)
+                <pre>
+                    1. pom.xml에 dependency 추가
+                        &lt;dependency>
+                            &lt;groupId>com.h2database&lt;/groupId>
+                            &lt;artifactId>h2&lt;/artifactId>
+                            &lt;scope>runtime&lt;/scope>
+                        &lt;/dependency>
+
+                    2. application.properties 파일에 정보 추가 (※ 기본 계정 : sa)
+                        spring.datasource.url=jdbc:h2:~/DB명; #DB 고정
+                        spring.datasource.driverClassName=org.h2.Driver
+                        spring.datasource.username=sa
+                        spring.datasource.password=
+                        spring.h2.console.enabled=true
+                        spring.h2.console.path=/h2-console /*기본값*/
+                    
+                    3. 프로젝트 실행
+                    4. http://localhost:포트주소/h2-console로 이동
+                </pre>
+            </li>
+            <li>자신의 memory DB의 주소를 알기 위한 코드
+                <pre>
+                    package com.example.demo;
+
+                    import java.sql.SQLException;
+
+                    import org.springframework.beans.factory.annotation.Autowired;
+                    import org.springframework.boot.ApplicationArguments;
+                    import org.springframework.boot.ApplicationRunner;
+                    import org.springframework.stereotype.Component;
+
+                    import javax.sql.DataSource;
+                    import java.sql.Connection;
+
+                    @Component
+                    public class DatabaseConfig implements ApplicationRunner {
+
+                        @Autowired
+                        DataSource dataSource;
+
+                        @Override
+                        public void run(ApplicationArguments args) throws SQLException {
+                            try(Connection connection = dataSource.getConnection()){
+                                System.out.println(connection.getMetaData().getURL());
+                                System.out.println(connection.getMetaData().getUserName());
+                            } catch (Exception e){
+                                System.out.println(e);
+                            }
+                        }
+                    }
+                </pre>
+            </li>
+        </ul>
+    </section>
+
+    <div id="remote">
+        <section id="remote_setcion">
+            <select id="remote_menu" onchange="move_section()">
+                <option value="intro">JPA</option>
+                <option value="installAndConnnecting">설치 및 연결</option>
+                <option value="basicUsage">기본 사용법</option>
+                <option value="h2db">H2 Database</option>
+            </select>
+        </section>
+    </div>
+</body>
+</html>
