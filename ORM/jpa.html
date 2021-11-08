@@ -89,6 +89,49 @@
                             예시) public interface BookRepository extends JpaRepository&lt;BookEntity, Long>
                 </pre>
             </li>
+            <li>Repository 종류
+                <pre>
+                    ● Repository&lt;T, ID>
+                    ● CrudRepository&lt;T, ID>
+                    ● PagingAndSortingRepository&lt;T, ID>
+                    ● JpaRepository&lt;T, ID>
+
+                    ※ T : Entity의 타입클래스, ID : Primary Key의 Type 
+                </pre>
+            </li>
+            <li>Repository의 기본 메소드 형식
+                <pre>
+                    ● find~ : 특정 조건을 만족하는 데이터를 가져오기
+                    ● save~ : 해당 테이블에 데이터를 저장하기
+                    ● delete~ : 특정 조건을 만족하는 데이터를 삭제
+                    ● flush() : 영속성 컨텍스트의 변경 내용을 DataBase에 동기화
+                    ● existsById(ID id) : id값을 통해 데이터 존재 여부 판단 (Boolean 값 리턴)
+                    ● count() : 해당 테이블의 전체 데이터 개수를 리턴 (long 값 리턴)
+                </pre>
+            </li>
+            <li>JPA를 통한 페이징 처리
+                <pre>
+                    ※ PagingAndSortingRepository 인터페이스의 구현 필요
+
+                    ● Page&lt;VO타입> 객체명 = repository객체.find~(new PageRequest(page, size));
+                        ○ page : 찾을 페이지, 시작값 : 0
+                        ○ size : 한 페이지의 사이즈, 기본값 : 20
+
+                    ● 컨트롤러에서 Pageable 변수 받기
+                        예시)
+                            @GetMapping("/users")
+                            public List&lt;User> findAllUser(Pageable pageable) { ... }   
+                            //GET /users?page=3&size=10&sort=id,DESC
+
+                    ● @PageableDefault (페이징을 위한 기본값 설정 어노테이션)
+                        예시)
+                            @GetMapping("/users")
+                            public List&lt;User> findAllUser(@PageableDefault(size=100, sort="id", direction = Sort.Direction.DESC) Pageable pageable) { ... } 
+
+                    ● 페이징 기본값 설정법 - application.properties
+                        spring.data.web.pageable.default-page-size=페이지_크기
+                </pre>
+            </li>
             <li>Entity 제작법
                 <pre>
                     1. JPA의 Entity로 사용할 클래스를 만든다.
@@ -170,6 +213,26 @@
         </ul>
     </section>
 
+    <br>
+
+    <section id="log">
+        <header class="note_title">로그 출력하기</header>
+        <ul>
+            <li>JPA 쿼리 로그 출력 설정법
+                <pre>
+                    #JPA 로그 출력 설정
+                    spring.jpa.show-sql=true
+
+                    #JPA 로그의 모양을 단정하게 하기
+                    spring.jpa.properties.hibernate.format_sql=true
+                    
+                    #JPA 로그의 ? 부분을 실제 값으로 치환
+                    logging.level.org.hibernate.type.descriptor.sql=TRACE
+                </pre>
+            </li>
+        </ul>
+    </section>
+
     <div id="remote">
         <section id="remote_setcion">
             <select id="remote_menu" onchange="move_section()">
@@ -177,6 +240,7 @@
                 <option value="installAndConnnecting">설치 및 연결</option>
                 <option value="basicUsage">기본 사용법</option>
                 <option value="h2db">H2 Database</option>
+                <option value="log">로그 출력하기</option>
             </select>
         </section>
     </div>
