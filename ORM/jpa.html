@@ -1,368 +1,368 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JPA 공부</title>
     <link rel="stylesheet" href="./css/index.css" />
-</head>
-<body>
+  </head>
+  <body>
     <section id="intro">
-        <header class="note_title">JPA</header>
-        <ul>
-            <li>JPA
-                <pre>
-                    ● JPA (Java Persistence API) : Java에 대한 ORM 기술 표준
-                    ● 인터페이스 모음집
-                    ● JPA 인터페이스를 구현한 오픈소스 종류 : Hibernate, EclipseLink, DataNucleus
-                </pre>
-            </li>
-            <li>JPA의 사용 이유
-                <pre>
-                    ● SQL 중심이 아닌 객체 중심으로 개발
-                        ○ SQL 작성시 코드 반복의 감소
-                        ○ 모델링 문제 해결
-                    ● CRUD가 간단하다.
-                        (※ 특히 수정이 간단하다. => 객체를 변경하면 자동으로 Update Query 실행)
-                    ● 유지보수
-                        ○ 기존 : 필드 변경 시 관련 SQL 모두 수정
-                        ○ JPA 사용 : 필드만 추가 (※ 이유 : SQL은 JPA가 대신 처리해주기 때문)
-                    ● Object와 RDB 간의 패러다임 불일치 해결
-                    ● 최적화 기능
-                        ○ 캐싱 기능 : 1차 캐시와 동일성 보장
-                        ○ 버퍼링 기능 : 트랜잭션을 지원하는 쓰기 지연
-                        ○ 지연 로딩 : 객체가 실제로 사용될 때 로딩하는 전략
-                        ○ 즉시 로딩 : Join SQL로 한 번에 연관된 객체까지 미리 조회하는 전략
-                    ● 데이터 접근 추상화와 벤더 독립성
-                    ● 표준
-                </pre>
-            </li>
-            <li>JPA 동작 과정
-                <pre>
-                    ● 기본 구조
-                        ○ 애플리케이션과 JDBC 사이에서 동작
-                        ○ 개발자가 JPA 사용시 JPA 내부에서 JDBC API를 통해서 SQL을 호출하여 DataBase와 통신
+      <header class="note_title">JPA</header>
+      <ul>
+        <li>JPA
+          <pre>
+            ● JPA (Java Persistence API) : Java에 대한 ORM 기술 표준
+            ● 인터페이스 모음집
+            ● JPA 인터페이스를 구현한 오픈소스 종류 : Hibernate, EclipseLink, DataNucleus
+          </pre>
+        </li>
+        <li>JPA의 사용 이유
+          <pre>
+            ● SQL 중심이 아닌 객체 중심으로 개발
+                ○ SQL 작성시 코드 반복의 감소
+                ○ 모델링 문제 해결
+            ● CRUD가 간단하다.
+                (※ 특히 수정이 간단하다. => 객체를 변경하면 자동으로 Update Query 실행)
+            ● 유지보수
+                ○ 기존 : 필드 변경 시 관련 SQL 모두 수정
+                ○ JPA 사용 : 필드만 추가 (※ 이유 : SQL은 JPA가 대신 처리해주기 때문)
+            ● Object와 RDB 간의 패러다임 불일치 해결
+            ● 최적화 기능
+                ○ 캐싱 기능 : 1차 캐시와 동일성 보장
+                ○ 버퍼링 기능 : 트랜잭션을 지원하는 쓰기 지연
+                ○ 지연 로딩 : 객체가 실제로 사용될 때 로딩하는 전략
+                ○ 즉시 로딩 : Join SQL로 한 번에 연관된 객체까지 미리 조회하는 전략
+            ● 데이터 접근 추상화와 벤더 독립성
+            ● 표준
+          </pre>
+        </li>
+        <li>JPA 동작 과정
+          <pre>
+            ● 기본 구조
+                ○ 애플리케이션과 JDBC 사이에서 동작
+                ○ 개발자가 JPA 사용시 JPA 내부에서 JDBC API를 통해서 SQL을 호출하여 DataBase와 통신
 
-                    ● 저장 과정
-                        1. 개발자가 저장을 원하는 객체를 JPA에 전달
-                        2. JPA가 Entity를 분석
-                        3. JPA가 Insert SQL 생성
-                        4. JPA가 JDBC API를 사용하여 SQL을 DB에 전송
+            ● 저장 과정
+                1. 개발자가 저장을 원하는 객체를 JPA에 전달
+                2. JPA가 Entity를 분석
+                3. JPA가 Insert SQL 생성
+                4. JPA가 JDBC API를 사용하여 SQL을 DB에 전송
 
-                    ● 조회 과정
-                        1. 개발자가 조회를 원하는 객체의 PK 값을 JPA에 전달
-                        2. JPA가 Entity의 매핑 정보를 바탕으로 적절한 Selete SQL 생성
-                        3. JPA가 JDBC API를 사용하여 SQL을 DataBase에 전달
-                        4. DataBase가 JPA에게 결과를 전달
-                        5. JPA가 DataBase한테 전달받은 결과를 객체에 매핑하여 전달
-                </pre>
-            </li>
-        </ul>
+            ● 조회 과정
+                1. 개발자가 조회를 원하는 객체의 PK 값을 JPA에 전달
+                2. JPA가 Entity의 매핑 정보를 바탕으로 적절한 Selete SQL 생성
+                3. JPA가 JDBC API를 사용하여 SQL을 DataBase에 전달
+                4. DataBase가 JPA에게 결과를 전달
+                5. JPA가 DataBase한테 전달받은 결과를 객체에 매핑하여 전달
+          </pre>
+        </li>
+      </ul>
     </section>
 
     <section id="installAndConnnecting">
-        <header class="note_title">설치 및 연결</header>
-        <ul>
-            <li>설치 및 연결
-                <pre>
-                    ● pom.xml에 dependency 추가
-                        &lt;dependency>
-                            &lt;groupId>org.springframework.boot&lt;/groupId>
-                            &lt;artifactId>spring-boot-starter-data-jpa&lt;/artifactId>
-                    &lt;/dependency>
-                </pre>
-            </li>
-        </ul>
+      <header class="note_title">설치 및 연결</header>
+      <ul>
+        <li>설치 및 연결
+          <pre>
+            ● pom.xml에 dependency 추가
+                &lt;dependency>
+                    &lt;groupId>org.springframework.boot&lt;/groupId>
+                    &lt;artifactId>spring-boot-starter-data-jpa&lt;/artifactId>
+            &lt;/dependency>
+          </pre>
+        </li>
+      </ul>
     </section>
 
-    <br>
+    <br />
 
     <section id="basicUsage">
-        <header class="note_title">기본 사용법</header>
-        <ul>
-            <li>Repository 제작법
-                <pre>
-                    1. JPA의 Repository로 사용할 인터페이스를 만든다.
-                    2. 해당 인터페이스에 org.springframework.data.jpa.repository.JpaRepository를 import한다.
-                    3. JpaRepository 클래스를 JpaRepository&lt;Entity형식,ID형식>으로 상속받는다.
-                            예시) public interface BookRepository extends JpaRepository&lt;BookEntity, Long>
-                </pre>
-            </li>
-            <li>Repository 종류
-                <pre>
-                    ● Repository&lt;T, ID>
-                    ● CrudRepository&lt;T, ID>
-                    ● PagingAndSortingRepository&lt;T, ID>
-                    ● JpaRepository&lt;T, ID>
+      <header class="note_title">기본 사용법</header>
+      <ul>
+        <li>Repository 제작법
+          <pre>
+            1. JPA의 Repository로 사용할 인터페이스를 만든다.
+            2. 해당 인터페이스에 org.springframework.data.jpa.repository.JpaRepository를 import한다.
+            3. JpaRepository 클래스를 JpaRepository&lt;Entity형식,ID형식>으로 상속받는다.
+                    예시) public interface BookRepository extends JpaRepository&lt;BookEntity, Long>
+          </pre>
+        </li>
+        <li>Repository 종류
+          <pre>
+            ● Repository&lt;T, ID>
+            ● CrudRepository&lt;T, ID>
+            ● PagingAndSortingRepository&lt;T, ID>
+            ● JpaRepository&lt;T, ID>
 
-                    ※ T : Entity의 타입클래스, ID : Primary Key의 Type 
-                </pre>
-            </li>
-            <li>Repository의 기본 메소드 형식
-                <pre>
-                    ● find~ : 특정 조건을 만족하는 데이터를 가져오기
-                    ● save~ : 해당 테이블에 데이터를 저장하기
-                    ● delete~ : 특정 조건을 만족하는 데이터를 삭제
-                    ● flush() : 영속성 컨텍스트의 변경 내용을 DataBase에 동기화
-                    ● existsById(ID id) : id값을 통해 데이터 존재 여부 판단 (Boolean 값 리턴)
-                    ● count() : 해당 테이블의 전체 데이터 개수를 리턴 (long 값 리턴)
-                </pre>
-            </li>
-            <li>JPA를 통한 페이징 처리
-                <pre>
-                    ※ PagingAndSortingRepository 인터페이스의 구현 필요
+            ※ T : Entity의 타입클래스, ID : Primary Key의 Type 
+          </pre>
+        </li>
+        <li>Repository의 기본 메소드 형식
+          <pre>
+            ● find~ : 특정 조건을 만족하는 데이터를 가져오기
+            ● save~ : 해당 테이블에 데이터를 저장하기
+            ● delete~ : 특정 조건을 만족하는 데이터를 삭제
+            ● flush() : 영속성 컨텍스트의 변경 내용을 DataBase에 동기화
+            ● existsById(ID id) : id값을 통해 데이터 존재 여부 판단 (Boolean 값 리턴)
+            ● count() : 해당 테이블의 전체 데이터 개수를 리턴 (long 값 리턴)
+          </pre>
+        </li>
+        <li>JPA를 통한 페이징 처리
+          <pre>
+            ※ PagingAndSortingRepository 인터페이스의 구현 필요
 
-                    ● Page&lt;VO타입> 객체명 = repository객체.find~(new PageRequest(page, size));
-                        ○ page : 찾을 페이지, 시작값 : 0
-                        ○ size : 한 페이지의 사이즈, 기본값 : 20
+            ● Page&lt;VO타입> 객체명 = repository객체.find~(new PageRequest(page, size));
+                ○ page : 찾을 페이지, 시작값 : 0
+                ○ size : 한 페이지의 사이즈, 기본값 : 20
 
-                    ● 컨트롤러에서 Pageable 변수 받기
-                        예시)
-                            @GetMapping("/users")
-                            public List&lt;User> findAllUser(Pageable pageable) { ... }   
-                            //GET /users?page=3&size=10&sort=id,DESC
+            ● 컨트롤러에서 Pageable 변수 받기
+                예시)
+                    @GetMapping("/users")
+                    public List&lt;User> findAllUser(Pageable pageable) { ... }   
+                    //GET /users?page=3&size=10&sort=id,DESC
 
-                    ● @PageableDefault (페이징을 위한 기본값 설정 어노테이션)
-                        예시)
-                            @GetMapping("/users")
-                            public List&lt;User> findAllUser(@PageableDefault(size=100, sort="id", direction = Sort.Direction.DESC) Pageable pageable) { ... } 
+            ● @PageableDefault (페이징을 위한 기본값 설정 어노테이션)
+                예시)
+                    @GetMapping("/users")
+                    public List&lt;User> findAllUser(@PageableDefault(size=100, sort="id", direction = Sort.Direction.DESC) Pageable pageable) { ... } 
 
-                    ● 페이징 기본값 설정법 - application.properties
-                        spring.data.web.pageable.default-page-size=페이지_크기
-                </pre>
-            </li>
-            <li>쿼리 메소드란?
-                <pre>
-                    ● 메서드 이름으로 우리가 원하는 기능을 수행할 쿼리가 자동으로 생성해줄수 있도록 일정 규칙에 맞게 이름을 정의하여 사용하는 메서드
-                </pre>
-            </li>
-            <li>쿼리 메소드 - 실행문
-                <pre>
-                    ● 데이터 검색 (가독성을 위해 나눠져있을 뿐 모두 결과가 같다.)
-                        ○ findBy~
-                        ○ readBy~
-                        ○ getBy~
-                        ○ queryBy~
-                        ○ searchBy~
-                        ○ streamBy~
+            ● 페이징 기본값 설정법 - application.properties
+                spring.data.web.pageable.default-page-size=페이지_크기
+          </pre>
+        </li>
+        <li>쿼리 메소드란?
+          <pre>
+            ● 메서드 이름으로 우리가 원하는 기능을 수행할 쿼리가 자동으로 생성해줄수 있도록 일정 규칙에 맞게 이름을 정의하여 사용하는 메서드
+          </pre>
+        </li>
+        <li>쿼리 메소드 - 실행문
+          <pre>
+            ● 데이터 검색 (가독성을 위해 나눠져있을 뿐 모두 결과가 같다.)
+                ○ findBy~
+                ○ readBy~
+                ○ getBy~
+                ○ queryBy~
+                ○ searchBy~
+                ○ streamBy~
 
-                    ● 존재 여부 확인
-                        ○ existsBy~
-                    
-                    ● 개수 확인
-                        ○ countBy~
-                    
-                    ● 데이터 삭제
-                        ○ deleteBy~
-                        ○ removeBy~
+            ● 존재 여부 확인
+                ○ existsBy~
+            
+            ● 개수 확인
+                ○ countBy~
+            
+            ● 데이터 삭제
+                ○ deleteBy~
+                ○ removeBy~
 
-                    ● 처음부터 n개의 데이터 가져오기
-                        ○ ~First(숫자)~
-                        ○ ~Top(숫자)~
-                    
-                    ● 중복 제거
-                        ○ ~Distinct~
-                </pre>
-            </li>
-            <li>쿼리 메소드 - 조건문
-                <pre>
-                    ● 조건 연결
-                        ○ ~And~
-                        ○ ~Or~
+            ● 처음부터 n개의 데이터 가져오기
+                ○ ~First(숫자)~
+                ○ ~Top(숫자)~
+            
+            ● 중복 제거
+                ○ ~Distinct~
+          </pre>
+        </li>
+        <li>쿼리 메소드 - 조건문
+  <pre>
+            ● 조건 연결
+                ○ ~And~
+                ○ ~Or~
 
-                    ● 조건 부정
-                        ○ ~Not~
-                        ○ ~IsNot~
+            ● 조건 부정
+                ○ ~Not~
+                ○ ~IsNot~
 
-                    ● 참/거짓 체크
-                        ○ True
-                        ○ IsTrue
-                        ○ NotFalse
-                        ○ IsNotFalse
+            ● 참/거짓 체크
+                ○ True
+                ○ IsTrue
+                ○ NotFalse
+                ○ IsNotFalse
 
-                    ● 날짜 비교
-                        ○ 이전
-                            ○ ~Before
-                            ○ ~IsBefore
-                        ○ 이후
-                            ○ ~After
-                            ○ ~IsAfter
-                    ● 수치 비교
-                        ○ 작다
-                            ○ ~LessThan
-                            ○ ~IsLessThan
-                        ○ 작거나 같다
-                            ○ ~LessThanEqual
-                            ○ ~IsLessThanEqual
-                        ○ 크다
-                            ○ ~GreaterThan
-                            ○ ~IsGreaterThan
-                        ○ 크거나 같다
-                            ○ ~GreaterThanEqual
-                            ○ ~IsGreaterThanEqual
+            ● 날짜 비교
+                ○ 이전
+                    ○ ~Before
+                    ○ ~IsBefore
+                ○ 이후
+                    ○ ~After
+                    ○ ~IsAfter
+            ● 수치 비교
+                ○ 작다
+                    ○ ~LessThan
+                    ○ ~IsLessThan
+                ○ 작거나 같다
+                    ○ ~LessThanEqual
+                    ○ ~IsLessThanEqual
+                ○ 크다
+                    ○ ~GreaterThan
+                    ○ ~IsGreaterThan
+                ○ 크거나 같다
+                    ○ ~GreaterThanEqual
+                    ○ ~IsGreaterThanEqual
 
-                    ● 범위
-                        ○ m에서 n사이에 포함
-                            ○ ~Between
-                            ○ ~IsBetween
-                        ○ m,n,o...중에 포함
-                            ○ ~In
-                            ○ ~IsIn
+            ● 범위
+                ○ m에서 n사이에 포함
+                    ○ ~Between
+                    ○ ~IsBetween
+                ○ m,n,o...중에 포함
+                    ○ ~In
+                    ○ ~IsIn
 
-                    ● 단어 포함
-                        ○ ~로 시작
-                            ○ ~StartingWith
-                            ○ ~IsStartingWith
-                            ○ ~StartsWith
-                        ○ ~로 종료
-                            ○ ~EndingWith
-                            ○ ~IsEndingWith
-                            ○ ~EndsWith
-                        ○ ~ 포함
-                            ○ ~Like
-                            ○ ~IsLike
-                            ○ Containing
-                            ○ IsContaining
-                            ○ Contains
+            ● 단어 포함
+                ○ ~로 시작
+                    ○ ~StartingWith
+                    ○ ~IsStartingWith
+                    ○ ~StartsWith
+                ○ ~로 종료
+                    ○ ~EndingWith
+                    ○ ~IsEndingWith
+                    ○ ~EndsWith
+                ○ ~ 포함
+                    ○ ~Like
+                    ○ ~IsLike
+                    ○ Containing
+                    ○ IsContaining
+                    ○ Contains
 
-                    ● Null 체크
-                        ○ Null
-                        ○ IsNull
-                        ○ NotNull
-                        ○ IsNotNull
+            ● Null 체크
+                ○ Null
+                ○ IsNull
+                ○ NotNull
+                ○ IsNotNull
 
-                    ● Empty 체크
-                        ○ Empty
-                        ○ IsEmpty
-                        ○ NotEmpty
-                        ○ IsNotEmpty
-                </pre>
-            </li>
-            <li>쿼리 메소드 - 정렬하기
-                <pre>
-                    ● 단순 정렬
-                        ○ ~OrderBy칼럼명
-                        ○ ~OrderBy칼럼명Asc
-                        ○ ~OrderBy칼럼명Desc
-                    
-                    ● 정렬 방식 추가
-                        예시)
-                            //List&lt;User> findFirstByName(String name, Sort sort)
-                            userRepository.findFirstByName("HongGilDong", Sort.by(Order.desc("id"), Order.asc("email")))
-                </pre>
-            </li>
-            <li>Entity 제작법
-                <pre>
-                    1. JPA의 Entity로 사용할 클래스를 만든다.
-                    2. 해당 클래스에 javax.persistence.Entity를 import 하고 @Entity를 추가해준다.
-                    3. xxx
-                </pre>
-            </li>
-        </ul>
+            ● Empty 체크
+                ○ Empty
+                ○ IsEmpty
+                ○ NotEmpty
+                ○ IsNotEmpty
+          </pre>
+        </li>
+        <li>쿼리 메소드 - 정렬하기
+          <pre>
+            ● 단순 정렬
+                ○ ~OrderBy칼럼명
+                ○ ~OrderBy칼럼명Asc
+                ○ ~OrderBy칼럼명Desc
+            
+            ● 정렬 방식 추가
+                예시)
+                    //List&lt;User> findFirstByName(String name, Sort sort)
+                    userRepository.findFirstByName("HongGilDong", Sort.by(Order.desc("id"), Order.asc("email")))
+          </pre>
+        </li>
+        <li>Entity 제작법
+          <pre>
+            1. JPA의 Entity로 사용할 클래스를 만든다.
+            2. 해당 클래스에 javax.persistence.Entity를 import 하고 @Entity를 추가해준다.
+            3. xxx
+          </pre>
+        </li>
+      </ul>
     </section>
 
-    <br>
+    <br />
 
     <section id="h2db">
-        <header class="note_title">H2 Database</header>
-        <ul>
-            <li>H2 Database
-                <pre>
-                    ● Java 기반의 경량화된 관계형 DB
-                    ● 파일로 저장해서 실제 DB처럼 데이터 유지 가능
-                    ● 메모리 DB로 사용해서 실제 인스턴스가 동작 시점에만 유지하는 것도 가능
-                    ● 테스트 DB로 주로 사용
-                    ● 유지보수 시 JUnit 테스트용으로 주로 사용
-                    ● 서버를 재기동시 초기화
-                </pre>
-            </li>
-            <li>설치방법 (Spring Boot 기준)
-                <pre>
-                    1. pom.xml에 dependency 추가
-                        &lt;dependency>
-                            &lt;groupId>com.h2database&lt;/groupId>
-                            &lt;artifactId>h2&lt;/artifactId>
-                            &lt;scope>runtime&lt;/scope>
-                        &lt;/dependency>
+      <header class="note_title">H2 Database</header>
+      <ul>
+        <li>H2 Database
+          <pre>
+            ● Java 기반의 경량화된 관계형 DB
+            ● 파일로 저장해서 실제 DB처럼 데이터 유지 가능
+            ● 메모리 DB로 사용해서 실제 인스턴스가 동작 시점에만 유지하는 것도 가능
+            ● 테스트 DB로 주로 사용
+            ● 유지보수 시 JUnit 테스트용으로 주로 사용
+            ● 서버를 재기동시 초기화
+          </pre>
+        </li>
+        <li>설치방법 (Spring Boot 기준)
+          <pre>
+            1. pom.xml에 dependency 추가
+                &lt;dependency>
+                    &lt;groupId>com.h2database&lt;/groupId>
+                    &lt;artifactId>h2&lt;/artifactId>
+                    &lt;scope>runtime&lt;/scope>
+                &lt;/dependency>
 
-                    2. application.properties 파일에 정보 추가 (※ 기본 계정 : sa)
-                        spring.datasource.url=jdbc:h2:~/DB명; #DB 고정
-                        spring.datasource.driverClassName=org.h2.Driver
-                        spring.datasource.username=sa
-                        spring.datasource.password=
-                        spring.h2.console.enabled=true
-                        spring.h2.console.path=/h2-console /*기본값*/
-                    
-                    3. 프로젝트 실행
-                    4. http://localhost:포트주소/h2-console로 이동
-                </pre>
-            </li>
-            <li>자신의 memory DB의 주소를 알기 위한 코드
-                <pre>
-                    package com.example.demo;
+            2. application.properties 파일에 정보 추가 (※ 기본 계정 : sa)
+                spring.datasource.url=jdbc:h2:~/DB명; #DB 고정
+                spring.datasource.driverClassName=org.h2.Driver
+                spring.datasource.username=sa
+                spring.datasource.password=
+                spring.h2.console.enabled=true
+                spring.h2.console.path=/h2-console /*기본값*/
+            
+            3. 프로젝트 실행
+            4. http://localhost:포트주소/h2-console로 이동
+          </pre>
+        </li>
+        <li>자신의 memory DB의 주소를 알기 위한 코드
+          <pre>
+            package com.example.demo;
 
-                    import java.sql.SQLException;
+            import java.sql.SQLException;
 
-                    import org.springframework.beans.factory.annotation.Autowired;
-                    import org.springframework.boot.ApplicationArguments;
-                    import org.springframework.boot.ApplicationRunner;
-                    import org.springframework.stereotype.Component;
+            import org.springframework.beans.factory.annotation.Autowired;
+            import org.springframework.boot.ApplicationArguments;
+            import org.springframework.boot.ApplicationRunner;
+            import org.springframework.stereotype.Component;
 
-                    import javax.sql.DataSource;
-                    import java.sql.Connection;
+            import javax.sql.DataSource;
+            import java.sql.Connection;
 
-                    @Component
-                    public class DatabaseConfig implements ApplicationRunner {
+            @Component
+            public class DatabaseConfig implements ApplicationRunner {
 
-                        @Autowired
-                        DataSource dataSource;
+                @Autowired
+                DataSource dataSource;
 
-                        @Override
-                        public void run(ApplicationArguments args) throws SQLException {
-                            try(Connection connection = dataSource.getConnection()){
-                                System.out.println(connection.getMetaData().getURL());
-                                System.out.println(connection.getMetaData().getUserName());
-                            } catch (Exception e){
-                                System.out.println(e);
-                            }
-                        }
+                @Override
+                public void run(ApplicationArguments args) throws SQLException {
+                    try(Connection connection = dataSource.getConnection()){
+                        System.out.println(connection.getMetaData().getURL());
+                        System.out.println(connection.getMetaData().getUserName());
+                    } catch (Exception e){
+                        System.out.println(e);
                     }
-                </pre>
-            </li>
-        </ul>
+                }
+            }
+          </pre>
+        </li>
+      </ul>
     </section>
 
-    <br>
+    <br />
 
     <section id="log">
-        <header class="note_title">로그 출력하기</header>
-        <ul>
-            <li>JPA 쿼리 로그 출력 설정법
-                <pre>
-                    #JPA 로그 출력 설정
-                    spring.jpa.show-sql=true
+      <header class="note_title">로그 출력하기</header>
+      <ul>
+        <li>JPA 쿼리 로그 출력 설정법
+          <pre>
+            #JPA 로그 출력 설정
+            spring.jpa.show-sql=true
 
-                    #JPA 로그의 모양을 단정하게 하기
-                    spring.jpa.properties.hibernate.format_sql=true
-                    
-                    #JPA 로그의 ? 부분을 실제 값으로 치환
-                    logging.level.org.hibernate.type.descriptor.sql=TRACE
-                </pre>
-            </li>
-        </ul>
+            #JPA 로그의 모양을 단정하게 하기
+            spring.jpa.properties.hibernate.format_sql=true
+            
+            #JPA 로그의 ? 부분을 실제 값으로 치환
+            logging.level.org.hibernate.type.descriptor.sql=TRACE
+          </pre>
+        </li>
+      </ul>
     </section>
 
     <div id="remote">
-        <section id="remote_setcion">
-            <select id="remote_menu" onchange="move_section()">
-                <option value="intro">JPA</option>
-                <option value="installAndConnnecting">설치 및 연결</option>
-                <option value="basicUsage">기본 사용법</option>
-                <option value="h2db">H2 Database</option>
-                <option value="log">로그 출력하기</option>
-            </select>
-        </section>
+      <section id="remote_setcion">
+        <select id="remote_menu" onchange="move_section()">
+          <option value="intro">JPA</option>
+          <option value="installAndConnnecting">설치 및 연결</option>
+          <option value="basicUsage">기본 사용법</option>
+          <option value="h2db">H2 Database</option>
+          <option value="log">로그 출력하기</option>
+        </select>
+      </section>
     </div>
-</body>
+  </body>
 </html>
