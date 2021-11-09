@@ -78,8 +78,8 @@
 
     <br />
 
-    <section id="basicUsage">
-      <header class="note_title">기본 사용법</header>
+    <section id="JpaRepository">
+      <header class="note_title">JPA - Repository</header>
       <ul>
         <li>Repository 제작법
           <pre>
@@ -187,7 +187,7 @@
           </pre>
         </li>
         <li>쿼리 메소드 - 조건문
-  <pre>
+          <pre>
             ● 조건 연결
                 ○ ~And~
                 ○ ~Or~
@@ -273,6 +273,14 @@
                     userRepository.findFirstByName("HongGilDong", Sort.by(Order.desc("id"), Order.asc("email")))
           </pre>
         </li>
+      </ul>
+    </section>
+
+    <br />
+
+    <section id="jpaEntity">
+      <header class="note_title">JPA - Entity</header>
+      <ul>
         <li>Entity Class 기본 생성법
           <pre>
             1. JPA의 Entity로 사용할 클래스를 만든다.
@@ -294,9 +302,10 @@
                   (1)매핑될 테이블에서 자신이 명시한 칼럼에 Unique 제약조건을 추가한다.
                   (2) 보통 columnNames 속성은 name 속성과 같이 사용한다. //이유 : 제약조건명 랜덤생성
                   예시) uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+            ● @MappedSuperclass : 해당 어노테이션을 명시한 클래스를 상속받는 Entity Class는 해당 슈퍼 클래스의 필드를 칼럼으로 사용한다. 
 
             ● @Id : 해당 필드가 Primary Key이란 것을 의미한다.
-            ● @GeneratedValue
+            ● @GeneratedValue : hibernate의 sequence를 통해서 자동 증가하는 값이다.
             ● @Column : 해당 필드에 옵션을 추가한다.
               ○ name 옵션 : 테이블에서 사용되는 실제 칼럼명을 의미한다. 보통은 필드명과 칼럼명을 맞춘다.
                 예시) name="homeAddress"
@@ -324,6 +333,33 @@
             ● @Lob : DB에서 Varchar를 넘어서는 큰 내용을 넣고 싶은 경우에 사영하는 어노테이션
             ● @Transient : DB에 관계없이 메모리에서만 사용하고자 하는 필드에만 추가하는 어노테이션
                 => 임시 보관 데이터용으로 사용하는 어노테이션
+          </pre>
+        </li>
+        <li>Entity Listener란?
+          <pre>
+            ● Entity의 변화를 감지해서 같은 테이블이나 다른 테이블의 데이터를 조작하기 위한 이벤트 리스너
+            ● @SpringBootApplication이 있는 Main Class에 @EnableJpaAuditing 어노테이션을 추가해서 사용한다.
+          </pre>
+        </li>
+        <li>Entity Listener의 종류
+          <pre>
+            ● @PrePersist : insert가 실행되기 전에 작동
+            ● @PostPersist : insert가 실행된 후에 작동
+
+            ● @PreUpdate : update가 실행되기 전에 작동
+            ● @PostUpdate : update가 실행된 후에 작동
+
+            ● @PreRemove : delete가 실행되기 전에 작동
+            ● @PostRemove : delete가 실행되기 전에 작동
+            ● @PostLoad : select가 실행된 후에 작동
+          </pre>
+        </li>
+        <li>Entity Listener 생성 및 적용법
+          <pre>
+            1. 별도의 listener용 패키지를 만든다.
+            2. listener로 사용할 클래스를 만든다.
+            3. 해당 클래스 안에 필요한 Entity Listener를 작성해준다.
+            4. Entity Listener를 사용할 Entity Class에 가서 @EntityListeners(value = EntityListener클래스명.class)을 추가해준다.
           </pre>
         </li>
       </ul>
@@ -425,7 +461,8 @@
         <select id="remote_menu" onchange="move_section()">
           <option value="intro">JPA</option>
           <option value="installAndConnnecting">설치 및 연결</option>
-          <option value="basicUsage">기본 사용법</option>
+          <option value="JpaRepository">JPA - Repository</option>
+          <option value="jpaEntity">JPA - Entity</option>
           <option value="h2db">H2 Database</option>
           <option value="log">로그 출력하기</option>
         </select>
