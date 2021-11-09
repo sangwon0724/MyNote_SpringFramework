@@ -109,6 +109,27 @@
             ● count() : 해당 테이블의 전체 데이터 개수를 리턴 (long 값 리턴)
           </pre>
         </li>
+        <li>@Query 어노테이션
+          <pre>
+            ● JPA의 자동 SQL 생성기능 대신에 직접 쿼리를 작성할수 있게 해주는 어노테이션
+              기본 예시)
+                @Query(value = "select * from user limit 1;", nativeQuery = true)
+                Map&lt;String, Object> findOneUser();
+
+            ● 옵션
+              ○ value : SQL 쿼리를 작성하는 옵션
+              ○ nativeQuery : 해당 옵션이 추가되어있으면 DB에서 직접 쿼리문을 작성하듯이 작성할수 있게 해준다.
+
+            ● 주의점
+              ○ 호출하는 테이블명에 반드시 별칭을 추가해서 사용해야 한다.
+
+            ● 데이터 치환
+              ○ ? 사용 : ?1이나 ?2처럼 각각의 순서에 맞는 숫자를 붙여서 파라미터가 들어갈 순서대로 쿼리에 명시한다.
+              ○ :파라미터명 : :name이나 :age처럼 필요한 파라미터명에 맞춰서 쿼리에 명시하면 된다.
+                ※ 기존에는 @Param("name") String name처럼 파라미터에 어노테이션이 필요했다.
+                ※ 현재는 파라미터명만 잘 맞춰주면 알아서 잘 치환된다. (Spring 4 이상 + Java 8 이상)
+          </pre>
+        </li>
         <li>JPA를 통한 페이징 처리
           <pre>
             ※ PagingAndSortingRepository 인터페이스의 구현 필요
@@ -252,11 +273,57 @@
                     userRepository.findFirstByName("HongGilDong", Sort.by(Order.desc("id"), Order.asc("email")))
           </pre>
         </li>
-        <li>Entity 제작법
+        <li>Entity Class 기본 생성법
           <pre>
             1. JPA의 Entity로 사용할 클래스를 만든다.
             2. 해당 클래스에 javax.persistence.Entity를 import 하고 @Entity를 추가해준다.
-            3. xxx
+            3. 필요한 필드들을 필요한 어노테이션을 추가하면서 생성해준다.
+          </pre>
+        </li>
+        <li>Entity Class 관련 어노테이션
+          <pre>
+            ● @Entity : 해당 클래스를 Entity로 등록한다.
+              ○ name 옵션 : JPA에서 사용할 엔티티 이름을 지정한다. 보통 생략한다.
+                예시) name = "Member"
+            ● @Table : 매핑시킬 테이블을 직접 지정해준다.
+              ○ name 옵션 : 매핑시킬 테이블의 이름을 명시한다.
+                예시) name = "user"
+              ○ indexes 옵션
+                예시) indexes = { @Index(columnList = "name")}
+              ○ uniqueConstraints 옵션 :
+                  (1)매핑될 테이블에서 자신이 명시한 칼럼에 Unique 제약조건을 추가한다.
+                  (2) 보통 columnNames 속성은 name 속성과 같이 사용한다. //이유 : 제약조건명 랜덤생성
+                  예시) uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+
+            ● @Id : 해당 필드가 Primary Key이란 것을 의미한다.
+            ● @GeneratedValue
+            ● @Column : 해당 필드에 옵션을 추가한다.
+              ○ name 옵션 : 테이블에서 사용되는 실제 칼럼명을 의미한다. 보통은 필드명과 칼럼명을 맞춘다.
+                예시) name="homeAddress"
+              ○ nullable 옵션 : null 가능 여부
+                예시) nullable=false //필수값임을 의미
+              ○ length 옵션 : 최대 길이 설정, String 타입에만 사용
+                예시) length=10
+              ○ unique 옵션 : 해당 필드가 unique함을 의미
+                예시) unique=true
+              ○ insertable 옵션 : 해당 필드의 값을 추가가능한지에 대한 여부
+                예시) insertable = false
+              ○ updatable 옵션 : 해당 필드의 값을 변경가능한지에 대한 여부
+                예시) updatable = false
+
+            ● @NonNUll : 해당 필드는 반드시 값이 존재해야 한다.
+            ● @Enumerated : Enum 타입 매핑
+              ○ @Enumerated(value = EnumType.PRDINAL) : enum의 순서를 데이터베이스에 저장
+                ※ 순서 변경 여부때문에 사용하지 않는다.
+              ○ @Enumerated(value = EnumType.STRING) : enum의 이름을 데이터베이스에 저장
+            ● @Temporal : 날짜 타입 매핑
+              ○ @Temporal(TemporalType.DATE) : DB의 date 타입과 매핑
+              ○ @Temporal(TemporalType.TIME) : DB의 time 타입과 매핑
+              ○ @Temporal(TemporalType.TIMESTAMP) : DB의 timestamp 타입과 매핑
+              ※ Java 8의 LocalDate 사용시에는 생략가능한 어노테이션
+            ● @Lob : DB에서 Varchar를 넘어서는 큰 내용을 넣고 싶은 경우에 사영하는 어노테이션
+            ● @Transient : DB에 관계없이 메모리에서만 사용하고자 하는 필드에만 추가하는 어노테이션
+                => 임시 보관 데이터용으로 사용하는 어노테이션
           </pre>
         </li>
       </ul>
