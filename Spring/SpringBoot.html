@@ -1102,6 +1102,7 @@
                     ● @ToString : 해당 VO Class의 모든 필드를 출력하는 toString 메소드를 생성한다.
                         ○ includeFieldNames 옵션 : includeFieldNames=false 옵션을 사용하면 필드의 이름을 출력하지 않는다.
                         ○ exclude 옵션 : exclude="필드명" 옵션을 사용하면 해당 필드를 제외한다. 여러개면 {} 안에 명시
+                            ※ ToString에서 제외하고 싶은 필드에 직접 @ToString.Exclude을 추가해도 된다.
                         ○ of 옵션 : of={"필드1", "필드2", ...} 옵션을 사용하면 특정 필드를 포함하게 한다.
                         ○ callSuper 옵션 : callSuper=true 옵션을 사용하면 부모 클래스의 toString()을 호출한다.
                     ● @EqualsAndHashCode - hashcode와 equals 메소드를 생성한다.
