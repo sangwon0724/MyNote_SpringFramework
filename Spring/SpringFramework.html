@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spring Framework 공부</title>
-    <link rel="stylesheet" href="./css/index.css" />
+    <!-- code pretty print -->
+    <link rel="stylesheet" href="./css/codePrettyPrint.css">
 </head>
 <body>
     <section id="intro">
@@ -167,12 +168,11 @@
                 <pre>
                     ● getBean()이 호출되면, 팩토리는 의존성 주입을 이용해 빈을 인스턴스화 하고 빈의 특성을 설정하기 시작한다.
 
-                    코드)
-                    
-                        BeanFactory BF = new XmlBeanFactory(new FileInputStream("beanFactoryTest.xml"));
+                    <pre class="prettyprint lang-java">
+                        BeanFactory bf = new XmlBeanFactory(new FileInputStream("beanFactoryTest.xml"));
 
-                        testBean testbean = (testBean) BF.getBean("testbean");
-
+                        testBean testbean = (testBean) bf.getBean("testbean");
+                    </pre>
                 </pre>
             </li>
             <li>어플리케이션 컨텍스트 사용법
@@ -182,10 +182,11 @@
                         (2) FileSystemxmlApplicationContext : 파일 경로로 지정된 xml 파일에서 컨텐스트 정의 내용을 읽어들인다.
                         (3) XmlWebApplicationContext : 웹 어플리케이션에 포함된 xml 파일에서 컨텐스트 정의 내용을 읽어들인다.
 
-                        코드)
+                        <pre class="prettyprint lang-java">
                             ApplicationContext AC = new ClassPathXmlApplicationContext("context/contextBean.xml");
 
                             testBean testbean = AC.getBean("testbean");
+                        </pre>
                 </pre>
             </li>
             <li>빈 팩토리와 어플리케이션 컨텍스트의 차이점
@@ -207,7 +208,8 @@
                         ○ ref : 지정할 속성이 참조하는 빈의 id
                     ● qualifier 태그
                         ○ value : @Qualifier("명칭")에서 사용할 이름
-                    코드)
+
+                    <pre class="prettyprint lang-xml">
                         &lt;bean id="beanTest" class="com.example.practice.beanTest">
                             &lt;property name="ref" ref="refTest"/>
                             &lt;property name="whatever" value="whatever"/>
@@ -219,6 +221,7 @@
                             &lt;qualifier value="target"/> 
                         &lt;/bean>
                         &lt;bean id="qualifierTest2" class="com.example.practice.qualifierTest"/>
+                    </pre>
                 </pre>
             </li>
         </ul>
@@ -235,24 +238,25 @@
                         생성 → 빈 설정 (초기화) → 사용 → 소멸
 
                     ● 기초적인 사용방법 :
-                        코드)
-                        AnnotationConfigApplicationContext test = new AnnotationConfigApplicationContext(AnnotationBeanTest.class);
-                        //ApplicationContext test = new ClassPathXmlApplicationContext("applicationContextTest.xml");
-
-                        //빈 생성하기
-                        test.register();
-                        
-                        //빈 설정하기
-                        test.refresh();
-
-                        //빈 사용하기
-                        whatever what = (whatever)test.getBean("what");
-                        
-                        //빈을 직접 소멸시키기
-                        test.close();
-
-                        //JVM 소멸시 자동으로 소멸시키는 방법
-                        test.registerShutdownHook();
+                        <pre class="prettyprint lang-java">
+                            AnnotationConfigApplicationContext test = new AnnotationConfigApplicationContext(AnnotationBeanTest.class);
+                            //ApplicationContext test = new ClassPathXmlApplicationContext("applicationContextTest.xml");
+    
+                            //빈 생성하기
+                            test.register();
+                            
+                            //빈 설정하기
+                            test.refresh();
+    
+                            //빈 사용하기
+                            whatever what = (whatever)test.getBean("what");
+                            
+                            //빈을 직접 소멸시키기
+                            test.close();
+    
+                            //JVM 소멸시 자동으로 소멸시키는 방법
+                            test.registerShutdownHook();
+                        </pre>
                 </pre>
             </li>
             <li>기본적인 전제조건
@@ -478,13 +482,15 @@
                         ○ excludeFilters의 값으로 @Filter 어노테이션을 추가한다.
                         ○ @Filter 어노테이션의 속성인 type과 classes에 각각 FileterType.ANNOTATION과 스캔 대상에서 제외할 클래스의 명을 작성한다.
                             작성 예시)
-                                @Configuration
-                                @ComponentScan(
-                                    excludeFilters = @Filter(type = FilterType.ANNOTATION, classes = Configuration.class)
-                                )
-                                public class ComponentSscanTest {
-                                
-                                }
+                                <pre class="prettyprint lang-java">
+                                    @Configuration
+                                    @ComponentScan(
+                                        excludeFilters = @Filter(type = FilterType.ANNOTATION, classes = Configuration.class)
+                                    )
+                                    public class ComponentSscanTest {
+                                    
+                                    }
+                                </pre>
 
                     ● 탐색할 패키지의 시작 위치를 지정하는 방법
                         ○ @ComponentScan 어노테이션에 basePackages 속성을 준다.
@@ -554,7 +560,7 @@
                 <pre>
                     ● 의존성 주입 (Dependency Injection) : 어떤 객체에 스프링 컨테이너가 또 다른 객체와 의존성을 맺어주는 행위
 
-                    코드)
+                    <pre class="prettyprint lang-java">
                         public class TestA{ }
 
                         @Component
@@ -566,6 +572,7 @@
                             @Autowired
                             TestB testB;
                         }
+                    </pre>
                 </pre>
             </li>
             <li>어노테이션의 종류에 따른 다양한 의존성 주입 방법
@@ -709,7 +716,7 @@
             <li>쿠키 사용하기
                 <pre>
                     ● 컨트롤러 메소드의 매개변수로 쿠키 사용
-                        코드)
+                        <pre class="prettyprint lang-java">
                             @RequestMapping("/main")
                             public String mallIndex(@CookieValue(value="가져올쿠키명", required=false) Cookie cookie, HttpServletRequest request) {
                                 if(cookie != null)
@@ -717,6 +724,7 @@
 
                                 return "/common/main";
                             }
+                        </pre>
 
                     ● 주의점
                         ○ required=false를 입력하지 않으면 만약 쿠키가 없을 때 에러가 발생한다.
@@ -740,8 +748,7 @@
                     ● 방법 1 : HttpServletRequest를 통한 세션 얻기
                         ○ 컨트롤러 클래스의 메소드의 매개변수로 HttpServletRequest 객체 명시하기
                         ○ 해당 객체의 명이 request라고 했을 때
-                            코드)
-                                HttpSession session = request.getSession();
+                            예시) HttpSession session = request.getSession();
             
                     ● 방법 2 : HttpSession을 통한 세션 얻기
                         ○ 컨트롤러 클래스의 매개변수로 HttpSession 객체 명시하기
@@ -791,13 +798,15 @@
             <li>인터셉터 사용 방법
                 <pre>
                     ● spirng-servlet.xml에 인터셉터 태그를 통해서 사용 설정하기
-                        코드)
+
+                        <pre class="prettyprint lang-xml">
                             &lt;mvc:interceptors>
                                 &lt;mvc:interceptor>
                                     &lt;mvc:mapping path="/**" /> 
                                     &lt;bean class="com.project.util.MyInterceptor" />
                                 &lt;/mvc:interceptor>
                             &lt;/mvc:interceptors>
+                        </pre>
 
                     ● 인터셉터 클래스 구현하기
                         ○ HandlerInterceptorAdapter 상속받기
@@ -845,8 +854,10 @@
                     ● @RequestMapping 어노테이션에 대한 모든 매핑 정보는 스프링에서 제공하는 HandlerMapping 클래스가 가지고 있다.
                     ● @RequestMapping의 value 속성에는 요청될 url을, method 속성에는 요청 방식에 대해 작성한다.
                         예시)
-                            @RequestMapping(value = "/blog/main", method = RequestMethod.GET)
-                            public String blogMain(Model model) throws Exception{ ... }
+                            <pre class="prettyprint lang-java">
+                                @RequestMapping(value = "/blog/main", method = RequestMethod.GET)
+                                public String blogMain(Model model) throws Exception{ ... }
+                            </pre>
                     ● @RequestMapping을 적용한 메소드 사용 시 뷰 네임을 적용하는 방법
                         1) String : return에 명시한 문자열을 읽고 그 값에 해당하는 페이지를 찾아서 매칭시킨다.
                         2) void : return이 따로 없기 때문에 요청한 url 주소에 따라서 뷰를 매칭시킨다.
@@ -877,17 +888,19 @@
                         ○ @ResponseBody 어노테이션이 붙은 컨트롤러는 요청을 받았을 때 해당 http 요청의 미디어타입과 파라미터의 타입을 먼저 확인한다.
                         ○ return으로 전달하려는 자바 객체를 http 요청의 타입에 맞게 MessageConverter를 통해 변환하여 클라이언트로 전송한다.
                     ● 비동기 통신 관련 컨트롤러 예시
-                        @ResponseBody
-                        @RequestMapping(value = "/blog/main/ajax", method = RequestMethod.POST)
-                        public Map&lt;String, Object> blogMainPostAjax(@RequestBody HashMap&lt;String, Object> map,  Model model) throws Exception {
-
-                            ...
-
-                            Map&lt;String, Object> result = new HashMap&lt;sString, Object>();
-                            result.put("message", "success");
-
-                            return result;
-                        }
+                        <pre class="prettyprint lang-java">
+                            @ResponseBody
+                            @RequestMapping(value = "/blog/main/ajax", method = RequestMethod.POST)
+                            public Map&lt;String, Object> blogMainPostAjax(@RequestBody HashMap&lt;String, Object> map,  Model model) throws Exception {
+    
+                                ...
+    
+                                Map&lt;String, Object> result = new HashMap&lt;sString, Object>();
+                                result.put("message", "success");
+    
+                                return result;
+                            }
+                        </pre>
                     ● @RestController 어노테이션 : @Contrller 어노테이션 + @Response 어노테이션
                 </pre>
             </li>
@@ -900,24 +913,28 @@
                         3. 필수 값이지만 값이 들어오지 않으면 오류가 발생하기 때문에 이를 위해 기본 값을 설정할수 있다.
                             예시 ) @RequestParam(value="mode", defaultvalue="view") String mode
                         4. 기본 예시
-                            @RequestMapping(value="/find/account", method = RequestMethod.GET)
-                            public String findId(@RequestParam("name") String name, @RequestParam("birthday") String birthday) {
-                                System.out.pringln("계정 찾기 - 이름 : " + name + " / 생년월일 : " + birthday);
-                                //요청 url : http://localhost:8083/blog/proflie?name=홍길동&birthday=970229
-                                //출력 : 계정 찾기 - 이름 : 홍길동 / 생년월일 : 970229
-                                
-                                return "/find/account";
-                            }
+                            <pre class="prettyprint lang-java">
+                                @RequestMapping(value="/find/account", method = RequestMethod.GET)
+                                public String findId(@RequestParam("name") String name, @RequestParam("birthday") String birthday) {
+                                    System.out.pringln("계정 찾기 - 이름 : " + name + " / 생년월일 : " + birthday);
+                                    //요청 url : http://localhost:8083/blog/proflie?name=홍길동&birthday=970229
+                                    //출력 : 계정 찾기 - 이름 : 홍길동 / 생년월일 : 970229
+                                    
+                                    return "/find/account";
+                                }
+                            </pre>
                     ● 요청 url에 따른 동적 값 (@PathVariable 어노테이션) : @RequestMapping의 URL 값의 중괄호에 명시된 패스 변수를 받는다.
                         예시)
-                            @RequestMapping(value="/blog/{id}", method = RequestMethod.GET)
-                            public String personalBlog(@PathVariable("id") String id) {
-                                System.out.pringln("방문 블로그 : " + id);
-                                //요청 url : http://localhost:8083/blog/helloworld
-                                //출력 : 방문 블로그 : helloworld
+                            <pre class="prettyprint lang-java">
+                                @RequestMapping(value="/blog/{id}", method = RequestMethod.GET)
+                                public String personalBlog(@PathVariable("id") String id) {
+                                    System.out.pringln("방문 블로그 : " + id);
+                                    //요청 url : http://localhost:8083/blog/helloworld
+                                    //출력 : 방문 블로그 : helloworld
 
-                                return "/blog/personal";
-                            }
+                                    return "/blog/personal";
+                                }
+                            </pre>
                 </pre>
             </li>
             <li>데이터 전달 방식 (RequestMethod - GET/POST)
@@ -942,42 +959,50 @@
                 <pre>
                     ● Model 객체란? : Controller에서 생성한 데이터를 담아서 View로 전달할 때 사용하는 HashMap의 형식의 객체
                     ● Model 객체 사용법
-                        @RequestMapping(value = "/blog/{userID}", method = RequestMethod.GET)
-                        public String personalBlog(@PathVariable String userID, Model model) throws Exception {
-                            model.addAttribute("mode", "view"); //게시글 보기 모드
-                            return "/blog/personal";
-                        }
+                        <pre class="prettyprint lang-java">
+                            @RequestMapping(value = "/blog/{userID}", method = RequestMethod.GET)
+                            public String personalBlog(@PathVariable String userID, Model model) throws Exception {
+                                model.addAttribute("mode", "view"); //게시글 보기 모드
+                                return "/blog/personal";
+                            }
+                        </pre>
                     ● Model 객체를 파라미터로 사용하지 않고 특정 파라미터를 직접 view에 매칭시키는 방법
-                        @RequestMapping(value = "/blog/{userID}", method = RequestMethod.GET)
-                        public String personalBlog(@PathVariable String userID, @ModelAttribute("mode") String mode, Model model) throws Exception {
-                            //@ModelAttribute 어노테이션은 multipart/form-data 형태의 HTTP Body 내용과 HTTP 파라미터들을 1대1로 객체에 바인딩시킨다.
-                            //@ModelAttribute 어노테이션에 파라미터명을 명시하면 요청 url에 ModelAttribute로 명시된 값이 필요하다.
-                            //ModelAttribute("mode")처럼 정확하게 명시하지 않고 ModelAttribute User user처럼 사용할 수도 있다.
-                            //만약 Setter함수가 없다면 매핑을 시키지 못하고, null을 갖게 된다.
+                        <pre class="prettyprint lang-java">
+                            @RequestMapping(value = "/blog/{userID}", method = RequestMethod.GET)
+                            public String personalBlog(@PathVariable String userID, @ModelAttribute("mode") String mode, Model model) throws Exception {
+                                //@ModelAttribute 어노테이션은 multipart/form-data 형태의 HTTP Body 내용과 HTTP 파라미터들을 1대1로 객체에 바인딩시킨다.
+                                //@ModelAttribute 어노테이션에 파라미터명을 명시하면 요청 url에 ModelAttribute로 명시된 값이 필요하다.
+                                //ModelAttribute("mode")처럼 정확하게 명시하지 않고 ModelAttribute User user처럼 사용할 수도 있다.
+                                //만약 Setter함수가 없다면 매핑을 시키지 못하고, null을 갖게 된다.
 
-                            return "/blog/personal";
-                        }
+                                return "/blog/personal";
+                            }
+                        </pre>
                     ● ModelAndView 객체 : Model과 View를 동시에 설정가능한 형식의 객체 (ModelAndView 객체를 리턴한다.)
-                        @RequestMapping(value = "/blog/{userID}", method = RequestMethod.GET)
-                        public ModelAndView personalBlog(@PathVariable String userID, Model model) throws Exception {
-                            ModelAndView mv = new ModelAndView();
-                            mv.setViewName("/blog/personal"); //뷰명
-                            mv.addObject("mode", "view"); //뷰로 보낼 데이터
-
-                            return mv;
-                        }
+                        <pre class="prettyprint lang-java">
+                            @RequestMapping(value = "/blog/{userID}", method = RequestMethod.GET)
+                            public ModelAndView personalBlog(@PathVariable String userID, Model model) throws Exception {
+                                ModelAndView mv = new ModelAndView();
+                                mv.setViewName("/blog/personal"); //뷰명
+                                mv.addObject("mode", "view"); //뷰로 보낼 데이터
+    
+                                return mv;
+                            }
+                        </pre>
                 </pre>
             </li>
             <li>Spring 5부터 지원되는 Rendering 인터페이스
                 <pre>
                     기본 형식)
-                        @매핑_어노테이션("요청 url")
-                        public Rendering 메소드명() {
-                            return Rendering
-                                .view("뷰명")
-                                .modelAttribute("모델명", 데이터)
-                                .build();
-                        }
+                        <pre class="prettyprint lang-java">
+                            @매핑_어노테이션("요청 url")
+                            public Rendering 메소드명() {
+                                return Rendering
+                                    .view("뷰명")
+                                    .modelAttribute("모델명", 데이터)
+                                    .build();
+                            }
+                        </pre>
                 </pre>
             </li>
         </ul>
@@ -1066,12 +1091,14 @@
                     ● scope : 해당 라이브러리가 언제 필요한지, 언제 제외되는지를 나타내는 것 (사용 값 : compile, runtime, provided, test 등)
                     ● exclusions : 해당 라이브러리와 관련된 실행에 대한 설정
                         예시)
-                            &lt;exclusions>
-                                &lt;exclusion>
-                                    &lt;groupId>commons-logging&lt;/groupId>
-                                    &lt;artifactId>commons-logging&lt;/artifactId>
-                                &lt;/exclusion>
-                            &lt;/exclusions>
+                            <pre class="prettyprint lang-xml">
+                                &lt;exclusions>
+                                    &lt;exclusion>
+                                        &lt;groupId>commons-logging&lt;/groupId>
+                                        &lt;artifactId>commons-logging&lt;/artifactId>
+                                    &lt;/exclusion>
+                                &lt;/exclusions>
+                            </pre>
                 </pre>
             </li>
             <li>빌드 정보 (pom.xml의 project 태그 → build 태그 → plugins 태그 → plugin 태그 내부에 작성)
@@ -1095,58 +1122,71 @@
             <li>자주 쓰는 기능
                 <pre>
                     ● mybatis 관련
-                        &lt;dependency>
-                            &lt;groupId>org.mybatis&lt;/groupId>
-                            &lt;artifactId>mybatis&lt;/artifactId>
-                            &lt;version>3.2.2&lt;/version>
-                        &lt;/dependency>
-                        &lt;dependency>
-                            &lt;groupId>org.mybatis&lt;/groupId>
-                            &lt;artifactId>mybatis-spring&lt;/artifactId>
-                            &lt;version>1.2.0&lt;/version>
-                        &lt;/dependency>
-                        &lt;dependency>
-                            &lt;groupId>org.springframework&lt;/groupId>
-                            &lt;artifactId>spring-jdbc&lt;/artifactId>
-                            &lt;version>${org.springframework-version}&lt;/version>
-                        &lt;/dependency>
+                        <pre class="prettyprint lang-xml">
+                            &lt;dependency>
+                                &lt;groupId>org.mybatis&lt;/groupId>
+                                &lt;artifactId>mybatis&lt;/artifactId>
+                                &lt;version>3.2.2&lt;/version>
+                            &lt;/dependency>
+                            &lt;dependency>
+                                &lt;groupId>org.mybatis&lt;/groupId>
+                                &lt;artifactId>mybatis-spring&lt;/artifactId>
+                                &lt;version>1.2.0&lt;/version>
+                            &lt;/dependency>
+                            &lt;dependency>
+                                &lt;groupId>org.springframework&lt;/groupId>
+                                &lt;artifactId>spring-jdbc&lt;/artifactId>
+                                &lt;version>${org.springframework-version}&lt;/version>
+                            &lt;/dependency>
+                        </pre>
 
-                        ● user DataSource 관련
+                    ● user DataSource 관련
+                        <pre class="prettyprint lang-xml">
                             &lt;dependency>
                                 &lt;groupId>commons-dbcp&lt;/groupId>
                                 &lt;artifactId>commons-dbcp&lt;/artifactId>
                                 &lt;version>1.4&lt;/version>
                             &lt;/dependency>
-                            
-                        ● mariaDB 관련
+                        </pre>
+                        
+                    ● mariaDB 관련
+                        <pre class="prettyprint lang-xml">
                             &lt;dependency>
                                 &lt;groupId>org.mariadb.jdbc&lt;/groupId>
                                 &lt;artifactId>mariadb-java-client&lt;/artifactId>
                                 &lt;version>2.6.0&lt;/version>
                             &lt;/dependency>
-                            
-                        ● ajax 관련
+                        </pre>
+                        
+                    ● ajax 관련
+                        <pre class="prettyprint lang-xml">
                             &lt;dependency>
                                 &lt;groupId>org.codehaus.jackson&lt;/groupId>
                                 &lt;artifactId>jackson-mapper-asl&lt;/artifactId>
                                 &lt;version>1.9.13&lt;/version>
                             &lt;/dependency>
-                            
-                        ● @ResponseBody 어노테이션 사용
+                        </pre>
+                        
+                    ● @ResponseBody 어노테이션 사용
+                        <pre class="prettyprint lang-xml">
                             &lt;dependency>
                             &lt;groupId>com.fasterxml.jackson.core&lt;/groupId>
                             &lt;artifactId>jackson-databind&lt;/artifactId>
                             &lt;version>2.10.1&lt;/version>
                             &lt;/dependency> 
-                            
-                        ● Sql Log 출력 기능 사용
+                        </pre>
+                        
+                    ● Sql Log 출력 기능 사용
+                        <pre class="prettyprint lang-xml">
                             &lt;dependency>
                                 &lt;groupId>org.lazyluke&lt;/groupId>
                                 &lt;artifactId>log4jdbc-remix&lt;/artifactId>
                                 &lt;version>0.2.7&lt;/version>
                             &lt;/dependency>
-                            
-                        ● 파일 처리 관련
+                        </pre>
+                        
+                    ● 파일 처리 관련
+                        <pre class="prettyprint lang-xml">
                             &lt;dependency>
                                 &lt;groupId>commons-io&lt;/groupId>
                                 &lt;artifactId>commons-io&lt;/artifactId>
@@ -1157,13 +1197,16 @@
                                 &lt;artifactId>commons-fileupload&lt;/artifactId>
                                 &lt;version>1.3.1&lt;/version>
                             &lt;/dependency>
+                        </pre>
 
-                        ● json 변환 기능 사용
+                    ● json 변환 기능 사용
+                        <pre class="prettyprint lang-xml">
                             &lt;dependency>
                                 &lt;groupId>com.google.code.gson&lt;/groupId>
                                 &lt;artifactId>gson&lt;/artifactId>
                                 &lt;version>2.8.6&lt;/version>
                             &lt;/dependency>
+                        </pre>
                 </pre>
             </li>
         </ul>
@@ -1264,27 +1307,32 @@
             <li>자주 쓰는 기능
                 <pre>
                     ● 한글 깨짐 방지
-                        &lt;filter>
-                            &lt;filter-name>encodingFilter&lt;/filter-name>
-                            &lt;filter-class>rg.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class>
-                            &lt;init-param>
-                                &lt;param-name>encoding&lt;/param-name>
-                                &lt;param-value>UTF-8&lt;/param-value>
-                            &lt;/init-param>
-                        &lt;/filter>
-                        &lt;filter-mapping>
-                            &lt;filter-name>encodingFilter&lt;/filter-name>
-                            &lt;url-pattern>/*&lt;/url-pattern>
-                        &lt;/filter-mapping>
+                        <pre class="prettyprint lang-xml">
+                            &lt;filter>
+                                &lt;filter-name>encodingFilter&lt;/filter-name>
+                                &lt;filter-class>rg.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class>
+                                &lt;init-param>
+                                    &lt;param-name>encoding&lt;/param-name>
+                                    &lt;param-value>UTF-8&lt;/param-value>
+                                &lt;/init-param>
+                            &lt;/filter>
+                            &lt;filter-mapping>
+                                &lt;filter-name>encodingFilter&lt;/filter-name>
+                                &lt;url-pattern>/*&lt;/url-pattern>
+                            &lt;/filter-mapping>
+                        </pre>
+
                     ● 파일 전송
-                        &lt;filter>
-                            &lt;filter-name>MultipartFilter&lt;/filter-name>
-                            &lt;filter-class>org.springframework.web.multipart.support.MultipartFilter&lt;/filter-class>
-                        &lt;/filter>
-                        &lt;filter-mapping>
-                            &lt;filter-name>MultipartFilter&lt;/filter-name>
-                            &lt;url-pattern>/*&lt;/url-pattern>
-                        &lt;/filter-mapping>
+                        <pre class="prettyprint lang-xml">
+                            &lt;filter>
+                                &lt;filter-name>MultipartFilter&lt;/filter-name>
+                                &lt;filter-class>org.springframework.web.multipart.support.MultipartFilter&lt;/filter-class>
+                            &lt;/filter>
+                            &lt;filter-mapping>
+                                &lt;filter-name>MultipartFilter&lt;/filter-name>
+                                &lt;url-pattern>/*&lt;/url-pattern>
+                            &lt;/filter-mapping>
+                        </pre>
                 </pre>
             </li>
         </ul>
@@ -1326,48 +1374,58 @@
                     ● context:component-scan : 명시한 패키지에 있는 클래스들을 빈으로 등록하기 위한 태그
                         ○ base-package : 빈으로 등록하려고 하는 클래스가 포함된 패키지 경로 (예시 : com.my.mapper)
                     ● 기본 예시 코드 )
-                        &lt;context:component-scan base-package="com.my.mapper" />
+                        <pre class="prettyprint lang-xml">
+                            &lt;context:component-scan base-package="com.my.mapper" />
+                        </pre>
                     ● 필터링 기능이 적용된 예시 코드 )
-                        &lt;context:component-scan base-package="com.my">
-                            &lt;context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-                        &lt;/context:component-scan>
+                        <pre class="prettyprint lang-xml">
+                            &lt;context:component-scan base-package="com.my">
+                                &lt;context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+                            &lt;/context:component-scan>
+                        </pre>
                 </pre>
             </li>
             <li>자주 쓰는 기능
                 <pre>
                     ● JDBC 연결 (mariaDB의 경우)
-                        &lt;bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-                            &lt;property name="driverClassName" value="org.mariadb.jdbc.Driver" />
-                            &lt;property name="url" value="jdbc:mariadb://url주소/데이터베이스명" />
-                            &lt;property name="username" value="유저명" />
-                            &lt;property name="password" value="비밀번호" />
-                        &lt;/bean>
+                        <pre class="prettyprint lang-xml">
+                            &lt;bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+                                &lt;property name="driverClassName" value="org.mariadb.jdbc.Driver" />
+                                &lt;property name="url" value="jdbc:mariadb://url주소/데이터베이스명" />
+                                &lt;property name="username" value="유저명" />
+                                &lt;property name="password" value="비밀번호" />
+                            &lt;/bean>
+                        </pre>
 
                     ● myBatis 사용
-                        &lt;bean id="SqlSessionFectory" class="org.mybatis.spring.SqlSessionFactoryBean">
-                            &lt;property name="dataSource" ref="dataSource" />
-                            &lt;property name="configLocation" value="classpath:/mybatis-config.xml" />
-                            &lt;property name="mapperLocations" value="classpath:/mappers/*Mapper.xml" />
-                        &lt;/bean>
-                        &lt;bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
-                            &lt;constructor-arg name="sqlSessionFactory" ref="SqlSessionFectory" />
-                        &lt;/bean>
-                        &lt;bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-                            &lt;property name="basePackage" value="com.my.mapper" />
-                        &lt;/bean>
+                        <pre class="prettyprint lang-xml">
+                            &lt;bean id="SqlSessionFectory" class="org.mybatis.spring.SqlSessionFactoryBean">
+                                &lt;property name="dataSource" ref="dataSource" />
+                                &lt;property name="configLocation" value="classpath:/mybatis-config.xml" />
+                                &lt;property name="mapperLocations" value="classpath:/mappers/*Mapper.xml" />
+                            &lt;/bean>
+                            &lt;bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+                                &lt;constructor-arg name="sqlSessionFactory" ref="SqlSessionFectory" />
+                            &lt;/bean>
+                            &lt;bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+                                &lt;property name="basePackage" value="com.my.mapper" />
+                            &lt;/bean>
+                        </pre>
 
                     ● SQL log 사용 (DBMS의 유저정보를 정의하는 dataSource가 이미 정의되어있는 경우)
                         1. DBMS의 유저정보를 정의하는 id가 dataSource인 빈의 id를 dataSourceSpied로 변경한다.
                         2. 아래의 코드를 작성한다.
-                            &lt;bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource"> 
-                                &lt;constructor-arg ref="dataSourceSpied" /> 
-                                &lt;property name="logFormatter"> 
-                                    &lt;bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter"> 
-                                        &lt;property name="loggingType" value="MULTI_LINE" /> 
-                                        &lt;property name="sqlPrefix" value="SQL : "/> 
-                                    &lt;/bean> 
-                                &lt;property> 
-                            &lt;/bean>
+                            <pre class="prettyprint lang-xml">
+                                &lt;bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource"> 
+                                    &lt;constructor-arg ref="dataSourceSpied" /> 
+                                    &lt;property name="logFormatter"> 
+                                        &lt;bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter"> 
+                                            &lt;property name="loggingType" value="MULTI_LINE" /> 
+                                            &lt;property name="sqlPrefix" value="SQL : "/> 
+                                        &lt;/bean> 
+                                    &lt;property> 
+                                &lt;/bean>
+                            </pre>
                 </pre>
             </li>
         </ul>
@@ -1429,30 +1487,47 @@
             <li>자주 쓰는 기능
                 <pre>
                     ● 어노테이션 사용
-                        &lt;annotation-driven />
+                        <pre class="prettyprint lang-xml">
+                            &lt;annotation-driven />
+                        </pre>
+
                     ● 리소스 설정 (기본 설정)
-                        &lt;resources mapping="/resources/**" location="/resources/" />
+                        <pre class="prettyprint lang-xml">
+                            &lt;resources mapping="/resources/**" location="/resources/" />
+                        </pre>
+
                     ● view 페이지 설정 (기본 설정)
-                        &lt;beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-                            &lt;beans:property name="prefix" value="/WEB-INF/views/" />
-                            &lt;beans:property name="suffix" value=".jsp" />
-                        &lt;/beans:bean>
+                        <pre class="prettyprint lang-xml">
+                            &lt;beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                                &lt;beans:property name="prefix" value="/WEB-INF/views/" />
+                                &lt;beans:property name="suffix" value=".jsp" />
+                            &lt;/beans:bean>
+                        </pre>
+
                     ● 컨트롤러 관련 컴포넌트 스캔 (com.my.app은 임의값)
-                        &lt;context:component-scan base-package="com.my.app" />
+                        <pre class="prettyprint lang-xml">
+                            &lt;context:component-scan base-package="com.my.app" />
+                        </pre>
+
                     ● 파일 업로드 관련
-                        &lt;beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-                            &lt;beans:property name="maxUploadSize" value="100000000">&lt;/beans:property>
-                        &lt;/beans:bean>
+                        <pre class="prettyprint lang-xml">
+                            &lt;beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+                                &lt;beans:property name="maxUploadSize" value="100000000">&lt;/beans:property>
+                            &lt;/beans:bean>
+                        </pre>
+
                     ● 인터셉터 관련 (authenticationInterceptor와 com.my.util.UrlInterceptor는 임의값)
-                        &lt;beans:bean id="authenticationInterceptor" class="com.my.util.UrlInterceptor"/>
-                        &lt;interceptors>
-                            &lt;interceptor>
-                                &lt;mapping path="/blog/{userID}/write"/>
-                                &lt;mapping path="/blog/setting/profile"/>
-                                &lt;beans:ref bean="authenticationInterceptor"/>
-                            &lt;/interceptor>
-                        &lt;/interceptors>
-                </pre>
+                        <pre class="prettyprint lang-xml">
+                            &lt;beans:bean id="authenticationInterceptor" class="com.my.util.UrlInterceptor"/>
+                            &lt;interceptors>
+                                &lt;interceptor>
+                                    &lt;mapping path="/blog/{userID}/write"/>
+                                    &lt;mapping path="/blog/setting/profile"/>
+                                    &lt;beans:ref bean="authenticationInterceptor"/>
+                                &lt;/interceptor>
+                            &lt;/interceptors>
+                    </pre>
+                        </pre>
             </li>
         </ul>
     </section>
@@ -1486,15 +1561,17 @@
                         
                         &lt;&lt;&lt; class >>>
 
-                        @Value("${user.username}")
-                        private String userName;
-                        
-                        @Value("${user.birthday}")
-                        private String birthday;
-                        
-                        //defaultvalue 설정 가능
-                        @Value("${user.hoddy:게임}")
-                        private String hoddy;
+                        <pre class="prettyprint lang-java">
+                            @Value("${user.username}")
+                            private String userName;
+                            
+                            @Value("${user.birthday}")
+                            private String birthday;
+                            
+                            //defaultvalue 설정 가능
+                            @Value("${user.hoddy:게임}")
+                            private String hoddy;
+                        </pre>
                 </pre>
             </li>
             <li>SpEL을 통한 능동 변환
@@ -1504,21 +1581,26 @@
                     ● 사용 예시)
                         &lt;&lt;&lt; 빈으로 등록할 클래스 >>>
 
-                        @Component("userInfo")
-                        public class config{
-                            public static String username="HongGilDong";
-                            public String getBirthday(){
-                                return "970229";
+                        <pre class="prettyprint lang-java">
+                            @Component("userInfo")
+                            public class config{
+                                public static String username="HongGilDong";
+                                public String getBirthday(){
+                                    return "970229";
+                                }
                             }
-                        }
+                        </pre>
 
-                        &lt;&lt;&lt; class >>>
+                        &lt;&lt;&lt; 빈을 사용할 클래스 >>>
                         
-                        @Value("#{userInfo.username}")
-                        private String userName;
-                        
-                        @Value("#{userInfo.getBirthday()}")
-                        private String birthday;
+                        <pre class="prettyprint lang-java">
+                            @Value("#{userInfo.username}")
+                            private String userName;
+                            
+                            @Value("#{userInfo.getBirthday()}")
+                            private String birthday;
+                        </pre>
+
                     ※ 주의점 : 메소드 및 생성자 인자에 @Value를 사용할 때는 @Autowired나 @Resource같은 어노테이션이 반드시  존재해야 한다.
                 </pre>
             </li>
@@ -1534,11 +1616,13 @@
 
                         &lt;&lt;&lt; class >>>
 
-                        @Autowired 
-                        Environment env;
-
-                        private String userName=env.getProperty("user.username");
-                        private String birthday=env.getProperty("user.birthday");
+                        <pre class="prettyprint lang-xml">
+                            @Autowired 
+                            Environment env;
+    
+                            private String userName=env.getProperty("user.username");
+                            private String birthday=env.getProperty("user.birthday");
+                        </pre>
                 </pre>
             </li>
         </ul>
@@ -1653,5 +1737,12 @@
             </select>
         </section>
     </div>
+
+    <!--code pretty print -->
+    <script src ="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+    <script>
+        prettyPrint();
+    </script>
 </body>
 </html>
