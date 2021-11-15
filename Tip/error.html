@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>경험한 에러 목록</title>
-    <link rel="stylesheet" href="./css/index.css" />
+    <!-- code pretty print -->
+    <link rel="stylesheet" href="./css/codePrettyPrint.css">
 </head>
 <body>
     <section id="error">
@@ -29,10 +30,12 @@
                 <pre>
                     ※ 원인 : jdbc 관련 dependency의 부재
                     ※ 해결 : pom.xml에 dependency 추가
-                        &lt;dependency>
-                            &lt;groupId>org.springframework.boot&lt;/groupId>
-                            &lt;artifactId>spring-boot-starter-jdbc&lt;/artifactId>
-                        &lt;/dependency>
+                        <pre class="prettyprint lang-xml">
+                            &lt;dependency>
+                                &lt;groupId>org.springframework.boot&lt;/groupId>
+                                &lt;artifactId>spring-boot-starter-jdbc&lt;/artifactId>
+                            &lt;/dependency>
+                        </pre>
                 </pre>
             </li>
         </ul>
@@ -46,4 +49,11 @@
         </section>
     </div> -->
 </body>
+
+<!--code pretty print -->
+<script src ="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<script>
+    prettyPrint();
+</script>
 </html>

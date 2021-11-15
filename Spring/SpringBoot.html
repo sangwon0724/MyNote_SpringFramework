@@ -66,7 +66,7 @@
                     ● Dependencies에서 Spring Web 받기
                 </pre>
             </li>
-            <li>스프링 부트 설정하기
+            <li>스프링 부트 설정하기 (+ Jsp 사용 설정)
                 <pre>
                     1. 스프링 부트 프로젝트 생성 완료
                     2. Spring Boot에선 기본적으로 JSP VIEW를 지원하지 않기 때문에 pom.xml에 dependency를 추가
@@ -153,23 +153,24 @@
             </li>
             <li>사용 예시
                 <pre>
-                    ● @AssertTure(message="yyyyMMdd의 형식에 맞지 않습니다.")
+                    <pre class="prettyprint lang-java">
+                        @AssertTure(message="yyyyMMdd의 형식에 맞지 않습니다.")
                         private String birthday;
                         public String getBirthday() { return birthday; }
                         public void setBirthday(String birthday) { this.birthday = birthday; }
+
                         //boolean 형식 메소드명은 is로 시작해야 한다.
-                        <pre class="prettyprint lang-java">
-                            @AssertTrue
-                            public boolean isBirthday(){
-                                try {
-                                    LocalDate localDate = LocalDate.parse(getBirthday(), DateTimeFormatter.ofPattern("yyyyMMdd"));
-                                } catch (Exception e) {
-                                    return false;
-                                }
-                                
-                                return true;
+                        @AssertTrue
+                        public boolean isBirthday(){
+                            try {
+                                LocalDate localDate = LocalDate.parse(getBirthday(), DateTimeFormatter.ofPattern("yyyyMMdd"));
+                            } catch (Exception e) {
+                                return false;
                             }
-                        </pre>
+                            
+                            return true;
+                        }
+                    </pre>
                 </pre>
             </li>
             <li>Custom Validator
@@ -319,7 +320,8 @@
             </li>
             <li>인터셉터 적용하기
                 <pre>
-                    1. WebMvcConfigurer 인터페이스를 구현한 인터셉터 등록용 클래스를 추가한다. (※ WebMvcConfigurer 인터페이스 : ViewResolver 값을 자동으로 등록해준다.)
+                    1. WebMvcConfigurer 인터페이스를 구현한 인터셉터 등록용 클래스를 추가한다.
+                        (※ WebMvcConfigurer 인터페이스 : ViewResolver 값을 자동으로 등록해준다.)
                     2. 해당 클래스에 @Configuration 어노테이션을 추가한다.
                     3. 필요한 메소드들을 오버라이딩 한다. (※ InterceptorRegistry 클래스 : 매핑된 인터셉터 목록을 구성하는 데 도움을 주는 클래스)
                         ● public void addInterceptors(InterceptorRegistry registry) : 인터셉터를 등록하는 메소드
@@ -371,7 +373,7 @@
                     2. 비동기 처리를 시킬 메소드를 만든다.
                         ● 필요 어노테이션 : @Async
                         ● 반환타입 : CompletableFuture
-                        ● 리턴형식 : return new AsyncResult(실행할_메소드()).completable(); 또는 
+                        ● 리턴형식 : return new AsyncResult(실행할_메소드()).completable();
                         ● 예시 )
                             <pre class="prettyprint lang-java">
                                 @Async
@@ -421,7 +423,7 @@
 
                     ※ @Async 어노테이션의 name 속성에 Thread Bean의 명시해주면 해당 Thread를 사용하도록 할 수 있다.
 
-                    ※ 코드 예시)
+                    예시)
                         <pre class="prettyprint lang-java">
                             @Configuration
                             public class AppConfig {
@@ -501,7 +503,11 @@
                         ○ 기본 형태 : postForLocation(URI, Request Object), 결과값 : URI
                         ○ 사용 예시 :
                             <pre class="prettyprint lang-java">
-                                UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
+                                UserVO user
+                                    = UserVO.builder()
+                                    .name("HongGilDong").age(25).email("hong@naver.com")
+                                    .birthday("19970229").phoneNumber("0001112222")
+                                    .build();
                                 RestTemplate restTemplate = new RestTemplate();
                                 URI result = restTemplate.postForLocation(uri, user);
                                 return result;
@@ -511,7 +517,11 @@
                         ○ 기본 형태 : postForObject(URI, Request Object, ResponseType)
                         ○ 사용 예시 :
                             <pre class="prettyprint lang-java">
-                                UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
+                                UserVO user
+                                    = UserVO.builder()
+                                    .name("HongGilDong").age(25).email("hong@naver.com")
+                                    .birthday("19970229").phoneNumber("0001112222")
+                                    .build();
                                 RestTemplate restTemplate = new RestTemplate();
                                 UserVO result = restTemplate.postForObject(uri, user, UserVO.class);
                                 return result;
@@ -521,7 +531,11 @@
                         ○ 기본 형태 : postForEntity(URI, Request Object, ResponseType)
                         ○ 사용 예시 :
                             <pre class="prettyprint lang-java">
-                                UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
+                                UserVO user
+                                    = UserVO.builder()
+                                    .name("HongGilDong").age(25).email("hong@naver.com")
+                                    .birthday("19970229").phoneNumber("0001112222")
+                                    .build();
                                 RestTemplate restTemplate = new RestTemplate();
                                 ResponseEntity<UserVO> result = restTemplate.postForEntity(uri, user, UserVO.class);
                                 return result.getBody();
@@ -534,7 +548,11 @@
                         ○ 기본 형태 : put(URI, Request Object)
                         ○ 사용 예시 :
                             <pre class="prettyprint lang-java">
-                                UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0003334444").build();
+                                UserVO user
+                                    = UserVO.builder()
+                                    .name("HongGilDong").age(25).email("hong@naver.com")
+                                    .birthday("19970229").phoneNumber("0003334444")
+                                    .build();
                                 RestTemplate restTemplate = new RestTemplate();
                                 restTemplate.put(uri, user);
                             </pre>
@@ -561,7 +579,11 @@
                                 ※ RequestEntity와 ResponseEntity가 HttpEntity Class를 상속받고 있다.
                         ○ 사용 예시 - 1 :
                             <pre class="prettyprint lang-java">
-                                UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
+                                UserVO user
+                                    = UserVO.builder()
+                                    .name("HongGilDong").age(25).email("hong@naver.com")
+                                    .birthday("19970229").phoneNumber("0001112222")
+                                    .build();
                                 RequestEntity&lt;UserVO> request = RequestEntity
                                         .post(uri) //요청할 API 서버의 주소 설정
                                         .contentType(MediaType.APPLICATION_JSON) //contentType 설정, org.springframework.http.MediaType
@@ -573,7 +595,11 @@
 
                         ○ 사용 예시 - 2 :
                             <pre class="prettyprint lang-java">
-                                UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
+                                UserVO user
+                                    = UserVO.builder()
+                                    .name("HongGilDong").age(25).email("hong@naver.com")
+                                    .birthday("19970229").phoneNumber("0001112222")
+                                    .build();
                                 RequestEntity&lt;UserVO> request = RequestEntity
                                         .post(uri) //요청할 API 서버의 주소 설정
                                         .contentType(MediaType.APPLICATION_JSON) //contentType 설정, org.springframework.http.MediaType
@@ -600,7 +626,7 @@
             </li>
             <li>관련 개념
                 <pre>
-                    ● TDD (Test-driven Development) : 코드의 유지 보수 및 운영 환경에서의 에러를 미리 방지하기 위해서 사용하는 단위 검증 테스트 ㅡㅍ레임워크
+                    ● TDD (Test-driven Development) : 코드의 유지 보수 및 운영 환경에서의 에러를 미리 방지하기 위해서 사용하는 단위 검증 테스트 프레임워크
                     ● 단위 테스트 : 작성한 코드가 기대하는 대로 동작하는지 검증하는 절차
                 </pre>
             </li>
@@ -777,7 +803,7 @@
             <li>설치방법
                 <pre>
                     ● pom.xml에 dependency 추가
-                        <pre class="prettyprint lang-java">
+                        <pre class="prettyprint lang-xml">
                             &lt;dependency>
                                 &lt;groupId>org.springframework.boot&lt;/groupId>
                                 &lt;artifactId>spring-boot-starter-thymeleaf&lt;/artifactId>
