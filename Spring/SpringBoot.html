@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spring Boot 공부</title>
-    <link rel="stylesheet" href="./css/index.css" />
+    <!-- code pretty print -->
+    <link rel="stylesheet" href="./css/codePrettyPrint.css">
 </head>
 <body>
     <section id="intro">
@@ -69,15 +70,17 @@
                 <pre>
                     1. 스프링 부트 프로젝트 생성 완료
                     2. Spring Boot에선 기본적으로 JSP VIEW를 지원하지 않기 때문에 pom.xml에 dependency를 추가
-                        &lt;dependency>
-                            &lt;groupId>org.apache.tomcat.embed&lt;/groupId>
-                            &lt;artifactId>tomcat-embed-jasper&lt;/artifactId>
-                        &lt;/dependency>
-                        &lt;dependency>
-                            &lt;groupId>jstl&lt;/groupId>
-                            &lt;artifactId>jstl&lt;/artifactId>
-                            &lt;version>1.2&lt;/version>
-                        &lt;/dependency>
+                        <pre class="prettyprint lang-xml">
+                            &lt;dependency>
+                                &lt;groupId>org.apache.tomcat.embed&lt;/groupId>
+                                &lt;artifactId>tomcat-embed-jasper&lt;/artifactId>
+                            &lt;/dependency>
+                            &lt;dependency>
+                                &lt;groupId>jstl&lt;/groupId>
+                                &lt;artifactId>jstl&lt;/artifactId>
+                                &lt;version>1.2&lt;/version>
+                            &lt;/dependency>
+                        </pre>
                     3. application.properties에 가서 속성 추가
                         server.port=포트번호
     
@@ -111,10 +114,12 @@
             </li>
             <li>필요 dependency
                 <pre>
-                    &lt;dependency>
-                        &lt;groupId>org.springframework.boot&lt;/groupId>
-                        &lt;artifactId>spring-boot-starter-validation&lt;/artifactId>
-                    &lt;/dependency>
+                    <pre class="prettyprint lang-xml">
+                        &lt;dependency>
+                            &lt;groupId>org.springframework.boot&lt;/groupId>
+                            &lt;artifactId>spring-boot-starter-validation&lt;/artifactId>
+                        &lt;/dependency>
+                    </pre>
                 </pre>
             </li>
             <li>유효성 검증 어노테이션
@@ -153,16 +158,18 @@
                         public String getBirthday() { return birthday; }
                         public void setBirthday(String birthday) { this.birthday = birthday; }
                         //boolean 형식 메소드명은 is로 시작해야 한다.
-                        @AssertTrue
-                        public boolean isBirthday(){
-                            try {
-                                LocalDate localDate = LocalDate.parse(getBirthday(), DateTimeFormatter.ofPattern("yyyyMMdd"));
-                            } catch (Exception e) {
-                                return false;
+                        <pre class="prettyprint lang-java">
+                            @AssertTrue
+                            public boolean isBirthday(){
+                                try {
+                                    LocalDate localDate = LocalDate.parse(getBirthday(), DateTimeFormatter.ofPattern("yyyyMMdd"));
+                                } catch (Exception e) {
+                                    return false;
+                                }
+                                
+                                return true;
                             }
-                            
-                            return true;
-                        }
+                        </pre>
                 </pre>
             </li>
             <li>Custom Validator
@@ -201,11 +208,13 @@
             </li>
             <li>@ExceptionHandler 기본 코드
                 <pre>
-                    @ExceptionHandler(value=예외종류.class)
-                    public ResponseEntity exception(예외종류 e) {
-                        //원하는 예외 클래스의 종류를 모를 때는 Exception e로 매개변수를 주고 e.getClass().getName()를 확인해보면 된다.
-                        return ResponseEntity.status(HttpStatus.에러코드).body(e.getMessage());
-                    }
+                    <pre class="prettyprint lang-java">
+                        @ExceptionHandler(value=예외종류.class)
+                        public ResponseEntity exception(예외종류 e) {
+                            //원하는 예외 클래스의 종류를 모를 때는 Exception e로 매개변수를 주고 e.getClass().getName()를 확인해보면 된다.
+                            return ResponseEntity.status(HttpStatus.에러코드).body(e.getMessage());
+                        }
+                    </pre>
                 </pre>
             </li>
             <li>작동 방식
@@ -250,19 +259,21 @@
                         ○ public void destroy() : 필터가 웹 콘테이너에서 삭제될 때 호출되는 메소드
 
                     ● doFilter 예시
-                        @Override
-                        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-                            ContentCachingRequestWrapper wrappingRequest = new ContentCachingRequestWrapper((HttpServletRequest)request);
-                            ContentCachingResponseWrapper wrappingResponse = new ContentCachingResponseWrapper((HttpServletResponse) response);
-                    
-                            chain.doFilter(wrappingRequest, wrappingResponse);
-                    
-                            System.out.println(new String(wrappingRequest.getContentAsByteArray(),"UTF-8"));
-
-                            System.out.println(new String(wrappingResponse.getContentAsByteArray(),"UTF-8"));
-                            
-                            wrappingResponse.copyBodyToResponse();
-                        }
+                        <pre class="prettyprint lang-java">
+                            @Override
+                            public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+                                ContentCachingRequestWrapper wrappingRequest = new ContentCachingRequestWrapper((HttpServletRequest)request);
+                                ContentCachingResponseWrapper wrappingResponse = new ContentCachingResponseWrapper((HttpServletResponse) response);
+                        
+                                chain.doFilter(wrappingRequest, wrappingResponse);
+                        
+                                System.out.println(new String(wrappingRequest.getContentAsByteArray(),"UTF-8"));
+    
+                                System.out.println(new String(wrappingResponse.getContentAsByteArray(),"UTF-8"));
+                                
+                                wrappingResponse.copyBodyToResponse();
+                            }
+                        </pre>
                 </pre>
             </li>
             <li>필터 적용하기
@@ -314,30 +325,34 @@
                         ● public void addInterceptors(InterceptorRegistry registry) : 인터셉터를 등록하는 메소드
                     4. addInterceptors 메소드에서 자신이 생성한 인터셉터 클래스 객체를 등록한다.
                         예시-1)
-                            //Lombok의 @RequiredArgsConstructor 추가
-                            private final AuthInterceptor authInterceptor;
+                            <pre class="prettyprint lang-java">
+                                //Lombok의 @RequiredArgsConstructor 추가
+                                private final AuthInterceptor authInterceptor;
 
-                            @Override
-                            public void addInterceptors(InterceptorRegistry registry) {
-                                registry.addInterceptor(authInterceptor)
-                                .addPathPatterns("/api/test/*") // 해당 경로에 접근하기 전에 인터셉터가 가로챈다. (필수 X)
-                                .excludePathPatterns("/api/service/*"); // 해당 경로는 인터셉터가 가로채지 않는다. (필수 X)
-                            }
+                                @Override
+                                public void addInterceptors(InterceptorRegistry registry) {
+                                    registry.addInterceptor(authInterceptor)
+                                    .addPathPatterns("/api/test/*") // 해당 경로에 접근하기 전에 인터셉터가 가로챈다. (필수 X)
+                                    .excludePathPatterns("/api/service/*"); // 해당 경로는 인터셉터가 가로채지 않는다. (필수 X)
+                                }
+                            </pre>
 
                         예시-2)
-                            private final AuthInterceptor authInterceptor;
-
-                            //MvcConfig는 임의로 만든 인터셉터 등록용 클래스명
-                            public MvcConfig(AuthInterceptor authInterceptor) {
-                                this.authInterceptor = authInterceptor;
-                            }
-
-                            @Override
-                            public void addInterceptors(InterceptorRegistry registry) {
-                                registry.addInterceptor(authInterceptor)
-                                .addPathPatterns("/api/test/*") // 해당 경로에 접근하기 전에 인터셉터가 가로챈다. (필수 X)
-                                .excludePathPatterns("/api/service/*"); // 해당 경로는 인터셉터가 가로채지 않는다. (필수 X)
-                            }
+                            <pre class="prettyprint lang-java">
+                                private final AuthInterceptor authInterceptor;
+    
+                                //MvcConfig는 임의로 만든 인터셉터 등록용 클래스명
+                                public MvcConfig(AuthInterceptor authInterceptor) {
+                                    this.authInterceptor = authInterceptor;
+                                }
+    
+                                @Override
+                                public void addInterceptors(InterceptorRegistry registry) {
+                                    registry.addInterceptor(authInterceptor)
+                                    .addPathPatterns("/api/test/*") // 해당 경로에 접근하기 전에 인터셉터가 가로챈다. (필수 X)
+                                    .excludePathPatterns("/api/service/*"); // 해당 경로는 인터셉터가 가로채지 않는다. (필수 X)
+                                }
+                            </pre>
 
                     ※ 인터셉터 객체를 @AutoWired로 받을 수도 있지만 그렇게 되면 순환 참조가 일어날 수도 있다.
                 </pre>
@@ -358,18 +373,20 @@
                         ● 반환타입 : CompletableFuture
                         ● 리턴형식 : return new AsyncResult(실행할_메소드()).completable(); 또는 
                         ● 예시 )
-                            @Async
-                            public CompletableFuture run() {
-                                return new AsyncResult(helloWolrd()).completable();
-                            }
-                            public String helloWolrd() {
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
+                            <pre class="prettyprint lang-java">
+                                @Async
+                                public CompletableFuture run() {
+                                    return new AsyncResult(helloWolrd()).completable();
                                 }
-                                return "Hello World !";
-                            }
+                                public String helloWolrd() {
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return "Hello World !";
+                                }
+                            </pre>
 
                     ※ 비동기 처리를 진행한 결과를 확인하기 위해 서비스의 메소드는 주로 ListenableFuture나 CompletableFuture 형식으로 결과를 반환한다.
                     ※ 주로 return new AsyncResult(결과물) 형식으로 값을 전달한다.
@@ -385,10 +402,12 @@
                         ● 예외처리를 반드시 추가한다. (예시 : InterruptedException, ExecutionException 등등)
                     3. 해당 메소드의 return을 비동기 처리를 위해 작성한 Service의 @Async 메소드를 반환한다.
                         예시 )
-                            @GetMapping("/api/test/async/listenableFuture")
-                            public ListenableFuture<Integer> listenableFuture() throws InterruptedException, ExecutionException {
-                                return asyncService.listenableFuture(10000);
-                            }
+                            <pre class="prettyprint lang-java">
+                                @GetMapping("/api/test/async/listenableFuture")
+                                public ListenableFuture<Integer> listenableFuture() throws InterruptedException, ExecutionException {
+                                    return asyncService.listenableFuture(10000);
+                                }
+                            </pre>
                 </pre>
             </li>
             <li>Custom Thread
@@ -403,18 +422,20 @@
                     ※ @Async 어노테이션의 name 속성에 Thread Bean의 명시해주면 해당 Thread를 사용하도록 할 수 있다.
 
                     ※ 코드 예시)
-                        @Configuration
-                        public class AppConfig {
-                            @Bean("asyncThread")
-                            public Executor asyncThread(){
-                                ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-                                executor.setCorePoolSize(10);
-                                executor.setMaxPoolSize(100);
-                                executor.setQueueCapacity(10);
-                                executor.setThreadNamePrefix("Async-");
-                                return executor;
+                        <pre class="prettyprint lang-java">
+                            @Configuration
+                            public class AppConfig {
+                                @Bean("asyncThread")
+                                public Executor asyncThread(){
+                                    ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+                                    executor.setCorePoolSize(10);
+                                    executor.setMaxPoolSize(100);
+                                    executor.setQueueCapacity(10);
+                                    executor.setThreadNamePrefix("Async-");
+                                    return executor;
+                                }
                             }
-                        }
+                        </pre>
                 </pre>
             </li>
         </ul>
@@ -437,15 +458,17 @@
             </li>
             <li>URI 생성
                 <pre>
-                    URI uri = UriComponentsBuilder
-					.fromUriString("호출할 서버 주소") //예시 : http://localhost:8093
-					.queryParam(name, values) //정의 : uri에서 쓰는 query 값을 설정하는 메소드, 예시 : queryParam("name", "HongGilDong")
-					.path("호출할 path") //예시 : /api/server/hello
-					.encode() //정의 : uri의 기본 문자 set을 UTF-8로 변경
-					.build() //정의 : UriComponents로 변환
-					.toUri(); //정의 : uri로 변환
-
-                    //.expand(값) : path의 값에서 중간에 {name}처럼 Path Value를 쓸 수 있는데 그 값을 차례대로 채워준다. ({}가 두 번이면 expand()도 두 번)
+                    <pre class="prettyprint lang-java">
+                        URI uri = UriComponentsBuilder
+                        .fromUriString("호출할 서버 주소") //예시 : http://localhost:8093
+                        .queryParam(name, values) //정의 : uri에서 쓰는 query 값을 설정하는 메소드, 예시 : queryParam("name", "HongGilDong")
+                        .path("호출할 path") //예시 : /api/server/hello
+                        .encode() //정의 : uri의 기본 문자 set을 UTF-8로 변경
+                        .build() //정의 : UriComponents로 변환
+                        .toUri(); //정의 : uri로 변환
+    
+                        //.expand(값) : path의 값에서 중간에 {name}처럼 Path Value를 쓸 수 있는데 그 값을 차례대로 채워준다. ({}가 두 번이면 expand()도 두 번)
+                    </pre>
 
                     ※ RestTemplate의 메소드로 파라미터로 사용될 값에 URI 대신에 String으로 주소를 직접 써도 된다.
                 </pre>
@@ -456,16 +479,20 @@
                         ○ 장점 : 각각의 필드의 대한 값을 개별적으로 볼 수 있다.
                         ○ 기본 형태 : getForObject(URI, ResponseType)
                         ○ 사용 예시 :
-                            RestTemplate restTemplate = new RestTemplate();
-                            UserVO result = restTemplate.getForObject(uri, UserVO.class);
-                            return result;
+                            <pre class="prettyprint lang-java">
+                                RestTemplate restTemplate = new RestTemplate();
+                                UserVO result = restTemplate.getForObject(uri, UserVO.class);
+                                return result;
+                            </pre>
                     ● getForEntity : GET 요청을 보내고 ResponseEntity로 반환받음
                         ○ 장점 : HttpHeader나 HttpBody나 HttpStatus같은 정보들을 볼 수 있음
                         ○ 기본 형태 : getForEntity(URI, ResponseType)
                         ○ 사용 예시 :
-                            RestTemplate restTemplate = new RestTemplate();
-                            ResponseEntity&lt;UserVO> result = restTemplate.getForEntity(uri, UserVO.class);
-                            return result.getBody();
+                            <pre class="prettyprint lang-java">
+                                RestTemplate restTemplate = new RestTemplate();
+                                ResponseEntity&lt;UserVO> result = restTemplate.getForEntity(uri, UserVO.class);
+                                return result.getBody();
+                            </pre>
                 </pre>
             </li>
             <li>RestTemplate를 통한 서버 호출 - POST 방식
@@ -473,26 +500,32 @@
                     ● postForLocation : POST 요청을 보내고 java.net.URI 로 반환받음
                         ○ 기본 형태 : postForLocation(URI, Request Object), 결과값 : URI
                         ○ 사용 예시 :
-                            UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
-                            RestTemplate restTemplate = new RestTemplate();
-                            URI result = restTemplate.postForLocation(uri, user);
-                            return result;
+                            <pre class="prettyprint lang-java">
+                                UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
+                                RestTemplate restTemplate = new RestTemplate();
+                                URI result = restTemplate.postForLocation(uri, user);
+                                return result;
+                            </pre>
                     ● postForObject : POST 요청을 보내고 Java Object로 매핑받아서 반환받음
                         ○ 장점 : 각각의 필드의 대한 값을 개별적으로 볼 수 있다.
                         ○ 기본 형태 : postForObject(URI, Request Object, ResponseType)
                         ○ 사용 예시 :
-                            UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
-                            RestTemplate restTemplate = new RestTemplate();
-                            UserVO result = restTemplate.postForObject(uri, user, UserVO.class);
-                            return result;
+                            <pre class="prettyprint lang-java">
+                                UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
+                                RestTemplate restTemplate = new RestTemplate();
+                                UserVO result = restTemplate.postForObject(uri, user, UserVO.class);
+                                return result;
+                            </pre>
                     ● postForEntity : POST 요청을 보내고 ResponseEntity로로 매핑받아서 반환받음
                         ○ 장점 : HttpHeader나 HttpBody나 HttpStatus같은 정보들을 볼 수 있음
                         ○ 기본 형태 : postForEntity(URI, Request Object, ResponseType)
                         ○ 사용 예시 :
-                            UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
-                            RestTemplate restTemplate = new RestTemplate();
-                            ResponseEntity<UserVO> result = restTemplate.postForEntity(uri, user, UserVO.class);
-                            return result.getBody();
+                            <pre class="prettyprint lang-java">
+                                UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
+                                RestTemplate restTemplate = new RestTemplate();
+                                ResponseEntity<UserVO> result = restTemplate.postForEntity(uri, user, UserVO.class);
+                                return result.getBody();
+                            </pre>
                 </pre>
             </li>
             <li>RestTemplate를 통한 서버 호출 - PUT 방식
@@ -500,9 +533,11 @@
                     ● put : POST 요청을 보내고 java.net.URI 로 반환받음
                         ○ 기본 형태 : put(URI, Request Object)
                         ○ 사용 예시 :
-                            UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0003334444").build();
-                            RestTemplate restTemplate = new RestTemplate();
-                            restTemplate.put(uri, user);
+                            <pre class="prettyprint lang-java">
+                                UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0003334444").build();
+                                RestTemplate restTemplate = new RestTemplate();
+                                restTemplate.put(uri, user);
+                            </pre>
                 </pre>
             </li>
             <li>RestTemplate를 통한 서버 호출 - DELETE 방식
@@ -510,9 +545,11 @@
                     ● delete : POST 요청을 보내고 java.net.URI 로 반환받음
                         ○ 기본 형태 : delete(URI)
                         ○ 사용 예시 :
-                            //uri에 .queryParam("name", "HongGilDong") 추가
-                            RestTemplate restTemplate = new RestTemplate();
-                            restTemplate.delete(uri);
+                            <pre class="prettyprint lang-java">
+                                //uri에 .queryParam("name", "HongGilDong") 추가
+                                RestTemplate restTemplate = new RestTemplate();
+                                restTemplate.delete(uri);
+                            </pre>
             </li>
             <li>RestTemplate를 통한 서버 호출 - HTTP Method에 상관없이 호출하기
                 <pre>
@@ -523,23 +560,28 @@
                                 (2) exchange(RequestEntity, responseType)
                                 ※ RequestEntity와 ResponseEntity가 HttpEntity Class를 상속받고 있다.
                         ○ 사용 예시 - 1 :
-                            UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
-                            RequestEntity&lt;UserVO> request = RequestEntity
-                                    .post(uri) //요청할 API 서버의 주소 설정
-                                    .contentType(MediaType.APPLICATION_JSON) //contentType 설정, org.springframework.http.MediaType
-                                    .header("x-authorization","my-header") //헤더 설정
-                                    .body(user); //몸체 설정 (= 전달할 데이터)
-                            RestTemplate restTemplate = new RestTemplate();
-                            ResponseEntity&lt;UserVO> response = restTemplate.exchange(uri, HttpMethod.POST, request, UserVO.class); //org.springframework.core.ParameterizedTypeReference
+                            <pre class="prettyprint lang-java">
+                                UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
+                                RequestEntity&lt;UserVO> request = RequestEntity
+                                        .post(uri) //요청할 API 서버의 주소 설정
+                                        .contentType(MediaType.APPLICATION_JSON) //contentType 설정, org.springframework.http.MediaType
+                                        .header("x-authorization","my-header") //헤더 설정
+                                        .body(user); //몸체 설정 (= 전달할 데이터)
+                                RestTemplate restTemplate = new RestTemplate();
+                                ResponseEntity&lt;UserVO> response = restTemplate.exchange(uri, HttpMethod.POST, request, UserVO.class); //org.springframework.core.ParameterizedTypeReference
+                            </pre>
+
                         ○ 사용 예시 - 2 :
-                            UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
-                            RequestEntity&lt;UserVO> request = RequestEntity
-                                    .post(uri) //요청할 API 서버의 주소 설정
-                                    .contentType(MediaType.APPLICATION_JSON) //contentType 설정, org.springframework.http.MediaType
-                                    .header("x-authorization","my-header") //헤더 설정
-                                    .body(user); //몸체 설정 (= 전달할 데이터)
-                            RestTemplate restTemplate = new RestTemplate();
-                            ResponseEntity&lt;UserVO> response = restTemplate.exchange(request, new ParameterizedTypeReference&lt;>(){}); //org.springframework.core.ParameterizedTypeReference
+                            <pre class="prettyprint lang-java">
+                                UserVO user = UserVO.builder().name("HongGilDong").age(25).email("hong@naver.com").birthday("19970229").phoneNumber("0001112222").build();
+                                RequestEntity&lt;UserVO> request = RequestEntity
+                                        .post(uri) //요청할 API 서버의 주소 설정
+                                        .contentType(MediaType.APPLICATION_JSON) //contentType 설정, org.springframework.http.MediaType
+                                        .header("x-authorization","my-header") //헤더 설정
+                                        .body(user); //몸체 설정 (= 전달할 데이터)
+                                RestTemplate restTemplate = new RestTemplate();
+                                ResponseEntity&lt;UserVO> response = restTemplate.exchange(request, new ParameterizedTypeReference&lt;>(){}); //org.springframework.core.ParameterizedTypeReference
+                            </pre>
             </li>
         </ul>
     </section>
@@ -570,11 +612,13 @@
             <li>설치 방법
                 <pre>
                     ● pom.xml에 dependency 추가
-                        &lt;dependency>
-                            &lt;groupId>org.springframework.boot&lt;/groupId>
-                            &lt;artifactId>spring-boot-starter-test&lt;/artifactId>
-                            &lt;scope>test&lt;/scope>
-                        &lt;/dependency>
+                        <pre class="prettyprint lang-xml">
+                            &lt;dependency>
+                                &lt;groupId>org.springframework.boot&lt;/groupId>
+                                &lt;artifactId>spring-boot-starter-test&lt;/artifactId>
+                                &lt;scope>test&lt;/scope>
+                            &lt;/dependency>
+                        </pre>
                 </pre>
             </li>
             <li>Junit 제공 어노테이션
@@ -659,11 +703,13 @@
             <li>설치 방법
                 <pre>
                     ● pom.xml에 dependency 추가
-                        &lt;dependency>
-                            &lt;groupId>io.springfox&lt;/groupId>
-                            &lt;artifactId>springfox-boot-starter&lt;/artifactId>
-                            &lt;version>3.0.0&lt;/version>
-                        &lt;/dependency>
+                        <pre class="prettyprint lang-xml">
+                            &lt;dependency>
+                                &lt;groupId>io.springfox&lt;/groupId>
+                                &lt;artifactId>springfox-boot-starter&lt;/artifactId>
+                                &lt;version>3.0.0&lt;/version>
+                            &lt;/dependency>
+                        </pre>
                 </pre>
             </li>
             <li>Swagger 제공 어노테이션
@@ -731,11 +777,13 @@
             <li>설치방법
                 <pre>
                     ● pom.xml에 dependency 추가
-                    &lt;dependency>
-                        &lt;groupId>org.springframework.boot&lt;/groupId>
-                        &lt;artifactId>spring-boot-starter-thymeleaf&lt;/artifactId>
-                        &lt;version>2.3.4.RELEASE&lt;/version>
-                    &lt;/dependency>
+                        <pre class="prettyprint lang-java">
+                            &lt;dependency>
+                                &lt;groupId>org.springframework.boot&lt;/groupId>
+                                &lt;artifactId>spring-boot-starter-thymeleaf&lt;/artifactId>
+                                &lt;version>2.3.4.RELEASE&lt;/version>
+                            &lt;/dependency>
+                        </pre>
                 </pre>
             </li>
             <li>외부 파일 연결
@@ -748,30 +796,35 @@
                 <pre>
                     ● 기본 객체 선택 => th:object="객체"
                         예시)
-                            &lt;table>
-                                &lt;tr th:object="${board}">
-                                    &lt;td>&lt;span class="no" th:text="{board.no}">&lt;/span>&lt;/td>
-                                    &lt;td>&lt;span class="title" th:text="{board.title}">&lt;/span>&lt;/td>
-                                    &lt;td>&lt;span class="writer" th:text="{board.writer}">&lt;/span>&lt;/td>
-                                    &lt;td>&lt;span class="signdate" th:text="${#temporals.format(board.signdate, 'yyyy-MM-dd HH:mm')}"></span></td>
-                                &lt;/tr>
-                            &lt;/table>
+                            <pre class="prettyprint lang-html">
+                                &lt;table>
+                                    &lt;tr th:object="${board}">
+                                        &lt;td>&lt;span class="no" th:text="{board.no}">&lt;/span>&lt;/td>
+                                        &lt;td>&lt;span class="title" th:text="{board.title}">&lt;/span>&lt;/td>
+                                        &lt;td>&lt;span class="writer" th:text="{board.writer}">&lt;/span>&lt;/td>
+                                        &lt;td>&lt;span class="signdate" th:text="${#temporals.format(board.signdate, 'yyyy-MM-dd HH:mm')}"></span></td>
+                                    &lt;/tr>
+                                &lt;/table>
+                            </pre>
 
                     ● 반복문 => th:each="객체 : ${리스트}"
                         예시)
-                            &lt;table>
-                                &lt;tr th:each="board : ${boardList}">
-                                    &lt;!-- 인덱스 값 가져오기 ▼ -->
-                                    &lt;!--&lt;td>&lt;span class="no" th:text="{iterState.index}">&lt;/span>&lt;/td>-->
-                                    &lt;td>&lt;span class="no" th:text="{board.no}">&lt;/span>&lt;/td>
-                                    &lt;td>&lt;span class="title" th:text="{board.title}">&lt;/span>&lt;/td>
-                                    &lt;td>&lt;span class="writer" th:text="{board.writer}">&lt;/span>&lt;/td>
-                                    &lt;td>&lt;span class="signdate" th:text="${#temporals.format(board.signdate, 'yyyy-MM-dd HH:mm')}"></span></td>
-                                &lt;/tr>
-                            &lt;/table>
+                            <pre class="prettyprint lang-html">
+                                &lt;table>
+                                    &lt;tr th:each="board : ${boardList}">
+                                        &lt;!-- 인덱스 값 가져오기 ▼ -->
+                                        &lt;!--&lt;td>&lt;span class="no" th:text="{iterState.index}">&lt;/span>&lt;/td>-->
+                                        &lt;td>&lt;span class="no" th:text="{board.no}">&lt;/span>&lt;/td>
+                                        &lt;td>&lt;span class="title" th:text="{board.title}">&lt;/span>&lt;/td>
+                                        &lt;td>&lt;span class="writer" th:text="{board.writer}">&lt;/span>&lt;/td>
+                                        &lt;td>&lt;span class="signdate" th:text="${#temporals.format(board.signdate, 'yyyy-MM-dd HH:mm')}"></span></td>
+                                    &lt;/tr>
+                                &lt;/table>
+                            </pre>
 
                     ● 조건문 - (if-unless) => th:if="${비교대상} [조건] [비교값]"
                         예시)
+                        <pre class="prettyprint lang-html">
                             &lt;table>
                                 &lt;tr th:each="board : ${boardList}" th:if="${iterState.count} % 2 != 0">
                                     &lt;td>&lt;span class="no" th:text="{board.no}">&lt;/span>&lt;/td>
@@ -780,13 +833,16 @@
                                     &lt;td>&lt;span class="signdate" th:text="${#temporals.format(board.signdate, 'yyyy-MM-dd HH:mm')}"></span></td>
                                 &lt;/tr>
                             &lt;/table>
+                        </pre>
 
                     ● 조건문 - (switch-case) => th:switch="조건대상" + th:case=조건값"
                         예시)
-                            &lt;div th:switch="${user.grade}">
-                                &lt;p th:case="'normal'">일반 회원&lt;/p>
-                                &lt;p th:case="'vip'">VIP 회원&lt;/p>
-                            &lt;/div>
+                            <pre class="prettyprint lang-html">
+                                &lt;div th:switch="${user.grade}">
+                                    &lt;p th:case="'normal'">일반 회원&lt;/p>
+                                    &lt;p th:case="'vip'">VIP 회원&lt;/p>
+                                &lt;/div>
+                            </pre>
 
                     ● 값 설정하기
                         ○ input 태그의 값 지정하기 => th:value
@@ -881,16 +937,20 @@
             <li>사용 조건 (pom.xml의 dependency)
                 <pre>
                     ● Spring의 경우
-                        &lt;dependency>
-                            &lt;groupId>com.fasterxml.jackson.core&lt;/groupId>
-                            &lt;artifactId>jackson-databind&lt;/artifactId>
-                            &lt;version>2.9.8&lt;/version>
-                        </dependency>
+                        <pre class="prettyprint lang-xml">
+                            &lt;dependency>
+                                &lt;groupId>com.fasterxml.jackson.core&lt;/groupId>
+                                &lt;artifactId>jackson-databind&lt;/artifactId>
+                                &lt;version>2.9.8&lt;/version>
+                            &lt;/dependency>
+                        </pre>
                     ● Spring Boot의 경우
-                        &lt;dependency>
-                            &lt;groupId>org.springframework.boot&lt;/groupId>
-                            &lt;artifactId>spring-boot-starter-web&lt;/artifactId>
-                        </dependency>
+                        <pre class="prettyprint lang-xml">
+                            &lt;dependency>
+                                &lt;groupId>org.springframework.boot&lt;/groupId>
+                                &lt;artifactId>spring-boot-starter-web&lt;/artifactId>
+                            &lt;/dependency>
+                        </pre>
                 </pre>
             </li>
             <li>기본 사용 방법
@@ -914,21 +974,23 @@
 
                     ※ 예외사항 (@Builder 어노테이션을 사용하는 경우의 VO)
                         예시)
-                            @Getter
-                            @Setter
-                            @Builder(builderClassName = "UserVOBuilder", toBuilder = true)
-                            @JsonDeserialize(builder = UserVO.UserVOBuilder.class)
-                            public class UserVO {
-                                private String name; //이름
-                                private int age; //나이
-                                private String email; //이메일
-                                private String phoneNumber; //핸드폰번호
-                                private String birthday; //생년월일
-                                
-                                @JsonPOJOBuilder(withPrefix = "") public static class UserVOBuilder { 
+                            <pre class="prettyprint lang-java">
+                                @Getter
+                                @Setter
+                                @Builder(builderClassName = "UserVOBuilder", toBuilder = true)
+                                @JsonDeserialize(builder = UserVO.UserVOBuilder.class)
+                                public class UserVO {
+                                    private String name; //이름
+                                    private int age; //나이
+                                    private String email; //이메일
+                                    private String phoneNumber; //핸드폰번호
+                                    private String birthday; //생년월일
                                     
+                                    @JsonPOJOBuilder(withPrefix = "") public static class UserVOBuilder { 
+                                        
+                                    }
                                 }
-                            }
+                            </pre>
                 </pre>
             </li>
             <li>추가 사용 방법
@@ -990,15 +1052,17 @@
                             //예시 : return ResponseEntity.ok().build();
                     ● 3번 형태 (각각의 파라미터를 설정해서 개별 설정하는 방식)
                         ○ 사용 예시 )
-                            HttpHeaders HttpHeaders변수명 = new HttpHeaders(); //org.springframework.http.HttpHeaders
-                            HttpHeaders변수명.set("속성명", "값");
-
-                            VO클래스 vo변수명 = UserVO.builder().필드명("값").build();
-                        
-                            return ResponseEntity.오류메소드명()
-                                    .headers(HttpHeaders변수명)
-                                    .body(vo변수명)
-                                    .status(HttpStatus.코드명);
+                            <pre class="prettyprint lang-java">
+                                HttpHeaders HttpHeaders변수명 = new HttpHeaders(); //org.springframework.http.HttpHeaders
+                                HttpHeaders변수명.set("속성명", "값");
+    
+                                VO클래스 vo변수명 = UserVO.builder().필드명("값").build();
+                            
+                                return ResponseEntity.오류메소드명()
+                                        .headers(HttpHeaders변수명)
+                                        .body(vo변수명)
+                                        .status(HttpStatus.코드명);
+                            </pre>
                 </pre>
             </li>
         </ul>
@@ -1068,7 +1132,8 @@
                           만약 VO Class에서 두 필드의 선언 순서를 바꿨는데 두 필드가 자료형까지 같다면 오류가 발생하지 않기 때문에
                           추후에 문제가 발생해도 모를 확률이 크기때문에 @Builder를 사용하는 것이 좋다.
                         ○ 기본 사용 예시
-                            UserVO tempUser
+                            <pre class="prettyprint lang-java">
+                                UserVO tempUser
                                 = UserVO.builder()
                                     .name("홍길동")
                                     .age(25)
@@ -1076,27 +1141,34 @@
                                     .phoneNumber("0001112222")
                                     .birthday("19970229")
                                     .build();
+                            </pre>
                         ○ @Builder(toBuilder = true) 사용 예시 : builder 패턴으로 생성된 객체의 일부 값을 변경한 새로운 객체 생성
-                            UserVO userA
-                            = UserVO.builder()
-                                .name("A")
-                                .age(25)
-                                .email("hong@naver.com")
-                                .phoneNumber("0001112222")
-                                .birthday("19970229")
-                                .build();
+                            <pre class="prettyprint lang-java">
+                                UserVO userA
+                                = UserVO.builder()
+                                    .name("A")
+                                    .age(25)
+                                    .email("hong@naver.com")
+                                    .phoneNumber("0001112222")
+                                    .birthday("19970229")
+                                    .build();
 
-                            //userA에서 name/age 값만 변경된 새로운 객체를 생성 
-                            BuilderVO b2 = b.toBuilder().name("B").age(24).build();
+                                    //userA에서 name/age 값만 변경된 새로운 객체를 생성 
+                                    BuilderVO b2 = b.toBuilder().name("B").age(24).build();
+                            </pre>
                         ○ @Builder.Default 사용 예시 :
-                            private String name; //기본 값 null
-                            @Builder.Default private String job="programmer"; //기본 값 부여
+                            <pre class="prettyprint lang-java">
+                                private String name; //기본 값 null
+                                @Builder.Default private String job="programmer"; //기본 값 부여
+                            </pre>
                         ○ @Singular 옵션 사용 예시 :
-                            //vo
-                            @Singular("hobbyList") private List&lt;String> hobbyList;
-                            //생성 영역
-                            UserVO userC
-                            = UserVO..builder() .hobbyList("game") .hobbyList("read book") .hobbyList("listen music") .build();
+                            <pre class="prettyprint lang-java">
+                                //vo
+                                @Singular("hobbyList") private List&lt;String> hobbyList;
+                                //생성 영역
+                                UserVO userC
+                                = UserVO..builder() .hobbyList("game") .hobbyList("read book") .hobbyList("listen music") .build();
+                            </pre>
 
 
                     ● @ToString : 해당 VO Class의 모든 필드를 출력하는 toString 메소드를 생성한다.
@@ -1122,12 +1194,14 @@
 
                     ※ Lombok 설치 방법
                         1. pom.xml에 dependency 추가
-                            &lt;dependency>
-                                &lt;groupId>org.projectlombok&lt;/groupId>
-                                &lt;artifactId>lombok&lt;/artifactId>
-                                &lt;version>1.18.16&lt;/version>
-                                &lt;scope>provided&lt;/scope>
-                            &lt;/dependency>
+                            <pre class="prettyprint lang-xml">
+                                &lt;dependency>
+                                    &lt;groupId>org.projectlombok&lt;/groupId>
+                                    &lt;artifactId>lombok&lt;/artifactId>
+                                    &lt;version>1.18.16&lt;/version>
+                                    &lt;scope>provided&lt;/scope>
+                                &lt;/dependency>
+                            </pre>
                         2-A-1. cmd를 켜서 cd C:\Users\사용자명\.m2\repository\org\projectlombok\lombok\lombok버전 실행
                         2-A-2. java -jar lombok.jar 실행 (버전이 있는 경우 java -jar lombok-1.18.16.jar)
                         2-B-1. 파일 탐색기를 열고 C:\Users\사용자명\.m2\repository\org\projectlombok\lombok\lombok로 이동
@@ -1167,30 +1241,36 @@
                    2. 해당 패키지에서 어노테이션 파일을 만든다. (New에 보면 어노테이션이 있다.)
                    3. 어노테이션 제작 시 필요한 항목들을 선택해서 만들거나 아니면 아래의 기본적인 값들을 복사 및 붙여넣기 한다.
                         기초 import 목록 )
-                            import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-                            import static java.lang.annotation.ElementType.CONSTRUCTOR;
-                            import static java.lang.annotation.ElementType.FIELD;
-                            import static java.lang.annotation.ElementType.METHOD;
-                            import static java.lang.annotation.ElementType.PARAMETER;
-                            import static java.lang.annotation.ElementType.TYPE_USE;
-                            import static java.lang.annotation.RetentionPolicy.RUNTIME;
-                            
-                            import java.lang.annotation.Documented;
-                            import java.lang.annotation.Retention;
-                            import java.lang.annotation.Target;
-                            
-                            import javax.validation.Constraint;
-                            import javax.validation.Payload;
+                            <pre class="prettyprint lang-java">
+                                import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+                                import static java.lang.annotation.ElementType.CONSTRUCTOR;
+                                import static java.lang.annotation.ElementType.FIELD;
+                                import static java.lang.annotation.ElementType.METHOD;
+                                import static java.lang.annotation.ElementType.PARAMETER;
+                                import static java.lang.annotation.ElementType.TYPE_USE;
+                                import static java.lang.annotation.RetentionPolicy.RUNTIME;
+                                
+                                import java.lang.annotation.Documented;
+                                import java.lang.annotation.Retention;
+                                import java.lang.annotation.Target;
+                                
+                                import javax.validation.Constraint;
+                                import javax.validation.Payload;
+                            </pre>
                         기초 어노테이션 목록 )
-                            @Documented
-                            @Constraint(validatedBy = { })
-                            @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
-                            @Retention(RUNTIME)
+                            <pre class="prettyprint lang-java">
+                                @Documented
+                                @Constraint(validatedBy = { })
+                                @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
+                                @Retention(RUNTIME)
+                            </pre>
                         기초 속성 목록 )
-                            String message() default "{javax.validation.constraints.Email.message}";
-                            Class&lt;?>[] groups() default { };
-                            Class&lt;? extends Payload>[] payload() default { };
-                            String regexp() default ".*";
+                            <pre class="prettyprint lang-java">
+                                String message() default "{javax.validation.constraints.Email.message}";
+                                Class&lt;?>[] groups() default { };
+                                Class&lt;? extends Payload>[] payload() default { };
+                                String regexp() default ".*";
+                            </pre>
                 </pre>
             </li>
         </ul>
@@ -1276,5 +1356,12 @@
         </div>
     </div>
     <!-- 모달 영역 종료 -->
+
+    <!--code pretty print -->
+    <script src ="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+    <script>
+        prettyPrint();
+    </script>
 </body>
 </html>
