@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>myBatis 공부</title>
-    <link rel="stylesheet" href="./css/index.css" />
+    <!-- code pretty print -->
+    <link rel="stylesheet" href="./css/codePrettyPrint.css">
 </head>
 <body>
     <section id="installAndConnnecting">
@@ -14,59 +15,72 @@
             <li>설치 및 연결
                 <pre>
                     1. pom.xml에 의존성 추가
-                        &lt;dependency>
-                            &lt;groupId>org.mybatis&lt;/groupId>
-                            &lt;artifactId>mybatis&lt;/artifactId>
-                            &lt;version>3.2.2&lt;/version>
-                        &lt;/dependency>
-                        &lt;dependency>
-                            &lt;groupId>org.mybatis&lt;/groupId>
-                            &lt;artifactId>mybatis-spring&lt;/artifactId>
-                            &lt;version>1.2.0&lt;/version>
-                        &lt;/dependency>
-                        &lt;dependency>
-                            &lt;groupId>org.springframework&lt;/groupId>
-                            &lt;artifactId>spring-jdbc&lt;/artifactId>
-                            &lt;version>${org.springframework-version}&lt;/version>
-                        &lt;/dependency>
+                        <pre class="prettyprint lang-xml">
+                            &lt;dependency>
+                                &lt;groupId>org.mybatis&lt;/groupId>
+                                &lt;artifactId>mybatis&lt;/artifactId>
+                                &lt;version>3.2.2&lt;/version>
+                            &lt;/dependency>
+                            &lt;dependency>
+                                &lt;groupId>org.mybatis&lt;/groupId>
+                                &lt;artifactId>mybatis-spring&lt;/artifactId>
+                                &lt;version>1.2.0&lt;/version>
+                            &lt;/dependency>
+                            &lt;dependency>
+                                &lt;groupId>org.springframework&lt;/groupId>
+                                &lt;artifactId>spring-jdbc&lt;/artifactId>
+                                &lt;version>${org.springframework-version}&lt;/version>
+                            &lt;/dependency>
+                        </pre>
+
                     2. root-context.xml에 DBMS 유저 정보 등록
-                        &lt;bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-                            &lt;property name="driverClassName" value="org.mariadb.jdbc.Driver" />
-                            &lt;property name="url" value="jdbc:mariadb://url주소/데이터베이스명" />
-                            &lt;property name="username" value="유저명" />
-                            &lt;property name="password" value="비밀번호" />
-                        &lt;/bean>
+                        <pre class="prettyprint lang-xml">
+                            &lt;bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+                                &lt;property name="driverClassName" value="org.mariadb.jdbc.Driver" />
+                                &lt;property name="url" value="jdbc:mariadb://url주소/데이터베이스명" />
+                                &lt;property name="username" value="유저명" />
+                                &lt;property name="password" value="비밀번호" />
+                            &lt;/bean>
+                        </pre>
                     3. root-context.xml에 sqlSession 등록
-                        &lt;bean id="SqlSessionFectory" class="org.mybatis.spring.SqlSessionFactoryBean">
-                            &lt;property name="dataSource" ref="dataSource" />
-                            &lt;property name="configLocation" value="classpath:/mybatis-config.xml" />
-                            &lt;property name="mapperLocations" value="classpath:/mappers/*Mapper.xml" />
-                        &lt;/bean>
-                        &lt;bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
-                            &lt;constructor-arg name="sqlSessionFactory" ref="SqlSessionFectory" />
-                        &lt;/bean>
+                        <pre class="prettyprint lang-xml">
+                            &lt;bean id="SqlSessionFectory" class="org.mybatis.spring.SqlSessionFactoryBean">
+                                &lt;property name="dataSource" ref="dataSource" />
+                                &lt;property name="configLocation" value="classpath:/mybatis-config.xml" />
+                                &lt;property name="mapperLocations" value="classpath:/mappers/*Mapper.xml" />
+                            &lt;/bean>
+                            &lt;bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+                                &lt;constructor-arg name="sqlSessionFactory" ref="SqlSessionFectory" />
+                            &lt;/bean>
+                        </pre>
                     4. root-context.xml에 DAO를 작성할 패키지를 등록 (임의값 : com.my.mapper)
-                        &lt;bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-                            &lt;property name="basePackage" value="com.my.mapper" />
-                        &lt;/bean>
+                        <pre class="prettyprint lang-xml">
+                            &lt;bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+                                &lt;property name="basePackage" value="com.my.mapper" />
+                            &lt;/bean>
+                        </pre>
                     5. DAO를 작성할 패키지를 빈으로 등록할 수 있게 컴포넌트 스캔 추가 (임의값 : com.my.mapper)
-                        &lt;context:component-scan base-package="com.my.mapper" />
+                        <pre class="prettyprint lang-xml">
+                            &lt;context:component-scan base-package="com.my.mapper" />
+                        </pre>
                     6. 3에서 작성한 SqlSessionFectory의 property의 value의 classpath가 의미하는 지점인
                         프로젝트명/src/main/resources에 가서 mybatis-config.xml을 작성한다.
                     7. 3에서 작성한 SqlSessionFectory의 property의 mapperLocations 파라미터에 명시한 대로 폴더를 만든 후
                         그 위치에 지정한 형식의 이름을 가진 xml 파일을 만든다.
                         해당 파일은 SQL을 작성할 문서가 된다. (*Mapper.xml => blogMapper.xml, userMapper.xml 등등)
-                            내용)
+                            <pre class="prettyprint lang-xml">
                                 &lt;?xml version="1.0" encoding="UTF-8"?>
                                 &lt;!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
                                 &lt;configuration>
                                 &lt;/configuration>
+                            </pre>
                     8. SQL을 작성할 xml 파일에 가서 기본 코드를 작성해준다.
-                        내용)
+                        <pre class="prettyprint lang-xml">
                             &lt;?xml version="1.0" encoding="UTF-8"?>
                             &lt;!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
                             &lt;mapper namespace="">
                             &lt;/mapper>
+                        </pre>
                 </pre>
             </li>
         </ul>
@@ -91,22 +105,28 @@
                     6. 해당 DAO class에 org.apache.ibatis.session.SqlSession을 import 시켜준다.
                     7. 해당 DAO class에서 사용할 SqlSession 객체를 생성한다.
                         예시)
-                            @Autowired
-                            private SqlSession sqlSession;
+                            <pre class="prettyprint lang-java">
+                                @Autowired
+                                private SqlSession sqlSession;
+                            </pre>
                     8. 각각의 메소드에서 SqlSession의 메소드를 통해 mapper 파일에 작성된 namespace명과 실행할 SQL의 id를 명시하여 DB에 접근한다.
                         예시)
-                            @Override
-                            public List&lt;HashMap&lt;String, Object>> selectPost(Map&lt;String, Object> map) throws Exception {
-                                return sqlSession.selectList("blogMapper.selectPost", map);
-                            }
+                            <pre class="prettyprint lang-java">
+                                @Override
+                                public List&lt;HashMap&lt;String, Object>> selectPost(Map&lt;String, Object> map) throws Exception {
+                                    return sqlSession.selectList("blogMapper.selectPost", map);
+                                }
+                            </pre>
                     9. 작성된 메소드는 해당 메소드를 필요로 하는 서비스에서 호출하여 사용한다.
                         예시)
-                            @Autowired
-                            private BlogMapper mapper;
-                            @Override
-                            public List&lt;HashMap&lt;String, Object>> selectPost(Map&lt;String, Object> map) throws Exception {
-                                return mapper.selectPost(map);
-                            }
+                            <pre class="prettyprint lang-java">
+                                @Autowired
+                                private BlogMapper mapper;
+                                @Override
+                                public List&lt;HashMap&lt;String, Object>> selectPost(Map&lt;String, Object> map) throws Exception {
+                                    return mapper.selectPost(map);
+                                }
+                            </pre>
                     10. root-context.xml의 SqlSession에 등록된 정보에 따라 SqlSession 메소드 안에서 지정한 namespace와 같은 *Mapper.xml을 찾아서 해당하는 id의 SQL을 실행한다.
                 </pre>
             </li>
@@ -121,12 +141,14 @@
                         예시) public List&lt;HashMap&lt;String, Object>> selectPost(Map&lt;String, Object> map) throws Exception;
                     4. 작성된 메소드는 해당 메소드를 필요로 하는 서비스에서 호출하여 사용한다.
                         예시)
-                            @Autowired
-                            private BlogMapper mapper;
-                            @Override
-                            public List&lt;HashMap&lt;String, Object>> selectPost(Map&lt;String, Object> map) throws Exception {
-                                return mapper.selectPost(map);
-                            }
+                            <pre class="prettyprint lang-java">
+                                @Autowired
+                                private BlogMapper mapper;
+                                @Override
+                                public List&lt;HashMap&lt;String, Object>> selectPost(Map&lt;String, Object> map) throws Exception {
+                                    return mapper.selectPost(map);
+                                }
+                            </pre>
                     5. root-context.xml의 SqlSession에 등록된 정보에 따라 사용할 DAO interface를 namespace로 지정한 *Mapper.xml을 찾아서 호출한 메소드명과 같은 id의 SQL을 실행한다.
                 </pre>
             </li>
@@ -231,11 +253,17 @@
                     ● &lt;![CDATA[ 내용 ]]>을 사용한다.
 
                     예시)
-                        select title, content from blog_post
-                        where useYN = 'Y'
-                        &lt;![CDATA[
-                            and (REGEXP_REPLACE(title, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%' or REGEXP_REPLACE(content, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%')
-                        ]]>
+                        <pre class="prettyprint lang-sql">
+                            select title, content from blog_post
+                            where useYN = 'Y'
+                            &lt;![CDATA[
+                                and (
+                                    REGEXP_REPLACE(title, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%'
+                                    or 
+                                    REGEXP_REPLACE(content, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%'
+                                )
+                            ]]>
+                        </pre>
                 </pre>
             </li>
         </ul>
@@ -252,4 +280,11 @@
         </section>
     </div>
 </body>
+
+<!--code pretty print -->
+<script src ="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+<script>
+    prettyPrint();
+</script>
 </html>

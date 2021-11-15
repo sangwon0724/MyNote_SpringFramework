@@ -706,11 +706,13 @@
         <ul>
             <li>쿠키 생성하기
                 <pre>
-                    1. 쿠키 객체 생성하기
+                    <pre class="prettyprint lang-java">
+                        //1. 쿠키 객체 생성하기
                         Cookie cookie = new Cookie("속성명", "값");
-
-                    2. HttpServletResponse 객체에 추가하기 (변수명 : response)
+    
+                        //2. HttpServletResponse 객체에 추가하기 (변수명 : response)
                         response.addCookie(cookie);
+                    </pre>
                 </pre>
             </li>
             <li>쿠키 사용하기
@@ -732,7 +734,9 @@
             </li>
             <li>쿠키 삭제하기
                 <pre>
-                    cookie.setMaxAge(0); //존재 시간을 0초로 하기
+                    <pre class="prettyprint lang-java">
+                        cookie.setMaxAge(0); //존재 시간을 0초로 하기
+                    </pre>
                 </pre>
             </li>
         </ul>
@@ -895,7 +899,7 @@
     
                                 ...
     
-                                Map&lt;String, Object> result = new HashMap&lt;sString, Object>();
+                                Map&lt;String, Object> result = new HashMap&lt;String, Object>();
                                 result.put("message", "success");
     
                                 return result;
@@ -1480,8 +1484,14 @@
                             예시 1 ) &lt;mapping path="/blog/setting/profile"/>
                             예시 2 ) &lt;mapping path="/blog/{userID}/write"/>
                     ● beans:ref : 실행될 인터셉터에 대해서 작성한 클래스를 참조한 빈에 대해서 작성하는 태그
-                            예시 - 준비 ) interceptors 태그 밖에 &lt;beans:bean id="authenticationInterceptor" class="com.my.util.UrlInterceptor"/> 작성 (authenticationInterceptor와 com.my.util.UrlInterceptor는 임의값)
-                            예시 - 설정 ) interceptors 태그 내부의 interceptor 태그 내부에 &lt;beans:ref bean="authenticationInterceptor"/> 작성 (authenticationInterceptor는 임의값)
+                            예시 - 준비 )
+                                interceptors 태그 밖에
+                                &lt;beans:bean id="authenticationInterceptor" class="com.my.util.UrlInterceptor"/> 작성
+                                (authenticationInterceptor와 com.my.util.UrlInterceptor는 임의값)
+                            예시 - 설정 )
+                                interceptors 태그 내부의 interceptor 태그 내부에
+                                &lt;beans:ref bean="authenticationInterceptor"/> 작성
+                                (authenticationInterceptor는 임의값)
                 </pre>
             </li>
             <li>자주 쓰는 기능
@@ -1616,7 +1626,7 @@
 
                         &lt;&lt;&lt; class >>>
 
-                        <pre class="prettyprint lang-xml">
+                        <pre class="prettyprint lang-java">
                             @Autowired 
                             Environment env;
     
