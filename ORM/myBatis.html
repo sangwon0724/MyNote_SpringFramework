@@ -87,8 +87,6 @@
       </ul>
     </section>
 
-    <br />
-
     <section id="basicUsage">
       <header class="note_title">기본 사용법</header>
       <ul>
@@ -128,14 +126,16 @@
                             return mapper.selectPost(map);
                         }
                     </pre>
-            10. root-context.xml의 SqlSession에 등록된 정보에 따라 SqlSession 메소드 안에서 지정한 namespace와 같은 *Mapper.xml을 찾아서 해당하는 id의 SQL을 실행한다.
+            10. root-context.xml의 SqlSession에 등록된 정보에 따라 SqlSession 메소드 안에서 지정한
+                namespace와 같은 *Mapper.xml을 찾아서 해당하는 id의 SQL을 실행한다.
           </pre>
         </li>
         <li>사용법 (3.0 버전)
           <pre>
             ※ 사용할 패키지 ) com.my.mapper (DAO)
 
-            1. 해당 기능 그룹에 관련된 SQL을 사용할 xml 파일의 namespace에 해당 기능에 대해서 작성하는 DAO interface명으로 짓는다. (예시 : com.my.mapper.BlogMapper)
+            1. 해당 기능 그룹에 관련된 SQL을 사용할 xml 파일의 namespace에 해당 기능에 대해서 작성하는 DAO interface명으로 짓는다.
+               (예시 : com.my.mapper.BlogMapper)
             2. DAO로 사용할 패키지에서 각각의 기능 그룹에 대한 interface를 만든다.
                 예시) 블로그에 대한 DAO를 만든다고 했을 때 BlogMapper (interface)
             3. DAO의 interface에서 public [반환형] [메소드명] (매개변수)  throws Exception;의 형태로 메소드를 정의한다.
@@ -150,7 +150,8 @@
                             return mapper.selectPost(map);
                         }
                     </pre>
-            5. root-context.xml의 SqlSession에 등록된 정보에 따라 사용할 DAO interface를 namespace로 지정한 *Mapper.xml을 찾아서 호출한 메소드명과 같은 id의 SQL을 실행한다.
+            5. root-context.xml의 SqlSession에 등록된 정보에 따라 사용할 DAO interface를 namespace로 지정한
+               *Mapper.xml을 찾아서 호출한 메소드명과 같은 id의 SQL을 실행한다.
           </pre>
         </li>
         <li>SqlSession 메소드
@@ -217,8 +218,6 @@
       </ul>
     </section>
 
-    <br />
-
     <section id="dataBinding">
       <header class="note_title">데이터 연결</header>
       <ul>
@@ -234,8 +233,6 @@
         </li>
       </ul>
     </section>
-
-    <br />
 
     <section id="dataSubstitution">
       <header class="note_title">데이터 치환</header>
@@ -253,18 +250,69 @@
           <pre>
             ● &lt;![CDATA[ 내용 ]]>을 사용한다.
 
-            예시)
-                <pre class="prettyprint lang-sql">
-                    select title, content from blog_post
-                    where useYN = 'Y'
-                    &lt;![CDATA[
-                        and (
-                            REGEXP_REPLACE(title, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%'
-                            or 
-                            REGEXP_REPLACE(content, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%'
-                        )
-                    ]]>
-                </pre>
+            <pre class="prettyprint lang-sql">
+                select title, content from blog_post
+                where useYN = 'Y'
+                &lt;![CDATA[
+                    and (
+                        REGEXP_REPLACE(title, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%'
+                        or 
+                        REGEXP_REPLACE(content, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%'
+                    )
+                ]]>
+            </pre>
+          </pre>
+        </li>
+      </ul>
+    </section>
+
+    <section id="config">
+      <header class="note_title">설정 파일 이용하기</header>
+      <ul>
+        <li>별칭 사용하기
+          <pre>
+            1. 자신이 설정한 [프로젝트명/src/main/resources] 경로에 있는 mybatis 관련 설정 파일로 이동
+            2. &lt;configuration> 태그 안에 &lt;typeAliases> 태그 작성
+            3. &lt;typeAliases> 태그 안에 &lt;typeAlias type="com.my.vo.BoardVO" alias="BoardVO" />처럼 작성
+
+            <pre class="prettyprint lang-xml">
+              &lt;?xml version="1.0" encoding="UTF-8"?>
+                &lt;!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+                &lt;configuration>
+                  &lt;typeAliases>
+                      &lt;typeAlias type="com.my.vo.BoardVO" alias="BoardVO" />
+                  &lt;/typeAliases>
+                &lt;/configuration>
+            </pre>
+
+            <pre class="prettyprint lang-xml">
+              &lt;!-- 별칭 사용 전 -->
+              &lt;select id="selectPostA" resultType="com.my.vo.BoardVO" >
+                SELECT * FROM board where category=#{category} order by no desc
+              &lt;/select>
+
+              &lt;!-- 별칭 사용 후 -->
+              &lt;select id="selectPostB" resultType="BoardVO" >
+                SELECT * FROM board where category=#{category} order by no desc
+              &lt;/select>
+            </pre>
+          </pre>
+        </li>
+        <li>특수문자를 사용하고 싶은 경우
+          <pre>
+            ● &lt;![CDATA[ 내용 ]]>을 사용한다.
+
+            <pre class="prettyprint lang-sql">
+                select title, content from blog_post
+                where useYN = 'Y'
+                &lt;![CDATA[
+                    and (
+                        REGEXP_REPLACE(title, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%'
+                        or 
+                        REGEXP_REPLACE(content, '&lt;[^>]*>|\&([^;])*;', '') LIKE '%${search}%'
+                    )
+                ]]>
+            </pre>
           </pre>
         </li>
       </ul>
