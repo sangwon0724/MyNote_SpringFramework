@@ -426,8 +426,28 @@
         </li>
         <li>1 : N 관계
           <pre>
-            ● 단방향
-            ● 양방향
+            ● @OneToMany
+              ○ targetEntity : 관계를 맺을 Entity Class
+              ○ cascade : 현 Entity의 변경에 대해 관계를 맺은 Entity도 변경할지에 대한 여부 (JPA 레이어 수준에서 처리)
+                예시) cascade=CascadeType.[ALL, PERSIST, MERGE, REMOVE, REFRESH, DETACH]
+              ○ fetch : 관계 Entity의 데이터 읽기 전략
+                예시) fetch=FetchType.[EAGER, LAZY]
+                  (1) EAGER : 관계된 Entity의 정보를 미리 읽어오기
+                  (2) LAZY : 실제로 요청하는 순간 가져오기
+              ○ mappedBy : 양방향 관계 설정시 관계의 주체가 되는 쪽에서 정의하는 속성
+                예시) mappedBy = "boardPosts"
+              ○ orphanRemoval : 관계 Entity에서 변경이 일어난 경우 DB 변경을 같이 할지에 대한 여부 (DB 레이어에서 처리)
+                예시 : orphanRemoval = true //기본값 : false
+
+            <pre class="prettyprint lang-java">
+              @Entity
+              public class Board {
+                  ...
+                  @OneToMany(fetch = FetchType.EAGER)
+                  @JoinColumn(name = "boardId") //BoardPost Class에 있는 boardId 필드를 외래키로 지정
+                  private List&lt;BoardPost&gt; boardPosts = new ArrayList&lt;&gt;();
+              }
+            </pre>
           </pre>
         </li>
         <li>M : N 관계
