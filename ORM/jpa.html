@@ -450,6 +450,29 @@
             </pre>
           </pre>
         </li>
+        <li>N : 1 관계
+          <pre>
+            ● @ManyToOne
+              ○ targetEntity : 관계를 맺을 Entity Class
+              ○ cascade : 현 Entity의 변경에 대해 관계를 맺은 Entity도 변경할지에 대한 여부 (JPA 레이어 수준에서 처리)
+                예시) cascade=CascadeType.[ALL, PERSIST, MERGE, REMOVE, REFRESH, DETACH]
+              ○ fetch : 관계 Entity의 데이터 읽기 전략
+                예시) fetch=FetchType.[EAGER, LAZY]
+                  (1) EAGER : 관계된 Entity의 정보를 미리 읽어오기
+                  (2) LAZY : 실제로 요청하는 순간 가져오기
+              ○ optional : null 설정 여부
+                예시) optional = "false" //기본값 : true
+
+            <pre class="prettyprint lang-java">
+              @Entity
+              public class BoardPost {
+                  ...
+                  @ManyToOne
+                  Board board;
+              }
+            </pre>
+          </pre>
+        </li>
         <li>M : N 관계
           <pre>
             ● 단방향
