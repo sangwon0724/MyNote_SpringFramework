@@ -426,14 +426,62 @@
         </li>
         <li>1 : N 관계
           <pre>
-            ● 단방향
-            ● 양방향
+            ● @OneToMany
+              ○ targetEntity : 관계를 맺을 Entity Class
+              ○ cascade : 현 Entity의 변경에 대해 관계를 맺은 Entity도 변경할지에 대한 여부 (JPA 레이어 수준에서 처리)
+                예시) cascade=CascadeType.[ALL, PERSIST, MERGE, REMOVE, REFRESH, DETACH]
+              ○ fetch : 관계 Entity의 데이터 읽기 전략
+                예시) fetch=FetchType.[EAGER, LAZY]
+                  (1) EAGER : 관계된 Entity의 정보를 미리 읽어오기
+                  (2) LAZY : 실제로 요청하는 순간 가져오기
+              ○ mappedBy : 양방향 관계 설정시 관계의 주체가 되는 쪽에서 정의하는 속성
+                예시) mappedBy = "boardPosts"
+              ○ orphanRemoval : 관계 Entity에서 변경이 일어난 경우 DB 변경을 같이 할지에 대한 여부 (DB 레이어에서 처리)
+                예시 : orphanRemoval = true //기본값 : false
+
+            <pre class="prettyprint lang-java">
+              @Entity
+              public class Board {
+                  ...
+                  @OneToMany(fetch = FetchType.EAGER)
+                  @JoinColumn(name = "boardId") //BoardPost Class에 있는 boardId 필드를 외래키로 지정
+                  private List&lt;BoardPost&gt; boardPosts = new ArrayList&lt;&gt;();
+              }
+            </pre>
+          </pre>
+        </li>
+        <li>N : 1 관계
+          <pre>
+            ● @ManyToOne
+              ○ targetEntity : 관계를 맺을 Entity Class
+              ○ cascade : 현 Entity의 변경에 대해 관계를 맺은 Entity도 변경할지에 대한 여부 (JPA 레이어 수준에서 처리)
+                예시) cascade=CascadeType.[ALL, PERSIST, MERGE, REMOVE, REFRESH, DETACH]
+              ○ fetch : 관계 Entity의 데이터 읽기 전략
+                예시) fetch=FetchType.[EAGER, LAZY]
+                  (1) EAGER : 관계된 Entity의 정보를 미리 읽어오기
+                  (2) LAZY : 실제로 요청하는 순간 가져오기
+              ○ optional : null 설정 여부
+                예시) optional = "false" //기본값 : true
+
+            <pre class="prettyprint lang-java">
+              @Entity
+              public class BoardPost {
+                  ...
+                  @ManyToOne
+                  Board board;
+              }
+            </pre>
           </pre>
         </li>
         <li>M : N 관계
           <pre>
-            ● 단방향
-            ● 양방향
+            ● @ManyToMany라는 전용 어노테이션이 존재하긴 하지만 실무에서는 사용되지 않는다.
+            ● 미사용 이유
+              (1) 매핑 정보만 넣는 것이 가능하다.
+              (2) 추가 정보를 넣는 것 자체가 불가능하다.
+              (3) 예상하지 못하는 쿼리들이 나갈 가능성이 있다.
+              (4) 애초에 관계형 데이터베이스는 정규화된 테이블 2개로 다대다 관계를 표현할 수 없다.
+            ● 해결방법 : 두 테이블을 연결하기 위한 전용 엔티티를 만들어서 연결한다.
           </pre>
         </li>
       </ul>
@@ -588,6 +636,40 @@
 
     <br />
 
+    <section id="mysql">
+      <header class="note_title">MySql Database</header>
+      <ul>
+        <li>설치방법 (Spring Boot 기준)
+          <pre>
+            1. pom.xml에 dependency 추가
+              <pre class="prettyprint lang-xml">
+                &lt;dependency>
+                    &lt;groupId>mysql&lt;/groupId>
+                    &lt;artifactId>mysql-connector-java&lt;/artifactId>
+                    &lt;version>8.0.22&lt;/version>
+                &lt;/dependency>
+              </pre>
+
+            2. application.properties 파일에 정보 추가 (※ 기본 계정 : root)
+                #ddl-auto 옵션이 generate-ddl 옵션보다 상위로 적용되는 옵션이다.
+                spring.jpa.generate-ddl=true
+                spring.jpa.hibernate.ddl-auto=create-drop
+
+                spring.datasource.url=jdbc:mysql//localhost:3306/book_manager
+                spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+                spring.datasource.username=root
+                spring.datasource.password=
+                spring.datasource.initialization-mode=always
+            
+            3. 프로젝트 실행
+            4. http://localhost:포트주소/h2-console로 이동
+          </pre>
+        </li>
+      </ul>
+    </section>
+
+    <br />
+
     <section id="log">
       <header class="note_title">로그 출력하기</header>
       <ul>
@@ -619,6 +701,7 @@
           <option value="embeddedType">임베디드 타입</option>
           <option value="troubleShooting">트러블슈팅</option>
           <option value="h2db">H2 Database</option>
+          <option value="mysql">MySql Database</option>
           <option value="log">로그 출력하기</option>
         </select>
       </section>
