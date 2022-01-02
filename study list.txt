@@ -1,1 +1,2 @@
-@OneToMany(fetch = FetchType.EAGER)
+@DynamicInsert
+@DynamicUpdate
