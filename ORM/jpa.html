@@ -336,6 +336,8 @@
                 예시) insertable = false
               ○ updatable 옵션 : 해당 필드의 값을 변경가능한지에 대한 여부
                 예시) updatable = false
+              ○ columnDefinition 옵션 : 해당 필드의 자료형을 직접 명시한다.
+                예시) columnDefinition = "datetime(6) default now(6) comment '생성시간'"
 
             ● @NonNUll : 해당 필드는 반드시 값이 존재해야 한다.
             ● @Enumerated : Enum 타입 매핑
@@ -595,7 +597,35 @@
         </li>
         <li>영속성 전이
           <pre>
-            ● xxx
+            ● 특정 엔티티를 영속 상태로 만들때 연관된 엔티티도 함께 영속 상태로 만드는 것
+
+            ● 옵션
+              ○ ALL : PERSIST + REMOVE
+              ○ PERSIST : 특정 엔티티를 영속 상태로 변경 시 연관 엔티티도 영속 상태로 변경
+              ○ REMOVE : 특정 엔티티 삭제 시 관련 엔티티도 연관 엔티티도 함께 삭제
+              ○ MERGE : 특정 엔티티 병합 시 연관 엔티티도 함께 병합
+              ○ REFRESH : 특정 엔티티 새로고침 시 연관 엔티티도 새로고침
+              ○ DETACH : 특정 엔티티에서 detach() 수행 시 연관 엔티티도 detach() 수행
+
+            ● 예시
+            <pre class="prettyprint lang-java">
+              @ManyToOne(cascade = { CascadeType.ALL })
+              @ToString.Exclude
+              private Publisher publisher;
+            </pre>
+          </pre>
+        </li>
+        <li>고아 객체
+          <pre>
+            ● 부모 엔티티와 연관 관계가 끊어진 자식 엔티티
+            ● orphanRemoval = true 옵션을 활성화하면 고아 객체가 된 엔티티를 자동으로 삭제해준다.
+            ● 예시
+            <pre class="prettyprint lang-java">
+              @OneToMany(orphanRemoval = true)
+              @JoinColumn(name = "publisher_id")
+              @ToString.Exclude
+              private List&lt;Book&gt; books = new ArrayList&lt;&gt;();
+            </pre>
           </pre>
         </li>
       </ul>
@@ -881,12 +911,68 @@
 
     <br />
 
-    <section id="customQuery">
-      <header class="note_title">커스텀 쿼리</header>
+    <section id="jpaQuery">
+      <header class="note_title">JPA 쿼리</header>
       <ul>
-        <li>xx
+        <li>JPQL
           <pre>
-            ● xxx
+            ● 테이블이 아닌 엔티티 객체를 대상으로 검색하는 객체지향 쿼리
+            ● from절 뒤에 테이블명이 아닌 객체명이 붙는다.
+            ● 반드시 객체명과 동일하게 명시해야 한다. (대소문자 오타 실수 주의)
+            ● 전체 검색을 할 때 *이 아닌 객체명이나 별칭을 명시한다.
+            ● 예시
+            <pre class="prettyprint lang-java">
+              //파라미터 사용 방법
+              //쿼리 => name 사용시 :name으로 명시
+              //파라미터 => name 사용 시 @Param("name") String name으로 명시
+              @Query(value="SELECT m FROM Member AS m WHERE m.name = :name")
+              public Member findByName(@Param("name") String name);
+            </pre>
+          </pre>
+        </li>
+        <li>Native SQL
+          <pre>
+            ● @Query 어노테이션에서 원래의 쿼리를 쓰는 방식
+            ● nativeQuery = true 옵션 활성화가 필요하다.
+            ● 예시
+            <pre class="prettyprint lang-java">
+              //파라미터 사용 방법
+              //쿼리 => name 사용시 :name으로 명시
+              //파라미터 => name 사용 시 @Param("name") String name으로 명시
+              @Query(value = "SELECT * FROM member AS m WHERE m.name = :name", nativeQuery = true)
+              public Member findByName(@Param("name") String name);
+            </pre>
+          </pre>
+        </li>
+        <li>Converter
+          <pre>
+            ● 엔티티의 데이터를 변환하는 기능
+            ● useYN같이 DB에서는 String이지만 객체에서는 boolean으로 저장하고 싶을 때 사용한다.
+            ● 예시
+            <pre class="prettyprint lang-java">
+              @Entity
+              class Member{
+                  @Id
+                  @GeneratedValue
+                  private Integer id;
+
+                  @Convert(converter=BooleanToYNConverter.class)
+                  private boolean useYn;
+              }
+
+              @Converter
+              class ConverterBooleanToYN implements AttributeConverter&lt;Boolean, String&gt;{
+                  @Override
+                  public String convertToDatabaseColumn(Boolean value){
+                      return (value != null && value) ? "Y" : "N";
+                  }
+
+                  @Override
+                  public Boolean convertToEntityAttribute(String dbData){
+                      return "Y".eqauls(dbData);
+                  }
+              }
+            </pre>
           </pre>
         </li>
       </ul>
@@ -1060,7 +1146,7 @@
           <option value="persistence">영속성</option>
           <option value="jpaCache">JPA - Cache</option>
           <option value="transactionManager">Transaction Manager</option>
-          <option value="customQuery">커스텀 쿼리</option>
+          <option value="jpaQuery">JPA 쿼리</option>
           <option value="embeddedType">임베디드 타입</option>
           <option value="troubleShooting">트러블슈팅</option>
           <option value="h2db">H2 Database</option>
