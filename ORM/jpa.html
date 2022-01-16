@@ -984,22 +984,66 @@
     <section id="embeddedType">
       <header class="note_title">임베디드 타입</header>
       <ul>
-        <li>xx
+        <li>정의
           <pre>
-            ● xxx
+            ● JPA에서 정의한 사용자 정의 값 타입
+            ● 예시 1) 근무 시작 기간 & 근무 종료 기간 =(임베디드 타입으로 정의)=> 근무 기간
+            ● 예시 2) 우편번호 & 지역 정보 & 상세 주소 =(임베디드 타입으로 정의)=> 거주정보
+            ※ 하이버네이트에서의 컴포넌트와 같은 것을 의미한다.
           </pre>
         </li>
-      </ul>
-    </section>
-
-    <br />
-
-    <section id="troubleShooting">
-      <header class="note_title">트러블슈팅</header>
-      <ul>
-        <li>트러블슈팅
+        <li>사용법
           <pre>
-            ● xxx
+            ● @Embeddable: 값 타입을 정의하는 곳에 표시
+            ● @Embedded: 값 타입을 사용하는 곳에 표시
+            ※ 임베디드 타입은 기본 생성자가 필수다.
+          </pre>
+        </li>
+        <li>장점
+          <pre>
+            ● 재사용성
+            ●높은 응집도
+            ● 해당 값 타입만 사용하는 의미있는 메서드를 만들 수 있다.
+          </pre>
+        </li>
+        <li>예외사항 (칼럼명이 겹치는 경우)
+          <pre>
+            ● 재사용성
+            ●높은 응집도
+            ● 해당 값 타입만 사용하는 의미있는 메서드를 만들 수 있다.
+            ● 예시
+            <pre class="prettyprint lang-java">
+              @Entity
+              public class Member {
+                
+                @Id
+                @GeneratedValue
+                private Long id;
+                private String name;
+                
+                @Embedded
+                Address homeAddress;
+                
+                @Embedded
+                @AttributeOverrides({
+                  @AttributeOverride(name="area", column=@Column(name="COMPANY_AREA")),
+                  @AttributeOverride(name="city", column=@Column(name="COMPANY_CITY")),
+                  @AttributeOverride(name="street", column=@Column(name="COMPANY_STREET")),
+                  @AttributeOverride(name="building", column=@Column(name="COMPANY_BUILDING")),
+                  @AttributeOverride(name="homeNumber", column=@Column(name="COMPANY_HOMENUMBER"))
+                })
+                Address companyAddress;
+              }
+
+              @Embeddable
+              public class Address {
+                String area;
+                String city;
+                String street;
+                String building;
+                String homeNumber;
+              }
+            </pre>
           </pre>
         </li>
       </ul>
@@ -1149,7 +1193,6 @@
           <option value="transactionManager">Transaction Manager</option>
           <option value="jpaQuery">JPA 쿼리</option>
           <option value="embeddedType">임베디드 타입</option>
-          <option value="troubleShooting">트러블슈팅</option>
           <option value="h2db">H2 Database</option>
           <option value="mysql">MySql Database</option>
           <option value="log">로그 출력하기</option>
